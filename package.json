@@ -1,0 +1,23 @@
+{
+  "name": "sos-2016-10",
+  "version": "1.0.0",
+  "description": "",
+  "main": "about.js",
+  "scripts": {
+    "start":"node about.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sos-2016-10/sos-2016-10.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sos-2016-10/sos-2016-10/issues"
+  },
+  "homepage": "https://github.com/sos-2016-10/sos-2016-10#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
