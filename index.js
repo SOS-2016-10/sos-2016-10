@@ -24,7 +24,7 @@ app.get("/about",(req,res) => {
   console.log("About");
   res.write("<html><body><h1>About</h1>");
   res.write("<p>Welcome, this is an app from group 10 of SOS. We are working with data related to gender-violence</p>");
-  res.write("<ul><li><a href=\"/about/divorces-spanish\">Juan Luis Durante - divorces-spanish</a></li>");
+  res.write("<ul><li><a href=\"/about/divorces-spanish\">Juan Luis Dorante - divorces-spanish</a></li>");
   res.write("<li>Pascual Requena - mortal-victims</li>");
   res.write("<li>Ulises Cervera - telematic-monitoring</li></ul>");
   res.write("</body></html>");
@@ -36,6 +36,8 @@ app.get("/about/divorces-spanish",(req,res) => {
   console.log("Divorces-spanish");
   res.write("<html><body><h1>Divorces Spanish</h1>");
 
+  res.write("<p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href=\"http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase\">http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase</a></p>");
+  
   //Tabla
   //Columnas
   res.write("<table cellspacing=\"10\" cellpadding=\"10\" border=\"3\"><tr><th scope=\"col\">autonomous-community</th>");
