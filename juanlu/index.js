@@ -62,5 +62,5 @@ app.get("/about/divorces-spanish",(req,res) => {
 });
 
 
-app.listen(3000); //Para probar en local
-//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+//app.listen(3000); //Para probar en local
+app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
