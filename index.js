@@ -18,7 +18,7 @@ app.get("/",(req,res) => {
   res.write("</body></html>");
   res.end();
 });
-
+///
 //GET para ABOUT
 app.get("/about",(req,res) => {
   console.log("About");
