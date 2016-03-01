@@ -7,7 +7,6 @@ var app = express();
 
 //Me creo rutas estáticas
 app.use(express.static('about'));
-//app.use(express.static('divorces-spanish'));
 app.use('/about', express.static('divorces-spanish'));
 
 //GET para página principal
