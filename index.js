@@ -18,7 +18,11 @@ app.get("/",(req,res) => {
   res.write("</body></html>");
   res.end();
 });
+<<<<<<< HEAD
 
+=======
+///
+>>>>>>> bd2bd8488712b54fdb71656f525836311af20d22
 //GET para ABOUT
 app.get("/about",(req,res) => {
   console.log("About");
