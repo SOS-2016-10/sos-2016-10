@@ -6,6 +6,9 @@ var contacts = []; //Inicializo a array vacio
 var app = express();
 
 //Me creo rutas estáticas
+//app.use(express.static('css'));
+app.use(express.static(__dirname + '/css'));
+//app.use(express.static('public'));
 app.use(express.static('about'));
 //app.use(express.static('divorces-spanish'));
 app.use('/about', express.static('divorces-spanish'));
@@ -34,7 +37,7 @@ app.get("/about",(req,res) => {
 //GET para DIVORCES-SPANISH(Juanlu)
 app.get("/about/divorces-spanish",(req,res) => {
   console.log("Divorces-spanish");
-  res.write("<html><body><h1>Divorces Spanish</h1>");
+  res.write("<html><head><link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body><h1>Divorces Spanish</h1>");
 
   res.write("<p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href=\"http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase\">http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase</a></p>");
 
@@ -101,5 +104,5 @@ app.get('/about/mortal-victims', (req,res)=>{
 });
 
 
-//app.listen(3000); //Para probar en local
-app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+app.listen(3000); //Para probar en local
+//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
