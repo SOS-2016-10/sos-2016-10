@@ -1,69 +1,26 @@
 //Ejecución ASINCRONA con EXPRESS
 var express = require("express");
-//var fs = require("fs"); //modulo viene de fábrica(NO INSTALAR)
-var contacts = []; //Inicializo a array vacio
 
 var app = express();
 
 //Me creo rutas estáticas
-//app.use(express.static('css'));
-app.use(express.static(__dirname + '/css'));
-//app.use(express.static('public'));
-app.use(express.static('about'));
-//app.use(express.static('divorces-spanish'));
-app.use('/about', express.static('divorces-spanish'));
+app.use(express.static(__dirname + '/css')); //Es como si folder "css" no existiera, y estuviera todo en RAIZ
+app.use(express.static(__dirname + '/html')); //Es como si folder "html" no existiera, y estuviera todo en RAIZ
+//app.use('/about/divorces-spanish', express.static(__dirname + '/html/about/divorces-spanish')); //lo que quiero que ponga en url, donde está realmente
 
 //GET para página principal
 app.get("/",(req,res) => {
-  console.log("Main Menú");
-  res.write("<html><body><h1>SOS-2016-10</h1>");
-  res.write("<h2><a href=\"/about\">About</a></h2>");
-  res.write("</body></html>");
-  res.end();
+  console.log("Main Menu");
 });
 
 //GET para ABOUT
 app.get("/about",(req,res) => {
   console.log("About");
-  res.write("<html><body><h1>About</h1>");
-  res.write("<p>Welcome, this is an app from group 10 of SOS. We are working with data related to gender-violence</p>");
-  res.write("<ul><li><a href=\"/about/divorces-spanish\">Juan Luis Dorante - divorces-spanish</a></li>");
-  res.write("<li><a href=\"/about/mortal-victims\">Pascual Requena - mortal-victims</a></li>");
-  res.write("<li><a href=\"/about/telematic-monitorings\">Ulises Cervera - telematic-monitoring</li></ul>");
-  res.write("</body></html>");
-  res.end();
 });
 
 //GET para DIVORCES-SPANISH(Juanlu)
 app.get("/about/divorces-spanish",(req,res) => {
   console.log("Divorces-spanish");
-  res.write("<html><head><link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body><h1>Divorces Spanish</h1>");
-
-  res.write("<p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href=\"http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase\">http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase</a></p>");
-
-  //Tabla
-  //Columnas
-  res.write("<table cellspacing=\"10\" cellpadding=\"10\" border=\"3\"><tr><th scope=\"col\">autonomous-community</th>");
-  res.write("<th scope=\"col\"><strong>year</th>");
-  res.write("<th scope=\"col\"><strong><18 age</th>");
-  res.write("<th scope=\"col\"><strong>19<24 age</th>");
-  res.write("<th scope=\"col\"><strong>25<29 age</th>");
-  res.write("<th scope=\"col\"><strong>30<34 age</th>");
-  res.write("<th scope=\"col\">35<39 age</th>");
-  res.write("<th scope=\"col\">40<49 age</th></tr>");
-
-  //Filas
-  res.write("<tr><td>Andalucia</td>");
-  res.write("<td>2014</td>");
-  res.write("<td>1</td>");
-  res.write("<td>56</td>");
-  res.write("<td>537</td>");
-  res.write("<td>1860</td>");
-  res.write("<td>3416</td>");
-  res.write("<td>6781</td></tr></table>");
-
-  res.write("</body></html>");
-  res.end();
 });
 
 
