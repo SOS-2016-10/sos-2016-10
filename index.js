@@ -24,7 +24,11 @@ app.get("/about",(req,res) => {
 //GET para TIME
 app.get("/time",(req,res) => {
   var now = new Date();
-  res.send("It is "+now);
+  //res.send("It is "+now);
+  res.write("<html><head><link href=\"/style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>");
+  res.write("<p>It is "+now"</p>");
+  res.write("</body></html>");
+  res.end();
   console.log("New request to TIME arrived!");
 });
 
