@@ -35,10 +35,6 @@ app.get("/about/divorces-spanish",(req,res) => {
 //GET para Telematic-monitorings(Ulises)
 app.get('/about/telematic-monitorings', (req,res)=>{
   console.log("Telematic-monitorings");
-  res.write("<html><body><h1>Telematic-monitorings</h1>");
-  res.write("<p>Hello World!, My data is related to the number of telematic monitoring systems in Spain</div><div> I will get the info from this source:http://www.violenciagenero.msssi.gob.es/violenciaEnCifras/home.htm</p>");
-  res.write("</body></html>");
-  res.end();
 });
 
 //GET para Mortal-victims(Requena)
