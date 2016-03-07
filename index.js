@@ -2,6 +2,9 @@
 var express = require("express");
 
 var app = express();
+//Puede tener 2 valores, o la variable entorno PORT o 3000
+//Evaluación perezosa
+var port = (process.env.PORT || 3000);
 
 //Me creo rutas estáticas
 app.use(express.static(__dirname + '/css')); //Es como si folder "css" no existiera, y estuviera todo en RAIZ
@@ -16,6 +19,13 @@ app.get("/",(req,res) => {
 //GET para ABOUT
 app.get("/about",(req,res) => {
   console.log("About");
+});
+
+//GET para TIME
+app.get("/time",(req,res) => {
+  var now = new Date();
+  res.send("It is "+now);
+  console.log("New request to TIME arrived!");
 });
 
 //GET para DIVORCES-SPANISH(Juanlu)
@@ -62,4 +72,8 @@ app.get('/about/mortal-victims', (req,res)=>{
 
 
 //app.listen(3000); //Para probar en local
-app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+//Hago callback porque es asincrono
+app.listen(port, ()=>{
+  console.log("Magic happens on port "+port);
+});
