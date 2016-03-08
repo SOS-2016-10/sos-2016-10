@@ -40,28 +40,6 @@ app.get('/about/telematic-monitorings', (req,res)=>{
 //GET para Mortal-victims(Requena)
 app.get('/about/mortal-victims', (req,res)=>{
   console.log("Mortal-victims");
-  res.write("<html><body><h1>Mortal-victims</h1>");
-  res.write("<p>Welcome, My data is related to the number of mortal victims in Spain</div><div> I will get the info from this source:<a href= \" http://www.violenciagenero.msssi.gob.es/violenciaEnCifras/boletines/home.htm \">Here</a></p>");
-  //Tabla
-  //Columnas
-  res.write("<table cellspacing=\"10\" cellpadding=\"10\" border=\"3\"><tr><th scope=\"col\">autonomous-community</th>");
-  res.write("<th scope=\"col\"><strong>year</th>");
-  res.write("<th scope=\"col\"><strong>victim-age</th>");
-  res.write("<th scope=\"col\"><strong>mortal-victims</th></tr>");
-
-  //Filas
-  res.write("<tr><td>Andalucia</td>");
-  res.write("<td>2015</td>");
-  res.write("<td>1-30</td>");
-  res.write("<td>3</td></tr>");
-
-  res.write("<tr><td>Madrid</td>");
-  res.write("<td>2013</td>");
-  res.write("<td>31-85</td>");
-  res.write("<td>9</td></tr></table>");
-
-  res.write("</body></html>");
-  res.end();
 });
 
 
