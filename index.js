@@ -247,7 +247,7 @@ app.get("/api-test/videogames/loadInitialData", (req,res)=>{         //
   console.log("/api-test/videogames/loadInitialData");               //
   videogames = [
         { name: "LeagueOfLegends", platform: "Computer"},
-        { name: "BloodBorne", platform: "PlayStation"},
+        { name: "BloodBorn", platform: "PlayStation"},
         { name: "Halo", platform: "Xbox"},
         { name: "WorldOfWarcraft", platform: "Computer"}
   ];                                                            //
