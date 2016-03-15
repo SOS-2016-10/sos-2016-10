@@ -105,6 +105,89 @@ app.delete("/api/sandbox/teams/:name", (req,res) => {           //
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
+
+
+// /api/sandbox/videogames ////////////////////////////////////////////////////
+//var contacts = [{ name : "pepe"}];                                         //
+var videogames = [{ "name" : "games"}];                                        //
+app.get("/api/sandbox/videogames", (req,res) => {                            //
+  console.log("New GET of videogames");                                      //
+  res.send(videogames);                                                      //
+});                                                                          //
+app.post("/api/sandbox/videogames", (req,res) => {                           //
+  var videogame = req.body;                                                  //
+  if(!videogames.indexOf(videogame)){                                        //
+    videogames.push(videogame);                                              //
+    res.sendStatus(200);                                                     //
+    console.log("New post of resource: "+videogame.name);                    //
+  }else{                                                                     //
+    res.sendStatus(406);                                                     //
+    console.log("New post of already existing videogame: "+videogame.name);  //
+  }                                                                          //
+});                                                                          //
+//NO PERMITIDO                                                               //
+app.put("/api/sandbox/videogames", (req,res) => {                            //
+  console.log("PUT NOT ALLOWED");                                            //
+  res.sendStatus(405);                                                       //
+});                                                                          //
+app.delete("/api/sandbox/videogames", (req,res) => {                         //
+  console.log("New DELETE of videogames");                                   //
+  videogames.splice(0,videogames.length);                                    //
+  res.sendStatus(200);                                                       //
+});                                                                          //
+                                                                             //
+// /api/sandbox/videogames/LOL ////////////////////////////////////////////////
+app.get("/api/sandbox/videogames/:name", (req,res)=>{                        //
+  var n = req.params.name;                                                   //
+  console.log("New get of "+n);                                              //
+  index = searchV(videogames, n);                                            //
+  if(index == -1){                                                           //
+    res.sendstatus(404);                                                     //
+  }else{                                                                     //
+    res.send(videogames[index]);                                             //
+  }                                                                          //
+});                                                                          //
+//NO PERMITIDO                                                               //
+app.post("/api/sandbox/videogames/:name", (req,res) => {                     //
+  console.log("POST NOT ALLOWED");                                           //
+  res.sendStatus(405);                                                       //
+});                                                                          //
+app.put("/api/sandbox/videogames/:name", (req,res) => {                      //
+  var n = req.params.name;                                                   //
+  console.log("Trying to update "+n);                                        //
+  index = search(videogames, n);                                             //
+  if(index == -1){                                                           //
+    res.sendstatus(404);                                                     //
+  }else{                                                                     //
+    videogames[index] = req.body;                                            //
+    res.sendstatus(200);                                                     //
+  }                                                                          //
+});                                                                          //
+app.delete("/api/sandbox/videogames/:name", (req,res) => {                   //
+  var n = req.params.name;                                                   //
+  index = searchV(videogames, n);                                            //
+  if(index == -1){                                                           //
+    var n1 = req.params.name;                                                //
+    console.log(n1+" can not be deleted ");                                  //
+    res.sendstatus(404);                                                     //
+  }else{                                                                     //
+    console.log("New delete of "+n);                                         //
+    unions.splice(index,1);                                                  //
+    res.sendstatus(200);                                                     //
+  }                                                                          //
+});                                                                          //
+//FUNCTIONS                                                                  //
+function searchV(array, name){                                               //
+  for(var i = 0;i<array.length;i++){                                         //
+    if(array[i].name == name){                                               //
+      return i;                                                              //
+    }                                                                        //
+  }                                                                          //
+  return -1;                                                                 //
+}                                                                            //
+///////////////////////////////////////////////////////////////////////////////
+
+
 // /api/sandbox/unions
 
 var unions = [{acronym:"CGT",name:"Confederacion general del trabajo"}];
