@@ -215,8 +215,8 @@ app.put("/api/sandbox/videogames/:name", (req,res) => {              //
   //var n = req.params.name;                                    //
   var n = req.body.name;                                        //
                                                                 //
-  var e = find_resource(teams,n)[0];                            //
-  var i = find_resource(teams,n)[1];                            //
+  var e = find_resource(videogames,n)[0];                            //
+  var i = find_resource(videogames,n)[1];                            //
   if(e == 0){ //No hay error(lo encuentra, ya existe)           //
     videogames.splice(i, 1); //Elimino objeto                        //
     videogames.push(req.body); //Añado objeto                        //
@@ -230,8 +230,8 @@ app.put("/api/sandbox/videogames/:name", (req,res) => {              //
 app.delete("/api/sandbox/videogames/:name", (req,res) => {           //
   var n = req.params.name;                                      //
                                                                 //
-  var e = find_resource(teams,n)[0];                            //
-  var i = find_resource(teams,n)[1];                            //
+  var e = find_resource(videogames,n)[0];                            //
+  var i = find_resource(videogames,n)[1];                            //
   if(e == 0){ //Lo encuentro en "teams"                         //
     videogames.splice(i, 1); //delete teams[i];                      //
     console.log("New DELETE of resource "+n);                   //
