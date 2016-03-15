@@ -167,14 +167,12 @@ app.get("/api/sandbox/videogames", (req,res) => {
 });
 app.post("/api/sandbox/videogames", (req,res) => {
   var vg = req.body;
-
-
   var e = find_resource(videogames,vg.name)[0];
   if(e == 0){
     res.sendStatus(409);
     console.log("NOT POST because \""+vg.name+"\" exist");
   } else {
-    teams.push(vg);
+    videogames.push(vg);
     console.log("New POST of resource "+vg.name);
     res.sendStatus(200);
   }
