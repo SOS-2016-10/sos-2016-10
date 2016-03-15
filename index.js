@@ -115,14 +115,15 @@ app.get("/api/sandbox/videogames", (req,res) => {                            //
   res.send(videogames);                                                      //
 });                                                                          //
 app.post("/api/sandbox/videogames", (req,res) => {                           //
-  var videogame = req.body;                                                  //
-  if(!videogames.indexOf(videogame)){                                        //
+  var videogame = req.body;
+  index = searchV(videogames, videogame.name);                                             //
+  if(index == -1){
+    res.sendStatus(406);                                                     //
+    console.log("New post of already existing videogame: "+videogame.name);                                        //                   //
+  }else{                                                                     //
     videogames.push(videogame);                                              //
     res.sendStatus(200);                                                     //
-    console.log("New post of resource: "+videogame.name);                    //
-  }else{                                                                     //
-    res.sendStatus(406);                                                     //
-    console.log("New post of already existing videogame: "+videogame.name);  //
+    console.log("New post of resource: "+videogame.name);   //
   }                                                                          //
 });                                                                          //
 //NO PERMITIDO                                                               //
