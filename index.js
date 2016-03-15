@@ -188,7 +188,8 @@ function searchV(array, name){                                               //
 }                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // /api/sandbox/unions
 
 var unions = [{acronym:"CGT",name:"Confederacion general del trabajo"}];
@@ -237,14 +238,14 @@ app.get("/api/sandbox/unions/:acronym", (req,res)=>{
   console.log("New get of "+s);
   index = search(unions, s);
   if(index == -1){
-    res.sendstatus(404);
+    res.sendStatus(404);
   }else{
     res.send(unions[index]);
   }
 });
 
 app.post("/api/sandbox/unions/:acronym", (req,res)=>{
-  res.sendstatus(405);
+  res.sendStatus(405);
   console.log("Post not allowed.")
 });
 
@@ -253,10 +254,10 @@ app.put("/api/sandbox/unions/:acronym", (req,res)=>{
   console.log("New put of "+s);
   index = search(unions, s);
   if(index == -1){
-    res.sendstatus(404);
+    res.sendStatus(404);
   }else{
     unions[index] = req.body;
-    res.sendstatus(200);
+    res.sendStatus(200);
   }
 });
 
@@ -266,12 +267,20 @@ app.delete("/api/sandbox/unions/:acronym", (req,res)=>{
   if(index == -1){
     var s = req.params.siglas;
     console.log("Can not be delete "+s);
-    res.sendstatus(404);
+    res.sendStatus(404);
   }else{
     console.log("New delete of "+s);
     unions.splice(index,1);
-    res.sendstatus(200);
+    res.sendStatus(200);
   }
+});
+
+app.get("/api-test/unions/loadInitialData", (req,res)=>{
+  u1 = {acronym:"TUC",name:"Trade union congress"};
+  u2 = {acronym:"LTC",name:"London trades council"};
+  unions.push(u1);
+  unions.push(u2);
+  res.sendStatus(200);
 });
 //end of /api/sandbox/unions
 
