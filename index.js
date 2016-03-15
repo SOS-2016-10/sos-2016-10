@@ -1,4 +1,4 @@
-//Inicializar módulos
+//Inicializar módulos/
 var express = require("express");
 var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceversa
 
