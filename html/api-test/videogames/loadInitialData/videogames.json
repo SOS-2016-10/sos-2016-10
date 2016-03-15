@@ -1,5 +1,5 @@
 [
-      { "name": "LeagueOfLegends", "platform": "Computer"},
-      { "name": "BloodBorn", "platform": "PlayStation"},
-      { "name": "Halo", "platform": "Xbox"}
+      { "name": "LeagueOfLegends", "platform": "Computer", "players": "Multiplayer"},
+      { "name": "BloodBorn", "platform": "PlayStation", "players": "Single"},
+      { "name": "Halo", "platform": "Xbox", "players": "Multiplayer"}
 ]

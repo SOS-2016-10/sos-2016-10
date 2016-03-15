@@ -158,8 +158,8 @@ app.get("/api-test/teams/loadInitialData", (req,res)=>{         //
 //////////////////////////////////////////////////////////////////
 
 /////////////////////// /api/sandbox/videogames //////////////////////////
-var videogames = [{ name: "LeagueOflegends", platform: "Computer"},
-{ name: "BloodBorn", platform: "Playstation"}];
+var videogames = [{ name: "LeagueOflegends", platform: "Computer", players: "Multiplayer"},
+{ name: "BloodBorn", platform: "Playstation", players: "Single"}];
 
 app.get("/api/sandbox/videogames", (req,res) => {
   console.log("New GET of videogames");
@@ -239,9 +239,9 @@ app.delete("/api/sandbox/videogames/:name", (req,res) => {
 app.get("/api-test/videogames/loadInitialData", (req,res)=>{
   console.log("/api-test/videogames/loadInitialData");
   videogames = [
-        { name: "LeagueOfLegends", platform: "Computer"},
-        { name: "BloodBorn", platform: "PlayStation"},
-        { name: "Halo", platform: "Xbox"}
+        { name: "LeagueOfLegends", platform: "Computer", players:"Multiplayer"},
+        { name: "BloodBorn", platform: "PlayStation", players:"Single"},
+        { name: "Halo", platform: "Xbox", players: "Multiplayer"}
   ];
   res.send(videogames);
 });
