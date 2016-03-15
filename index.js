@@ -157,7 +157,7 @@ app.get("/api-test/teams/loadInitialData", (req,res)=>{         //
                                                                 //
 //////////////////////////////////////////////////////////////////
 
-/////////////////////// /api/sandbox/videogames //////////////////////////
+////////////////////// /api/sandbox/videogames //////////////////////////
 var videogames = [{ name: "LeagueOflegends", platform: "Computer", players: "Multiplayer"},
 { name: "BloodBorn", platform: "Playstation", players: "Single"}];
 
@@ -177,7 +177,7 @@ app.post("/api/sandbox/videogames", (req,res) => {
     res.sendStatus(200);
   }
 });
-//NO PERMITIDO
+//NOT ALLOWED - TABLA AZUL
 app.put("/api/sandbox/videogames", (req,res) => {
   console.log("PUT NOT ALLOWED");
   res.sendStatus(405);
@@ -200,7 +200,7 @@ app.get("/api/sandbox/videogames/:name", (req,res)=>{
     res.sendStatus(404);
   }
 });
-
+//NOT ALLOWED - TABLA AZUL
 app.post("/api/sandbox/videogames/:name", (req,res) => {
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);

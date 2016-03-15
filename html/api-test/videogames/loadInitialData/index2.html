@@ -1,4 +1,4 @@
-<!-- Pagina de loadInitialData "https://sos-2016-10.herokuapp.com/api-test/teams/loadInitialData" -->
+<!-- Pagina de loadInitialData "https://sos-2016-10.herokuapp.com/api-test/videogames/loadInitialData" -->
 <html>
 <head>
   <link href="/style.css" rel="stylesheet" type="text/css">
@@ -8,13 +8,12 @@
   <p>Loading...</p>
   <script type="text/javascript">
     var fs = require("fs");
-    //var teams = [];
     fs.readFile('videogames.json','utf8',(err,content)=>{
       console.log("Data read of videogames.json");
       videogames = JSON.parse(content); //OBJETO json,"cargo archivo en 1 variable"
     });
     document.write(videogames);
-    res.sendStatus(200); //ok
+    res.sendStatus(200); 
   </script>
 </body>
 </html>
