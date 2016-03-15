@@ -109,7 +109,7 @@ app.delete("/api/sandbox/teams/:name", (req,res) => {           //
 
 // /api/sandbox/videogames ////////////////////////////////////////////////////
 //var contacts = [{ name : "pepe"}];                                         //
-var videogames = [{ "name" : "games"}];                                        //
+var videogames = [{ name : "games"}];                                        //
 app.get("/api/sandbox/videogames", (req,res) => {                            //
   console.log("New GET of videogames");                                      //
   res.send(videogames);                                                      //
