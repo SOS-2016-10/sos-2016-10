@@ -1,0 +1,6 @@
+[
+      { "name": "LeagueOfLegends", "platform": "Computer"},
+      { "name": "BloodBorn", "platform": "PlayStation"},
+      { "name": "Halo", "platform": "Xbox"},
+      { "name": "WorldOfWarcraft", "platform": "Computer"}
+]
