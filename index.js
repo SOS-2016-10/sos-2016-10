@@ -2,6 +2,10 @@
 var express = require("express");
 var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceversa
 
+//Importar Controladores hechos por nosotros
+var teamsCtl = require("./teamsFile.js");
+var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
+
 var app = express();
 //Puede tener 2 valores, o la variable entorno PORT o 3000
 //Evaluación perezosa
@@ -17,22 +21,19 @@ app.use("/",express.static(__dirname + '/html')); //Es como si folder "html" no 
 
 //GET para página principal
 app.get("/",(req,res) => {
-  console.log("Main Menu");
 });
 
 //GET para ABOUT
 app.get("/about",(req,res) => {
-  console.log("About");
 });
 
 //GET para TIME
 app.get("/time",(req,res) => {
-  console.log("New request to TIME arrived!");
 });
 
 //GET para DIVORCES-SPANISH(Juanlu)
 app.get("/about/divorces-spanish",(req,res) => {
-  console.log("Divorces-spanish");
+  //console.log("Divorces-spanish");
 });
 
 //GET para Telematic-monitorings(Ulises)
@@ -45,117 +46,30 @@ app.get('/about/mortal-victims', (req,res)=>{
   console.log("Mortal-victims");
 });
 
-// /api/sandbox/teams ////////////////////////////////////////////
-//var contacts = [{ name : "pepe"}];                            //
-var teams = [{ name: "Betis", stadium: "Benito Villamarín"},
-{ name: "Sevilla", stadium: "Ramón Sánchez-Pizjuán"}]; //No es JSON(es JavaScript)  //
-                                                                //
-//Función para buscar en array "teams" en mi caso               //
-function find_resource(array,name){                             //
-  for(var i=0;i<array.length;i++){                              //
-    if(array[i].name == name){                                  //
-      //console.log(array[i]);                                  //
-      var error = 0; //No hay error                             //
-      break;                                                    //
-    } else {                                                    //
-      var error = 1; //Hay error                                //
-    }                                                           //
-  }                                                             //
-  return [error, i];                                            //
-}                                                               //
-                                                                //
-app.get("/api/sandbox/teams", (req,res) => {                    //
-  console.log("New GET of TEAMS");                              //
-  res.send(teams);                                              //
-});                                                             //
-app.post("/api/sandbox/teams", (req,res) => {                   //
-  var team = req.body;                                          //
-                                                                //
-  //comprobar antes que no existe ese "name" ya                 //
-  var e = find_resource(teams,team.name)[0];                    //
-  if(e == 0){ //No hay error(lo encuentra, ya existe)           //
-    res.sendStatus(409); //Conflict                             //
-    console.log("NOT POST because \""+team.name+"\" exist");    //
-  } else {                                                      //
-    teams.push(team);                                           //
-    console.log("New POST of resource "+team.name);             //
-    res.sendStatus(200);                                        //
-  }                                                             //
-});                                                             //
-//NO PERMITIDO                                                  //
-app.put("/api/sandbox/teams", (req,res) => {                    //
-  console.log("PUT NOT ALLOWED");                               //
-  res.sendStatus(405);                                          //
-});                                                             //
-app.delete("/api/sandbox/teams", (req,res) => {                 //
-  console.log("New DELETE of TEAMS");                           //
-  teams.splice(0,teams.length);                                 //
-  res.sendStatus(200);                                          //
-});                                                             //
-                                                                //
-// /api/sandbox/teams/betis //////////////////////////////////////
-app.get("/api/sandbox/teams/:name", (req,res)=>{                //
-  var n = req.params.name;                                      //
-  console.log("New GET of resource "+n);                        //
-                                                                //
-  var e = find_resource(teams,n)[0];                            //
-  var i = find_resource(teams,n)[1];                            //
-  if(e == 0){ //Error == 0 "NO hay error"                       //
-    res.send(teams[i]);                                         //
-  } else {                                                      //
-    res.sendStatus(404);                                        //
-  }                                                             //
-});                                                             //
-//NO PERMITIDO                                                  //
-app.post("/api/sandbox/teams/:name", (req,res) => {             //
-  console.log("POST NOT ALLOWED");                              //
-  res.sendStatus(405);                                          //
-});                                                             //
-app.put("/api/sandbox/teams/:name", (req,res) => {              //
-  //var n = req.params.name;                                    //
-  var n = req.body.name;                                        //
-                                                                //
-  var e = find_resource(teams,n)[0];                            //
-  var i = find_resource(teams,n)[1];                            //
-  if(e == 0){ //No hay error(lo encuentra, ya existe)           //
-    teams.splice(i, 1); //Elimino objeto                        //
-    teams.push(req.body); //Añado objeto                        //
-    console.log("New PUT of resource "+n);                      //
-    res.sendStatus(200);                                        //
-  } else {                                                      //
-    console.log("Resource \""+n+"\" NOT exist");                //
-    res.sendStatus(404);                                        //
-  }                                                             //
-});                                                             //
-app.delete("/api/sandbox/teams/:name", (req,res) => {           //
-  var n = req.params.name;                                      //
-                                                                //
-  var e = find_resource(teams,n)[0];                            //
-  var i = find_resource(teams,n)[1];                            //
-  if(e == 0){ //Lo encuentro en "teams"                         //
-    teams.splice(i, 1); //delete teams[i];                      //
-    console.log("New DELETE of resource "+n);                   //
-    res.sendStatus(200);                                        //
-  } else { //No lo encuentro en "teams"                         //
-    console.log("Not DELETE because NOT FOUND "+n);             //
-    res.sendStatus(404);                                        //
-  }                                                             //
-});                                                             //
-//Para inicializar la API REST "teams" ///////////////////////////
-// /api-test/XXXXX/loadInitialData“                             //
-app.get("/api-test/teams/loadInitialData", (req,res)=>{         //
-  console.log("/api-test/teams/loadInitialData");               //
-  teams = [
-        { name: "Betis", stadium: "Benito Villamarín"},
-        { name: "Sevilla", stadium: "Ramón Sánchez-Pizjuán"},
-        { name: "Real Madrid", stadium: "Santiago Bernabéu"},
-        { name: "Valencia", stadium: "Mestalla"}
-  ];                                                            //
-  res.send(teams);                                              //
-  //res.sendStatus(200);                                        //
-});                                                             //
-                                                                //
-//////////////////////////////////////////////////////////////////
+/////////////////////// Código Juanlu ///////////////////////
+//Llamar a controlador OPERACIONES lista teams
+app.get("/api/sandbox/teams", teamsCtl.getTeams);
+app.post("/api/sandbox/teams", teamsCtl.postTeams);
+app.put("/api/sandbox/teams", teamsCtl.putTeams);
+app.delete("/api/sandbox/teams", teamsCtl.deleteTeams);
+//Llamar a controlador OPERACIONES sobre 1 recurso "/api/sandbox/teams/betis"
+app.get("/api/sandbox/teams/:name", teamsCtl.getTeam);
+app.post("/api/sandbox/teams/:name", teamsCtl.postTeam);
+app.put("/api/sandbox/teams/:name", teamsCtl.putTeam);
+app.put("/api/sandbox/teams/:name", teamsCtl.deleteTeam);
+app.get("/api-test/teams/loadInitialData", teamsCtl.loadInitialData); //Inicializar teams "/api-test/teams/loadInitialData"
+
+//OPERACIONES lista DIVORCES
+app.get("/api/v1/divorces-spanish", divorcesSpanishCtl.getDivorces);
+app.post("/api/v1/divorces-spanish", divorcesSpanishCtl.postDivorces);
+app.put("/api/v1/divorces-spanish", divorcesSpanishCtl.putDivorces);
+app.delete("/api/v1/divorces-spanish", divorcesSpanishCtl.deleteDivorces);
+//OPERACIONES sobre 1 DIVORCE(recurso)
+app.get("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.getDivorce);
+app.post("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.postDivorce);
+app.put("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.putDivorce);
+app.delete("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.deleteDivorce);
+app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadInitialData); //Inicializar divorces-spanish "/api/v1/divorces-spanish/loadInitialData"
 
 ////////////////////// /api/sandbox/videogames //////////////////////////
 var videogames = [{ name: "LeagueOflegends", platform: "Computer", players: "Multiplayer"},
