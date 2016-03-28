@@ -4,7 +4,7 @@ var app = express();
 //Initialiting an array to work on. It is Javascript NOT JSON.
 var victims = [{autonomous_community: "Andalucia", year: 2015, under18age: 0, from18to40age: 3, over40age: 7},
                 {autonomous_community: "Madrid", year: 2013, under18age: 0, from18to40age: 5, over40age: 4},
-                {autonomous_community: "Cantabria", year: 2013, under18age: 0, from18to40age: 1, over40age: 0}]
+                {autonomous_community: "Cantabria", year: 2013, under18age: 0, from18to40age: 1, over40age: 0}];
 
 //Function to find the required concrete resource of victims
   function finder(array,name){
@@ -63,7 +63,53 @@ module.exports.getVictim = (req,res)=>{
     res.sendStatus(404);
   }
 }
+//NOT ALLOWED
+module.exports.postVictim = (req,res)=>{
+  console.log("POST NOT ALLOWED");
+  res.sendStatus(405);
+}
 
+module.exports.putVictim = (req,res)=>{
+  var vic = req.body.autonomous_community;
+
+  var a1 = finder(victims,vic)[0];
+  var a2 = finder(victims,vic)[1];
+
+  if(a1 == 0){ //founded, already exist
+    victims.splice(a2, 1); //delete item
+    victims.push(req.body); //add item
+    console.log("New PUT of resource "+vic);
+    res.sendStatus(200);
+  } else {
+    console.log("Error: Resource \""+vic+"\" NOT exist");
+    res.sendStatus(404);
+  }
+}
+module.exports.deleteVictim = (req,res)=>{
+  var v = req.params.autonomous_community;
+
+  var i = finder(victims,v)[0];
+  var a = finder(victims,v)[1];
+  if(i == 0){ //item founded
+    divorces.splice(a, 1); //deleting item
+    console.log("New DELETE of resource "+v);
+    res.sendStatus(200); //OK
+  } else { //item not founded
+    console.log("Not DELETE because NOT FOUND "+v);
+    res.sendStatus(404);
+  }
+}
+
+// Test
+// /api/v1/mortal-victims/loadInitialData“
+module.exports.loadInitialData = (req,res)=>{
+  console.log("/api/v1/mortal-victims/loadInitialData");
+  var victims = [
+    var victims = [{autonomous_community: "Andalucia", year: 2015, under18age: 0, from18to40age: 3, over40age: 7},
+                    {autonomous_community: "Madrid", year: 2013, under18age: 0, from18to40age: 5, over40age: 4},
+                    {autonomous_community: "Cantabria", year: 2013, under18age: 0, from18to40age: 1, over40age: 0}];
+  res.send(victims);
+}
 
 //mortal-victims
 // Calling mortal-victims resource
