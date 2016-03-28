@@ -7,6 +7,8 @@ var teamsCtl = require("./teamsFile.js");
 var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
 var unionsCtl = require("./unions.js");
 var telematicMonitoringsCtl = require("./telematicMonitorings.js");
+var videogamesCtl = require("./videogames.js");
+var mortalVictimsCtl = require("./mortalVictims.js");
 
 var app = express();
 //Puede tener 2 valores, o la variable entorno PORT o 3000
@@ -98,95 +100,35 @@ app.post("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.post
 app.put("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.putTM);
 app.delete("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.deleteTM);
 
+//VIDEOGAMES - MORTAL-VICTIMS
+//Videogames
+/// Calling videogames resource
+app.get("/api/sandbox/videogames", videogamesCtl.getVideogames);
+app.post("/api/sandbox/videogames", videogamesCtl.postVideogames);
+app.put("/api/sandbox/videogames", videogamesCtl.putVideogames);
+app.delete("/api/sandbox/videogames", videogamesCtl.deleteVideogames);
+// Calling videogames concrete resource
+app.get("/api/sandbox/videogames/:name", videogamesCtl.getVideogame);
+app.post("/api/sandbox/videogames/:name", videogamesCtl.postVideogame);
+app.put("/api/sandbox/videogames/:name", videogamesCtl.putVideogame);
+app.put("/api/sandbox/videogames/:name", videogamesCtl.deleteVideogame);
+//Initialize test data "/api-test/videogames/loadInitialData"
+app.get("/api-test/teams/loadInitialData", videogamesCtl.loadInitialData);
 
+//mortal-victims
+// Calling mortal-victims resource
+app.get("/api/v1/mortal-victims", mortalVictimsCtl.getVictims);
+app.post("/api/v1/mortal-victims", mortalVictimsCtl.postVictims);
+app.put("/api/v1/mortal-victims", mortalVictimsCtl.putVictims);
+app.delete("/api/v1/mortal-victims", mortalVictimsCtl.deleteVictims);
+//Calling mortal-victims concrete resource
+app.get("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.getVictim);
+app.post("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.postVictim);
+app.put("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.putVictim);
+app.delete("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.deleteVictim);
+//initialize mortal-victims test data "/api/v1/mortal-victims/loadInitialData"
+app.get("/api/v1/mortal-victims/loadInitialData", mortalVictimsCtl.loadInitialData);
 
-////////////////////// /api/sandbox/videogames //////////////////////////
-var videogames = [{ name: "LeagueOflegends", platform: "Computer", players: "Multiplayer"},
-{ name: "BloodBorn", platform: "Playstation", players: "Single"}];
-
-app.get("/api/sandbox/videogames", (req,res) => {
-  console.log("New GET of videogames");
-  res.send(videogames);
-});
-app.post("/api/sandbox/videogames", (req,res) => {
-  var vg = req.body;
-  var e = find_resource(videogames,vg.name)[0];
-  if(e == 0){
-    res.sendStatus(409);
-    console.log("NOT POST because \""+vg.name+"\" exist");
-  } else {
-    videogames.push(vg);
-    console.log("New POST of resource "+vg.name);
-    res.sendStatus(200);
-  }
-});
-//NOT ALLOWED - TABLA AZUL
-app.put("/api/sandbox/videogames", (req,res) => {
-  console.log("PUT NOT ALLOWED");
-  res.sendStatus(405);
-});
-app.delete("/api/sandbox/videogames", (req,res) => {
-  console.log("New DELETE of TEAMS");
-  videogames.splice(0,videogames.length);
-  res.sendStatus(200);
-});
-
-
-app.get("/api/sandbox/videogames/:name", (req,res)=>{
-  var n = req.params.name;
-  console.log("New GET of resource "+n);
-  var e = find_resource(videogames,n)[0];
-  var i = find_resource(videogames,n)[1];
-  if(e == 0){
-    res.send(videogames[i]);
-  } else {
-    res.sendStatus(404);
-  }
-});
-//NOT ALLOWED - TABLA AZUL
-app.post("/api/sandbox/videogames/:name", (req,res) => {
-  console.log("POST NOT ALLOWED");
-  res.sendStatus(405);
-});
-
-app.put("/api/sandbox/videogames/:name", (req,res) => {
-  var n = req.body.name;
-  var e = find_resource(videogames,n)[0];
-  var i = find_resource(videogames,n)[1];
-  if(e == 0){
-    videogames.splice(i, 1);
-    videogames.push(req.body);
-    console.log("New PUT of resource "+n);
-    res.sendStatus(200);
-  } else {
-    console.log("Resource \""+n+"\" NOT exist");
-    res.sendStatus(404);
-  }
-});
-app.delete("/api/sandbox/videogames/:name", (req,res) => {
-  var n = req.params.name;
-  var e = find_resource(videogames,n)[0];
-  var i = find_resource(videogames,n)[1];
-  if(e == 0){
-    videogames.splice(i, 1);
-    console.log("New DELETE of resource "+n);
-    res.sendStatus(200);
-  } else {
-    console.log("Not DELETE because NOT FOUND "+n);
-    res.sendStatus(404);
-  }
-});
-
-app.get("/api-test/videogames/loadInitialData", (req,res)=>{
-  console.log("/api-test/videogames/loadInitialData");
-  videogames = [
-        { name: "LeagueOfLegends", platform: "Computer", players:"Multiplayer"},
-        { name: "BloodBorn", platform: "PlayStation", players:"Single"},
-        { name: "Halo", platform: "Xbox", players: "Multiplayer"}
-  ];
-  res.send(videogames);
-});
-////////////////////////////////////////////////////////////////////////////////
 
 //app.listen(3000); //Para probar en local
 //app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku

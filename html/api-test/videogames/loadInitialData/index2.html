@@ -9,7 +9,7 @@
   <script type="text/javascript">
     var fs = require("fs");
     fs.readFile('videogames.json','utf8',(err,content)=>{
-      console.log("Data read of videogames.json");
+      console.log("Data read on videogames.json");
       videogames = JSON.parse(content); //OBJETO json,"cargo archivo en 1 variable"
     });
     document.write(videogames);
