@@ -1,3 +1,4 @@
+var express = require("express");
 // URI:/api/v1/mortal-victims
 var victims = [{autonomous_community: "Andalucia", year: 2015, under18age: 0, from18to40age: 3, over40age: 7} , {autonomous_community: "Madrid", year: 2013, under18age: 0, from18to40age: 5, over40age: 4} , {autonomous_community: "Cantabria", year: 2013, under18age: 0, from18to40age: 1, over40age: 0} ];
 
