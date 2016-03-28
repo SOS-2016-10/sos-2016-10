@@ -5,7 +5,7 @@ var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceve
 //Importar Controladores hechos por nosotros
 var teamsCtl = require("./teamsFile.js");
 var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
-var unionsCtl = require('./Unions.js');
+var unionsCtl = require('./unions.js');
 var telematicMonitoringsCtl = require('./telematicMonitorings.js');
 
 var app = express();
@@ -49,6 +49,7 @@ app.get('/about/mortal-victims', (req,res)=>{
 });
 
 /////////////////////// Código Juanlu ///////////////////////
+/*
 //Llamar a controlador OPERACIONES lista teams
 app.get("/api/sandbox/teams", teamsCtl.getTeams);
 app.post("/api/sandbox/teams", teamsCtl.postTeams);
@@ -72,6 +73,7 @@ app.post("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.po
 app.put("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.putDivorce);
 app.delete("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.deleteDivorce);
 app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadInitialData); //Inicializar divorces-spanish "/api/v1/divorces-spanish/loadInitialData"
+*/
 
 //Resource Unions
 app.get("/api/sandbox/unions", unionsCtl.getUnions);
