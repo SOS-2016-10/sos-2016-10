@@ -13,7 +13,7 @@ function search(array, acronym){
 module.exports.getUnions = (req,res)=>{
   console.log("New request of unions.");
   res.send(unions);
-});
+}
 
 module.exports.postUnions = (req, res)=>{
   var sind = req.body;
@@ -25,18 +25,18 @@ module.exports.postUnions = (req, res)=>{
     res.sendStatus(406);
     console.log("New post of already exiting labor unions: "+sind.acronym);
   }
-});
+}
 
 module.exports.putUnions = (req,res)=>{
   console.log("Put not allowed.");
   res.sendStatus(405);
-});
+}
 
 module.exports.deleteUnions = (req,res)=>{
   console.log("Deleting unions.");
   unions = [];
   res.sendStatus(200);
-});
+}
 
 /////////////////////////////////////// CONCRETE OBJECTS
 module.exports.getUnion = (req,res)=>{
@@ -48,12 +48,12 @@ module.exports.getUnion = (req,res)=>{
   }else{
     res.send(unions[index]);
   }
-});
+}
 
 module.exports.postUnion = (req,res)=>{
   res.sendStatus(405);
   console.log("Post not allowed.")
-});
+}
 
 module.exports.putUnion = (req,res)=>{
   var s = req.params.acronym;
@@ -65,7 +65,7 @@ module.exports.putUnion = (req,res)=>{
     unions[index] = req.body;
     res.sendStatus(200);
   }
-});
+}
 
 module.exports.deleteUnion = (req,res)=>{
   var s = req.params.acronym;
@@ -79,7 +79,7 @@ module.exports.deleteUnion = (req,res)=>{
     unions.splice(index,1);
     res.sendStatus(200);
   }
-});
+}
 
 module.exports.loadInitialData = (req,res)=>{
   u1 = {acronym:"TUC",name:"Trade union congress"};
@@ -87,5 +87,5 @@ module.exports.loadInitialData = (req,res)=>{
   unions.push(u1);
   unions.push(u2);
   res.sendStatus(200);
-});
+}
 //end of /api/sandbox/unions

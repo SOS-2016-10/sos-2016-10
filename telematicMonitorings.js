@@ -13,7 +13,7 @@ function search(array, province){
 module.exports.getTMs = (req,res)=>{
   console.log("New request of TMs.");
   res.send(tms);
-});
+}
 
 module.exports.postTMs = (req, res)=>{
   var tm = req.body;
@@ -25,18 +25,18 @@ module.exports.postTMs = (req, res)=>{
     res.sendStatus(406);
     console.log("New post of already exiting TM: "+tm.province);
   }
-});
+}
 
 module.exports.putTMs = (req,res)=>{
   console.log("Put not allowed.");
   res.sendStatus(405);
-});
+}
 
 module.exports.deleteTMs = (req,res)=>{
   console.log("Deleting TMs.");
   tms = [];
   res.sendStatus(200);
-});
+}
 
 /////////////////////////////////////// CONCRETE OBJECTS
 module.exports.getTM = (req,res)=>{
@@ -48,12 +48,12 @@ module.exports.getTM = (req,res)=>{
   }else{
     res.send(tms[index]);
   }
-});
+}
 
 module.exports.postTM = (req,res)=>{
   res.sendStatus(405);
   console.log("Post not allowed.")
-});
+}
 
 module.exports.putTM = (req,res)=>{
   var s = req.params.province;
@@ -65,7 +65,7 @@ module.exports.putTM = (req,res)=>{
     tms[index] = req.body;
     res.sendStatus(200);
   }
-});
+}
 
 module.exports.deleteTM = (req,res)=>{
   var s = req.params.province;
@@ -79,7 +79,7 @@ module.exports.deleteTM = (req,res)=>{
     tms.splice(index,1);
     res.sendStatus(200);
   }
-});
+}
 
 module.exports.loadInitialData = (req,res)=>{
   tm1 = {province:"Sevilla",year:2013,installed:1,uninstalled:2,actived:3}
@@ -93,4 +93,4 @@ module.exports.loadInitialData = (req,res)=>{
   tms.push(tm4);
   tms.push(tm5);
   res.sendStatus(200);
-});
+}
