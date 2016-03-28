@@ -76,6 +76,7 @@ app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadIniti
 */
 
 //Resource Unions
+app.get("/api/v1/telematic-monitorings/loadInitialData", telematicMonitoringsCtl.loadInitialData); //Initialize telematic-monitorings "/api/v1/telematic-monitorings/loadInitialData"
 app.get("/api/sandbox/unions", unionsCtl.getUnions);
 app.post("/api/sandbox/unions", unionsCtl.postUnions);
 app.put("/api/sandbox/unions", unionsCtl.putUnions);
@@ -92,11 +93,10 @@ app.post("/api/v1/telematic-monitorings", telematicMonitoringsCtl.postTMs);
 app.put("/api/v1/telematic-monitorings", telematicMonitoringsCtl.putTMs);
 app.delete("/api/v1/telematic-monitorings", telematicMonitoringsCtl.deleteTMs);
 //Concrete telematic-monitoring
-app.get("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.getTMs);
-app.post("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.postTMs);
-app.put("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.putTMs);
-app.delete("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.deleteTMs);
-app.get("/api/v1/telematic-monitorings/loadInitialData", telematicMonitoringsCtl.loadInitialData); //Initialize telematic-monitorings "/api/v1/telematic-monitorings/loadInitialData"
+app.get("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.getTM);
+app.post("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.postTM);
+app.put("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.putTM);
+app.delete("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.deleteTM);
 
 
 

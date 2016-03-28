@@ -5,6 +5,7 @@ function search(array, province){
   for(var i = 0;i<array.length;i++){
     if(array[i].province == province){
       return i;
+      console.log("provincia: ")
     }
   }
   return -1;
@@ -93,4 +94,5 @@ module.exports.loadInitialData = (req,res)=>{
   tms.push(tm4);
   tms.push(tm5);
   res.sendStatus(200);
+  console.log("loadInitialData")
 }
