@@ -49,7 +49,7 @@ app.get('/about/mortal-victims', (req,res)=>{
 });
 
 /////////////////////// Código Juanlu ///////////////////////
-/*
+
 //Llamar a controlador OPERACIONES lista teams
 app.get("/api/sandbox/teams", teamsCtl.getTeams);
 app.post("/api/sandbox/teams", teamsCtl.postTeams);
@@ -73,7 +73,7 @@ app.post("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.po
 app.put("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.putDivorce);
 app.delete("/api/v1/divorces-spanish/:autonomous-community", divorcesSpanishCtl.deleteDivorce);
 app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadInitialData); //Inicializar divorces-spanish "/api/v1/divorces-spanish/loadInitialData"
-*/
+
 
 //Resource Unions
 app.get("/api/v1/telematic-monitorings/loadInitialData", telematicMonitoringsCtl.loadInitialData); //Initialize telematic-monitorings "/api/v1/telematic-monitorings/loadInitialData"
