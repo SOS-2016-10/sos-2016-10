@@ -108,6 +108,8 @@ app.delete("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.de
 
 //VIDEOGAMES - MORTAL-VICTIMS
 //Videogames
+//Initialize test data "/api-test/videogames/loadInitialData"
+app.get("/api-test/teams/loadInitialData", videogamesCtl.loadInitialData);
 /// Calling videogames resource
 app.get("/api/sandbox/videogames", videogamesCtl.getVideogames);
 app.post("/api/sandbox/videogames", videogamesCtl.postVideogames);
@@ -118,10 +120,10 @@ app.get("/api/sandbox/videogames/:name", videogamesCtl.getVideogame);
 app.post("/api/sandbox/videogames/:name", videogamesCtl.postVideogame);
 app.put("/api/sandbox/videogames/:name", videogamesCtl.putVideogame);
 app.put("/api/sandbox/videogames/:name", videogamesCtl.deleteVideogame);
-//Initialize test data "/api-test/videogames/loadInitialData"
-app.get("/api-test/teams/loadInitialData", videogamesCtl.loadInitialData);
 
 //mortal-victims
+//initialize mortal-victims test data "/api/v1/mortal-victims/loadInitialData"
+app.get("/api/v1/mortal-victims/loadInitialData", mortalVictimsCtl.loadInitialData);
 // Calling mortal-victims resource
 app.get("/api/v1/mortal-victims", mortalVictimsCtl.getVictims);
 app.post("/api/v1/mortal-victims", mortalVictimsCtl.postVictims);
@@ -132,8 +134,7 @@ app.get("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.getVict
 app.post("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.postVictim);
 app.put("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.putVictim);
 app.delete("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.deleteVictim);
-//initialize mortal-victims test data "/api/v1/mortal-victims/loadInitialData"
-app.get("/api/v1/mortal-victims/loadInitialData", mortalVictimsCtl.loadInitialData);
+
 
 
 //app.listen(3000); //Para probar en local
