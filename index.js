@@ -130,10 +130,10 @@ app.post("/api/v1/mortal-victims", mortalVictimsCtl.postVictims);
 app.put("/api/v1/mortal-victims", mortalVictimsCtl.putVictims);
 app.delete("/api/v1/mortal-victims", mortalVictimsCtl.deleteVictims);
 //Calling mortal-victims concrete resource
-app.get("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.getVictim);
-app.post("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.postVictim);
-app.put("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.putVictim);
-app.delete("/api/v1/mortal-victims/:autonomous-community", mortalVictimsCtl.deleteVictim);
+app.get("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.getVictim);
+app.post("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.postVictim);
+app.put("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.putVictim);
+app.delete("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.deleteVictim);
 
 
 
