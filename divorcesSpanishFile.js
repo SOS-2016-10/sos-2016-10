@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var paginate = require("express-paginate");
 
-//Array sobre el que hago las operaciones
+///Array sobre el que hago las operaciones
 var divorces = [{ autonomous_community: "andalucia", year: 2014, age_0_18: 1, age_19_24: 56, age_25_29: 537, age_30_34: 1860 },
 { autonomous_community: "aragon", year: 2014, age_0_18: 0, age_19_24: 6, age_25_29: 69, age_30_34: 235 },
 { autonomous_community: "andalucia", year: 2013, age_0_18: 3, age_19_24: 77, age_25_29: 607, age_30_34: 1956 } ]; //No es JSON(es JavaScript)
