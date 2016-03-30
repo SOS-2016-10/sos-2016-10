@@ -75,6 +75,11 @@ app.get("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.get
 app.post("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.postDivorce);
 app.put("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.putDivorce);
 app.delete("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.deleteDivorce);
+//OPERACIONES sobre 1 DIVORCE(recurso) ":year"
+app.get("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.getYear);
+app.post("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.postYear);
+app.put("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.putYear);
+app.delete("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.deleteYear);
 //OPERACIONES sobre 1 DIVORCE(recurso) "/:autonomous_community/:year"
 app.get("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.getDivorceYear);
 app.post("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.postDivorceYear);

@@ -1,6 +1,5 @@
 var express = require("express");
 var app = express();
-var paginate = require("express-paginate");
 
 ///Array sobre el que hago las operaciones
 var divorces = [{ autonomous_community: "andalucia", year: 2014, age_0_18: 1, age_19_24: 56, age_25_29: 537, age_30_34: 1860 },
@@ -262,4 +261,14 @@ module.exports.deleteDivorceYear = (req,res)=>{
     console.log("Not DELETE because NOT FOUND "+n+" "+y);
     res.sendStatus(404);
   }
+}
+
+//OPERACIONES sobre 1 DIVORCE(recurso) ":year"
+module.exports.getYear = (req,res)=>{
+}
+module.exports.postYear = (req,res)=>{
+}
+module.exports.putYear = (req,res)=>{
+}
+module.exports.deleteYear = (req,res)=>{
 }
