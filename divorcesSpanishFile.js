@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var router = express.Router();
 
 ///Array sobre el que hago las operaciones
 var divorces = [{ autonomous_community: "andalucia", year: 2014, age_0_18: 1, age_19_24: 56, age_25_29: 537, age_30_34: 1860 },
@@ -272,3 +273,4 @@ module.exports.putYear = (req,res)=>{
 }
 module.exports.deleteYear = (req,res)=>{
 }
+module.exports = router;

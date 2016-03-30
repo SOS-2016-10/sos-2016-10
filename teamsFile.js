@@ -1,3 +1,6 @@
+var express = require("express");
+var router = express.Router();
+
 // /api/sandbox/teams ////////////////////////////////////////////
 //var contacts = [{ name : "pepe"}];
 var teams = [{ name: "Betis", stadium: "Benito Villamarín"},
@@ -18,10 +21,12 @@ function find_resource(array,name){
 }
 
 module.exports.getTeams = (req,res)=>{
+//router.getTeams = (req,res)=>{
   console.log("New GET of TEAMS");
   res.send(teams);
 }
 module.exports.postTeams = (req,res)=>{
+//router.postTeams = (req,res)=>{
   var team = req.body;
 
   //comprobar antes que no existe ese "name" ya
@@ -35,6 +40,7 @@ module.exports.postTeams = (req,res)=>{
     res.sendStatus(200);
   }
 }
+
 //NO PERMITIDO
 module.exports.putTeams = (req,res)=>{
   console.log("PUT NOT ALLOWED");
@@ -108,3 +114,4 @@ module.exports.loadInitialData = (req,res)=>{
   res.send(teams);
   //res.sendStatus(200);
 }
+module.exports = router;
