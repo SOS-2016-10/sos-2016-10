@@ -52,11 +52,42 @@ app.get('/about/mortal-victims', (req,res)=>{
 
 //////////////////////////////////////////////////////////////
 /////////////////////// Código Juanlu ///////////////////////
-//Llamar a API "TEAMS"
-app.use("/api/sandbox/teams", teamsCtl);
-//Llamar a API "DIVORCES-SPANISH"
-app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 
+//Llamar a controlador OPERACIONES lista teams
+app.use("/api/sandbox/teams", teamsCtl);
+/*app.get("/api-test/teams/loadInitialData", teamsCtl.loadInitialData); //Inicializar teams "/api-test/teams/loadInitialData"
+app.get("/api/sandbox/teams", teamsCtl.getTeams);
+app.post("/api/sandbox/teams", teamsCtl.postTeams);
+app.put("/api/sandbox/teams", teamsCtl.putTeams);
+app.delete("/api/sandbox/teams", teamsCtl.deleteTeams);
+//Llamar a controlador OPERACIONES sobre 1 recurso "/api/sandbox/teams/betis"
+app.get("/api/sandbox/teams/:name", teamsCtl.getTeam);
+app.post("/api/sandbox/teams/:name", teamsCtl.postTeam);
+app.put("/api/sandbox/teams/:name", teamsCtl.putTeam);
+app.put("/api/sandbox/teams/:name", teamsCtl.deleteTeam);*/
+
+//OPERACIONES lista DIVORCES
+app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
+/*app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadInitialData); //Inicializar divorces-spanish "/api/v1/divorces-spanish/loadInitialData"
+app.get("/api/v1/divorces-spanish", divorcesSpanishCtl.getDivorces);
+app.post("/api/v1/divorces-spanish", divorcesSpanishCtl.postDivorces);
+app.put("/api/v1/divorces-spanish", divorcesSpanishCtl.putDivorces);
+app.delete("/api/v1/divorces-spanish", divorcesSpanishCtl.deleteDivorces);
+//OPERACIONES sobre 1 DIVORCE(recurso) ":autonomous_community"
+app.get("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.getDivorce);
+app.post("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.postDivorce);
+app.put("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.putDivorce);
+app.delete("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.deleteDivorce);
+//OPERACIONES sobre 1 DIVORCE(recurso) ":year"
+app.get("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.getYear);
+app.post("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.postYear);
+app.put("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.putYear);
+app.delete("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.deleteYear);
+//OPERACIONES sobre 1 DIVORCE(recurso) "/:autonomous_community/:year"
+app.get("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.getDivorceYear);
+app.post("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.postDivorceYear);
+app.put("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.putDivorceYear);
+app.delete("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.deleteDivorceYear);*/
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////      ULISES      //////////////////////////////////

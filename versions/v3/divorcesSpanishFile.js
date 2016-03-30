@@ -1,23 +1,3 @@
-/*app.get("/api/v1/divorces-spanish/loadInitialData", divorcesSpanishCtl.loadInitialData); //Inicializar divorces-spanish "/api/v1/divorces-spanish/loadInitialData"
-app.get("/api/v1/divorces-spanish", divorcesSpanishCtl.getDivorces);
-app.post("/api/v1/divorces-spanish", divorcesSpanishCtl.postDivorces);
-app.put("/api/v1/divorces-spanish", divorcesSpanishCtl.putDivorces);
-app.delete("/api/v1/divorces-spanish", divorcesSpanishCtl.deleteDivorces);
-//OPERACIONES sobre 1 DIVORCE(recurso) ":autonomous_community"
-app.get("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.getDivorce);
-app.post("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.postDivorce);
-app.put("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.putDivorce);
-app.delete("/api/v1/divorces-spanish/:autonomous_community", divorcesSpanishCtl.deleteDivorce);
-//OPERACIONES sobre 1 DIVORCE(recurso) ":year"
-app.get("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.getYear);
-app.post("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.postYear);
-app.put("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.putYear);
-app.delete("/api/v1/divorces-spanish/:year", divorcesSpanishCtl.deleteYear);
-//OPERACIONES sobre 1 DIVORCE(recurso) "/:autonomous_community/:year"
-app.get("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.getDivorceYear);
-app.post("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.postDivorceYear);
-app.put("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.putDivorceYear);
-app.delete("/api/v1/divorces-spanish/:autonomous_community/:year", divorcesSpanishCtl.deleteDivorceYear);*/
 var express = require("express");
 var app = express();
 var router = express.Router();
@@ -191,8 +171,7 @@ router.put("/:autonomous_community", (req,res)=>{
     res.sendStatus(404);
   }
 });
-//module.exports.deleteDivorce = (req,res)=>{
-router.delete("/:autonomous_community", (req,res)=>{
+module.exports.deleteDivorce = (req,res)=>{
   var n = req.params.autonomous_community;
 
   var e = find_resource(divorces,n)[0];
@@ -205,12 +184,11 @@ router.delete("/:autonomous_community", (req,res)=>{
     console.log("Not DELETE because NOT FOUND "+n);
     res.sendStatus(404);
   }
-});
+}
 
-//Para inicializar la API REST "divorces-spanish" ///////////////////////////////////////////////////////////////
-// /api/v1/divorces-spanish/loadInitialData“ ////////////////////////////////////////////////////////////////////
-//module.exports.loadInitialData = (req,res)=>{
-router.get("/loadInitialData", (req,res)=>{
+//Para inicializar la API REST "divorces-spanish" ///////////////////////////
+// /api/v1/divorces-spanish/loadInitialData“
+module.exports.loadInitialData = (req,res)=>{
   console.log("/api/v1/divorces-spanish/loadInitialData");
   divorces.push({ autonomous_community: "canarias", year: 2014, age_0_18: 0, age_19_24: 10, age_25_29: 149, age_30_34: 429 });
   divorces.push({ autonomous_community: "cantabria", year: 2014, age_0_18: 0, age_19_24: 5, age_25_29: 25, age_30_34: 103 });
@@ -221,11 +199,10 @@ router.get("/loadInitialData", (req,res)=>{
   divorces.push({ autonomous_community: "andalucia", year: 2014, age_0_18: 1, age_19_24: 56, age_25_29: 537, age_30_34: 1860 });
   //res.send(divorces);
   res.sendStatus(200);
-});
+}
 
-//////////////////// Operaciones sobre 1 recurso (autonomous_community/year) ////////////////////////////////////////
-//module.exports.getDivorceYear = (req,res)=>{
-router.get("/:autonomous_community/:year", (req,res)=>{
+//////////////////// Operaciones sobre 1 recurso (autonomous_community/year) ////////////////////
+module.exports.getDivorceYear = (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
   console.log("New GET of resource "+n+" "+y);
@@ -241,15 +218,13 @@ router.get("/:autonomous_community/:year", (req,res)=>{
   } else {
     res.sendStatus(404);
   }
-});
+}
 //NO PERMITIDO
-//module.exports.postDivorceYear = (req,res)=>{
-router.post("/:autonomous_community/:year", (req,res)=>{
+module.exports.postDivorceYear = (req,res)=>{
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
-});
-//module.exports.putDivorceYear = (req,res)=>{
-router.put("/:autonomous_community/:year", (req,res)=>{
+}
+module.exports.putDivorceYear = (req,res)=>{
   //var n = req.body.year;
 
   var n = req.body.autonomous_community;
@@ -268,9 +243,8 @@ router.put("/:autonomous_community/:year", (req,res)=>{
     console.log("Resource \""+n+" "+y+"\" NOT exist");
     res.sendStatus(404);
   }
-});
-//module.exports.deleteDivorceYear = (req,res)=>{
-router.delete("/:autonomous_community/:year", (req,res)=>{
+}
+module.exports.deleteDivorceYear = (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
   var ac = find_community(divorces,n)[2]; //obtengo arrayComunidades
@@ -287,20 +261,15 @@ router.delete("/:autonomous_community/:year", (req,res)=>{
     console.log("Not DELETE because NOT FOUND "+n+" "+y);
     res.sendStatus(404);
   }
-});
+}
 
-//OPERACIONES sobre 1 DIVORCE(recurso) ":year"////////////////////////////////////////////////////////////////7
-//module.exports.getYear = (req,res)=>{
-router.get("/:year", (req,res)=>{
-});
-//module.exports.postYear = (req,res)=>{
-router.post("/:year", (req,res)=>{
-});
-//module.exports.putYear = (req,res)=>{
-router.put("/:year", (req,res)=>{
-});
-//module.exports.deleteYear = (req,res)=>{
-router.delete("/:year", (req,res)=>{
-});
-
+//OPERACIONES sobre 1 DIVORCE(recurso) ":year"
+module.exports.getYear = (req,res)=>{
+}
+module.exports.postYear = (req,res)=>{
+}
+module.exports.putYear = (req,res)=>{
+}
+module.exports.deleteYear = (req,res)=>{
+}
 module.exports = router;
