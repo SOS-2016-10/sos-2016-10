@@ -64,7 +64,7 @@ function compruebaApiKey(key){
 //module.exports.getDivorces = (req,res)=>{
 router.get("/", (req,res)=>{
   var q = req.query;
-  if(Object.keys().length == 0){ //No hay busqueda(nº parámetros = 0)
+  if(Object.keys(q).length == 0){ //No hay busqueda(nº parámetros = 0)
     console.log("New GET of \"divorces-spanish\"");
     res.send(divorces);
   } else { //Hay parámetros de busqueda
