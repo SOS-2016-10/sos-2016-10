@@ -203,7 +203,7 @@ router.get("/:autonomous_community/:year", (req,res)=>{
 
   if(e.v1 == 0){ //Error == 0 "NO hay error"
     //res.send(divorces[i]);
-    res.send(ay);
+    res.send(ay.v3);
   } else {
     res.sendStatus(404);
   }
