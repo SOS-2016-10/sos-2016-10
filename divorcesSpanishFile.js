@@ -178,7 +178,7 @@ router.put("/:year", (req,res)=>{
 router.delete("/:year(\\d+)", (req,res)=>{
   var y = req.params.year;
   var prop = "year";
-  
+
   var eiaux2 = functions.find_year(divorces,y);
   if(eiaux2.v1 == 0){ //Lo encuentro en "divorces"
     divorces = functions.deleteParam(divorces,y,prop); //divorces.splice(i, 1); //delete divorces[i];
@@ -197,12 +197,11 @@ router.get("/:autonomous_community/:year", (req,res)=>{
   var y = req.params.year;
   console.log("New GET of resource "+n+" "+y);
 
-  var ac = functions.find_community(divorces,n)[2]; //obtengo arrayComunidades
-  var ay = functions.find_year(ac,y)[2]; //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ac,y)[0];
-  //var e = find_resource(divorces,y)[0];
-  //var i = find_resource(divorces,n)[1];
-  if(e == 0){ //Error == 0 "NO hay error"
+  var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
+  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+  var e = functions.find_year(ay.v3,y);
+
+  if(e.v1 == 0){ //Error == 0 "NO hay error"
     //res.send(divorces[i]);
     res.send(ay);
   } else {
@@ -218,12 +217,11 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   //var n = req.body.year;
   var n = req.body.autonomous_community;
   var y = req.body.year;
-  var ac = functions.find_community(divorces,n)[2]; //obtengo arrayComunidades
-  var ay = functions.find_year(ac,y)[2]; //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ac,y)[0];
-  //var e = find_resource(divorces,n)[0];
-  //var i = find_resource(divorces,n)[1];
-  if(e == 0){ //No hay error(lo encuentra, ya existe)
+
+  var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
+  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+  var e = functions.find_year(ay.v3,y);
+  if(e.v1 == 0){ //No hay error(lo encuentra, ya existe)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
     console.log("New PUT of resource "+n+" "+y);
@@ -236,13 +234,12 @@ router.put("/:autonomous_community/:year", (req,res)=>{
 router.delete("/:autonomous_community/:year", (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
-  var ac = functions.find_community(divorces,n)[2]; //obtengo arrayComunidades
-  var ay = functions.find_year(ac,y)[2]; //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ac,y)[0];
 
-  //var e = find_resource(divorces,n)[0];
-  //var i = find_resource(divorces,n)[1];
-  if(e == 0){ //Lo encuentro en "divorces"
+  var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
+  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+  var e = functions.find_year(ay.v3,y);
+
+  if(e.v1 == 0){ //Lo encuentro en "divorces"
     divorces.splice(i, 1); //delete divorces[i];
     console.log("New DELETE of resource "+n);
     res.sendStatus(200);
