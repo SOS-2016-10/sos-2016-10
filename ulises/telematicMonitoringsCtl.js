@@ -17,26 +17,26 @@ exports.loadInitialData = (req,res)=>{
 exports.getTMs = (req,res)=>{
   console.log("New GET of TMs.");
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  var province = req.params.province;
   switch (lib.whichCase(req)) {
     case 0://Bad request.
       return res.sendStatus(400);
     case 1://DO NOT SEARCH, DO NOT PAGINATION
       var subArray = tms;
       break;
-    case 2://DO SEARCH, DO NOT PAGINATION
-      var subArray = lib.filterFromTo(tms, province, req.params.since, req.params.to);
+    case 2://SEARCH, DO NOT PAGINATION
+    console.log('cASE 2: ')
+      var subArray = lib.filterFromTo(tms, req.query.from, req.query.to);
       break;
-    case 3://DO NOT SEARCH, DO PAGINATION
+    case 3://DO NOT SEARCH, PAGINATION
       var subArray = tms;
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
       res.send(subArray.slice(offset, offset+limit));
       break;
-    case 4://DO SEARCH, DO PAGINATION
+    case 4://SEARCH, PAGINATION
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
-      var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+      var subArray = lib.filterFromTo(tms, value, req.query.from, req.query.to);
       subArray.slice(offset, offset+limit);//PAGINATION
       break;
   }
@@ -54,7 +54,7 @@ exports.getTMsByProvince = (req, res) => {// '/:province(\\D+)/ replaced for '/:
         var subArray = lib.filterBy(tms, 'province', value);
         break;
       case 2://DO SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+        var subArray = lib.filterFromToByProvince(tms, value, req.query.from, req.query.to);
         break;
       case 3://DO NOT SEARCH, DO PAGINATION
         var subArray = lib.filterBy(tms, 'province', value);
@@ -65,7 +65,7 @@ exports.getTMsByProvince = (req, res) => {// '/:province(\\D+)/ replaced for '/:
       case 4://DO SEARCH, DO PAGINATION
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+        var subArray = lib.filterFromToByProvince(tms, value, req.query.from, req.query.to);
         subArray.slice(offset, offset+limit);//PAGINATION
         break;
     }
@@ -84,7 +84,7 @@ exports.getTMsByYear = (req, res) => {
         var subArray = lib.filterBy(tms, 'year', value);
         break;
       case 2://DO SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+        var subArray = lib.filterFromToByYear(tms, value, req.query.from, req.query.to);
         break;
       case 3://DO NOT SEARCH, DO PAGINATION
         var subArray = lib.filterBy(tms, 'year', value);
@@ -95,7 +95,7 @@ exports.getTMsByYear = (req, res) => {
       case 4://DO SEARCH, DO PAGINATION
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+        var subArray = lib.filterFromToByYear(tms, value, req.query.from, req.query.to);
         subArray.slice(offset, offset+limit);//PAGINATION
         break;
     }

@@ -1,4 +1,4 @@
-var lib = require('./libTM.js')
+ar lib = require('./libTM.js')
 var crypto = require('crypto');
 
 
@@ -41,7 +41,7 @@ exports.indexOf = (array1, atr1, value1, atr2, value2) =>{
   return -1;
 }
 
-exports.filterFromTo = (array, province, since, to)=>{
+exports.filterFromToByProvince = (array, province, since, to)=>{
   var subArray1 = lib.filterBy(array, 'province', province);
   var subArray2 = [];
   for(i in subArray1){
@@ -50,6 +50,27 @@ exports.filterFromTo = (array, province, since, to)=>{
     }
   }
   return subArray2;
+}
+
+exports.filterFromToByYear = (array, year, since, to)=>{
+  var subArray1 = lib.filterBy(array, 'year', year);
+  var subArray2 = [];
+  for(i in subArray1){
+    if(subArray1[i]['year']>=since && subArray1[i]['year']<=to){
+      subArray2.push(subArray1[i]);
+    }
+  }
+  return subArray2;
+}
+
+exports.filterFromTo = (array, since, to)=>{
+  var subArray = [];
+  for(i in array){
+    if(array[i]['year']>=since && array[i]['year']<=to){
+      subArray.push(array[i]);
+    }
+  }
+  return subArray;
 }
 
 exports.whichCase = (req)=>{
