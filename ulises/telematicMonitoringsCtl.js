@@ -17,6 +17,7 @@ exports.loadInitialData = (req,res)=>{
 exports.getTMs = (req,res)=>{
   console.log("New GET of TMs.");
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  var province = req.params.province;
   switch (lib.whichCase(req)) {
     case 0://Bad request.
       return res.sendStatus(400);
@@ -24,7 +25,7 @@ exports.getTMs = (req,res)=>{
       var subArray = tms;
       break;
     case 2://DO SEARCH, DO NOT PAGINATION
-      var subArray = lib.filterFromTo(tms, value, req.params.since, req.params.to);
+      var subArray = lib.filterFromTo(tms, province, req.params.since, req.params.to);
       break;
     case 3://DO NOT SEARCH, DO PAGINATION
       var subArray = tms;
