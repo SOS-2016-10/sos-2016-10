@@ -92,7 +92,7 @@ router.post("/", (req,res)=>{
 
   //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
   var eiaux = functions.find_community(divorces,req.body.autonomous_community);//functions.find_resource(divorces,divorce.autonomous_community)[0];
-  var eiaux2 = functions.find_year(divorces,req.body.year);
+  var eiaux2 = functions.find_year(eiaux.v3,req.body.year);
   if((eiaux.v1 == 0) && (eiaux2.v1 == 0)){ //No hay error(lo encuentra, ya existe)
     res.sendStatus(409); //Conflict
     console.log("NOT POST because \""+divorce.autonomous_community+"\" or \""+divorce.year+"\" exist");
