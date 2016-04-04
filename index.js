@@ -5,8 +5,8 @@ var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceve
 //Importar Controladores hechos por nosotros
 var teamsCtl = require("./teamsFile.js");
 var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
-var unionsCtl = require("./unions.js");
-var telematicMonitoringsCtl = require("./telematicMonitorings.js");
+var unionsCtl = require("./ulises/unions.js");
+var telematicMonitorings = require("./ulises/telematicMonitorings.js");
 var videogamesCtl = require("./videogames.js");
 var mortalVictimsCtl = require("./mortalVictims.js");
 
@@ -17,6 +17,12 @@ var port = (process.env.PORT || 3000);
 
 //Cada vez que llegue JSON <=> Variable
 app.use(bodyParser.json());
+//app.listen(3000); //Para probar en local
+//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+//Hago callback porque es asincrono
+app.listen(port, ()=>{
+  console.log("Ready to go! port "+port);
+});
 
 //Me creo rutas estáticas
 app.use("/",express.static(__dirname + '/css')); //Es como si folder "css" no existiera, y estuviera todo en RAIZ
@@ -61,7 +67,6 @@ app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////      ULISES      //////////////////////////////////
 //Resource Unions
-app.get("/api/v1/telematic-monitorings/loadInitialData", telematicMonitoringsCtl.loadInitialData); //Initialize telematic-monitorings "/api/v1/telematic-monitorings/loadInitialData"
 app.get("/api/sandbox/unions", unionsCtl.getUnions);
 app.post("/api/sandbox/unions", unionsCtl.postUnions);
 app.put("/api/sandbox/unions", unionsCtl.putUnions);
@@ -73,15 +78,8 @@ app.put("/api/sandbox/unions/:acronym", unionsCtl.putUnion);
 app.put("/api/sandbox/unions/:acronym", unionsCtl.deleteUnion);
 app.get("/api-test/unions/loadInitialData", unionsCtl.loadInitialData); //Initialize unions "/api-test/unions/loadInitialData"
 //Resource telematic-monitorings
-app.get("/api/v1/telematic-monitorings", telematicMonitoringsCtl.getTMs);
-app.post("/api/v1/telematic-monitorings", telematicMonitoringsCtl.postTMs);
-app.put("/api/v1/telematic-monitorings", telematicMonitoringsCtl.putTMs);
-app.delete("/api/v1/telematic-monitorings", telematicMonitoringsCtl.deleteTMs);
-//Concrete telematic-monitoring
-app.get("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.getTM);
-app.post("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.postTM);
-app.put("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.putTM);
-app.delete("/api/v1/telematic-monitorings/:province", telematicMonitoringsCtl.deleteTM);
+//Acceso a recursos API REST telematic-monitorings
+app.use('/api/v1/telematic-monitorings', telematicMonitorings);
 
 //VIDEOGAMES - MORTAL-VICTIMS
 //Videogames
@@ -111,12 +109,3 @@ app.get("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.getVict
 app.post("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.postVictim);
 app.put("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.putVictim);
 app.delete("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.deleteVictim);
-
-
-
-//app.listen(3000); //Para probar en local
-//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
-//Hago callback porque es asincrono
-app.listen(port, ()=>{
-  console.log("Ready to go! port "+port);
-});
