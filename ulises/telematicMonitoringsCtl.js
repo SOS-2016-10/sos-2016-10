@@ -36,7 +36,9 @@ exports.getTMs = (req,res)=>{
     case 4://SEARCH, PAGINATION
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
-      var subArray = lib.filterFromTo(tms, value, req.query.from, req.query.to);
+      console.log('offset: '+offset)
+      console.log('limit: '+limit)
+      var subArray = lib.filterFromTo(tms, req.query.from, req.query.to);
       subArray.slice(offset, offset+limit);//PAGINATION
       break;
   }
