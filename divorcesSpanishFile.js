@@ -144,7 +144,7 @@ router.put("/:autonomous_community", (req,res)=>{
   if(eiaux.v3.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
     console.log("Resource \""+n+"\" NOT exist");
     res.sendStatus(404);
-  } else if(eiaux.v3 == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
+  } else if(eiaux.v3.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
     console.log("New PUT of resource "+n);
