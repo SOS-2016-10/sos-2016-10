@@ -138,6 +138,7 @@ router.post('/',(req,res)=>{
 
 exports.postTM = (req,res)=>{
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  if(!lib.isDataCorrect(req,'post')){ console.log('res 401');
   var tm = req.body;
   var subArray1 = lib.filterBy(tms, 'province', tm[0]['province']);
   var subArray2 = lib.filterBy(subArray1, 'year', tm[0]['year']);
@@ -179,6 +180,7 @@ exports.putByProvince = (req,res)=>{
 
 exports.putTMByProvinceYear = (req,res)=>{
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  if(!lib.isDataCorrect(req,'put')){ console.log('res 401');
   var tm = req.body[0];
   if(tm['province'] != value1 || tm['year'] != value2){return res.sendStatus(400);}
   var value1 = req.params.province;

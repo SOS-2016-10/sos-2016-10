@@ -83,3 +83,24 @@ exports.verifyAccess = (key) =>{
   var keyShadow = crypto.createHash('sha1').update(key).digest('hex');
   return keyShadow == generalPass;
 }
+
+exports.isDataCorrect = (req, type) =>{
+  var tm = req.body[0];
+  var province = req.params.province;
+  var year = req.params.year;
+  console.log(tm['province'])
+  console.log(tm['year'])
+  console.log(tm['installed'])
+  console.log(tm['uninstalled'])
+  console.log(tm['actived'])
+  if(type == 'post'){
+    if(tm['province'] == undefined || tm['year'] == undefined ||
+        tm['installed'] == undefined || tm['uninstalled'] == undefined ||
+        tm['actived'] == undefined){ return false;}
+  }else{
+    if(tm['province'] != province || tm['year'] != year ||
+        tm['installed'] == undefined || tm['uninstalled'] == undefined ||
+        tm['actived'] == undefined){ return false;}
+  }
+  return true;
+}
