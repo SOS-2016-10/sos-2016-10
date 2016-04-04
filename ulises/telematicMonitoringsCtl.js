@@ -31,15 +31,19 @@ exports.getTMs = (req,res)=>{
       var subArray = tms;
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
-      res.send(subArray.slice(offset, offset+limit));
+      subArray = subArray.slice(offset, (offset+limit));
       break;
     case 4://SEARCH, PAGINATION
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
-      console.log('offset: '+offset)
+      console.log('offset: '+req.query.limit)
       console.log('limit: '+limit)
       var subArray = lib.filterFromTo(tms, req.query.from, req.query.to);
-      subArray.slice(offset, offset+limit);//PAGINATION
+      console.log(subArray);
+      console.log('offset+limit: '+(offset+limit))
+      subArray = subArray.slice(offset, (offset+limit));//PAGINATION
+      console.log('SUB')
+      console.log(subArray)
       break;
   }
   (subArray.length == 0) ? res.sendStatus(404) : res.send(subArray);
