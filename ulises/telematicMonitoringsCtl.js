@@ -179,12 +179,14 @@ exports.putByProvince = (req,res)=>{
 
 exports.putTMByProvinceYear = (req,res)=>{
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  var tm = req.body[0];
+  if(tm['province'] != value1 || tm['year'] != value2){return res.sendStatus(400);}
   var value1 = req.params.province;
   var value2 = req.params.year;
   var index = lib.indexOf(tms, 'province', value1, 'year', value2);
   console.log("New put of "+value1,value2);
   if(index > -1){
-    tms[index] = req.body[0];
+    tms[index] = tm;
     res.sendStatus(200);
   }else{
     res.sendStatus(404);
