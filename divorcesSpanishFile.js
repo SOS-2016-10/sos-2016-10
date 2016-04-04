@@ -138,20 +138,19 @@ router.post("/:autonomous_community", (req,res)=>{
 
 router.put("/:autonomous_community", (req,res)=>{
   var n = req.body.autonomous_community;
-  var y = req.body.year;
 
-  //var e = functions.find_resource(divorces,n)[0];
-  //var i = functions.find_resource(divorces,n)[1];
   var eiaux = functions.find_community(divorces,n);
-  var eiaux2 = functions.find_year(eiaux.v3,y);
-  if(eiaux2.v1 == 0){ //No hay error(lo encuentra, ya existe)
+  //var eiaux2 = functions.find_year(eiaux.v3,y);
+  if(eiaux.v3.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
+    console.log("Resource \""+n+"\" NOT exist");
+    res.sendStatus(404);
+  } else if(eiaux.v3 == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
     console.log("New PUT of resource "+n);
     res.sendStatus(200);
-  } else {
-    console.log("Resource \""+n+"\" NOT exist");
-    res.sendStatus(404);
+  } else { //Hay más de 1 recurso que cumple filtro(NO PUEDO HACER PUT)
+    res.send(409); //Conflict
   }
 });
 
@@ -192,15 +191,15 @@ router.put("/:year", (req,res)=>{
 
   var eiaux2 = functions.find_year(divorces,y);
   if(eiaux2.v3.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
-    console.log("Resource \""+n+"\" NOT exist");
+    console.log("Resource \""+y+"\" NOT exist");
     res.sendStatus(404); //NOT FOUND
   } else if(eiaux2.v3.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
-    console.log("New PUT of resource "+n);
+    console.log("New PUT of resource "+y);
     res.sendStatus(200);
   } else { //Hay más de 1 recurso que cumple filtro(NO PUEDO HACER PUT)
-
+    res.send(409); //Conflict
   }
 });
 router.delete("/:year(\\d+)", (req,res)=>{
