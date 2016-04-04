@@ -199,9 +199,9 @@ router.get("/:autonomous_community/:year", (req,res)=>{
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ay.v3,y);
+  //var e = functions.find_year(ay.v3,y);
 
-  if(e.v1 == 0){ //Error == 0 "NO hay error"
+  if(ay.v1 == 0){ //Error == 0 "NO hay error"
     //res.send(divorces[i]);
     res.send(ay.v3);
   } else {
@@ -217,15 +217,24 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   //var n = req.body.year;
   var n = req.body.autonomous_community;
   var y = req.body.year;
+  var nn = req.params.autonomous_community;
+  var yy = req.params.year;
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ay.v3,y);
-  if(e.v1 == 0){ //No hay error(lo encuentra, ya existe)
-    divorces.splice(i, 1); //Elimino objeto
-    divorces.push(req.body); //Añado objeto
-    console.log("New PUT of resource "+n+" "+y);
-    res.sendStatus(200);
+  ///var e = functions.find_year(ay.v3,y);
+  //if(e.v1 == 0){ //No hay error(lo encuentra, ya existe)
+  if(ay.v3.length == 1){ //Si hay 1 elemento(ACTUALIZO)
+    if((n != nn) || (y != yy)){
+      console.log("400 BAD REQUEST");
+      res.sendStatus(400);
+    } else {
+      //divorces.splice(i, 1); //Elimino objeto
+      functions.deleteOneResource(divorces,n,y);
+      divorces.push(req.body); //Añado objeto
+      console.log("New PUT of resource "+n+" "+y);
+      res.sendStatus(200);
+    }
   } else {
     console.log("Resource \""+n+" "+y+"\" NOT exist");
     res.sendStatus(404);
@@ -237,10 +246,12 @@ router.delete("/:autonomous_community/:year", (req,res)=>{
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  var e = functions.find_year(ay.v3,y);
+  //var e = functions.find_year(ay.v3,y);
 
-  if(e.v1 == 0){ //Lo encuentro en "divorces"
-    divorces.splice(i, 1); //delete divorces[i];
+  //if(ay.v1 == 0){ //Lo encuentro en "divorces"
+  if(ay.v3.length == 1){ //Si hay 1 elemento(ELIMINO)
+    //divorces.splice(i, 1); //delete divorces[i];
+    functions.deleteOneResource(divorces,n,y);
     console.log("New DELETE of resource "+n);
     res.sendStatus(200);
   } else { //No lo encuentro en "divorces"

@@ -15,7 +15,14 @@ module.exports.deleteParam = function(data,param,prop){
   }
   return aux;
 };
-
+module.exports.deleteOneResource = function(data,ac,y){
+  for(var i=0;i<data.length;i++){
+    if((data[i].autonomous_community == ac) && (data[i].year == y)){
+      data.splice(i,1);
+      break;
+    }
+  }
+};
 
 //find
 module.exports.find = function(array,name){
