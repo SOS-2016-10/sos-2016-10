@@ -100,50 +100,51 @@ module.exports.find_year = function(array,year){
 
 //Busqueda
 module.exports.search = function(data,query){
-  var aux3 = [];
-  var aux4 = [];
+  var aux = [];
+  var aux2 = [];
   //Hago el BUCLE según el nº de parámetros
   for(var i=0;i<Object.keys(query).length;i++){
     var valor = Object.keys(query)[i];
-    if(i == 0){ //////////1ª vez que entro en bucle
-      //Recorro array dado
-      for(var j=0;j<data.length;j++){
-        var v = query[valor]; //obtengo el contenido de la request
-        if(data[j][valor] == v){
-          var error = 0; //No hay error
-          aux3.push(data[j]);
-        }
-      }
-      if(aux3.length == 0){
-        var error = 1; //Hay error
-      }
-    } else { //////////Resto de veces que entro en bucle(aux3 ya está lleno)
-      for(var j=0;j<aux3.length;j++){
-        var v = query[valor]; //obtengo el contenido de la request
-        if(aux3[j][valor] == v){
-          var error = 0; //No hay error
-          aux4.push(aux3[j]);
-        }
-      }
-      aux3 = aux4;
-      if(aux4.length == 0){
-        var error = 1; //Hay error
-      }
+    if((valor[i] != "limit") || (valor[i] != "offset")){ ///////NO HAGO PAGINACION
+      if(i == 0){ //////////1ª vez que entro en bucle
+        //Recorro array dado
+        for(var j=0;j<data.length;j++){
+          var v = query[valor]; //obtengo el contenido de la request
+          if(data[j][valor] == v){ //data[0].year == 2014
+            aux.push(data[j]);
+          }
+        } //FIN for secundario
+      } else { //////////Resto de veces que entro en bucle(aux ya está lleno)
+       for(var j=0;j<aux.length;j++){
+         var v = query[valor]; //obtengo el contenido de la request
+         if(aux[j][valor] == v){
+           aux2.push(aux[j]);
+         }
+       }
+       //aux3 = aux4;
+     }
     }
-  } //FIN for principal
-  if(aux4.length == 0){//Devuelvo 1 cosa u otra
-    //res.send(aux3);
-    return aux3;
+  }// FIN for principal
+
+  //////////////////////Devolver 1 cosa u otra //////////////////////////
+  if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
+    if((query.limit != undefined) && (query.offset != undefined)){
+      aux = this.pagination(query.limit,query.offset,aux);
+    }
+    return aux;
   } else {
     //res.send(aux4);
-    return aux4;
+    if((query.limit != undefined) && (query.offset != undefined)){
+      aux2 = this.pagination(query.limit,query.offset,aux2);
+    }
+    return aux2;
   }
 };
 //Paginacion
 module.exports.pagination = function(limit,offset,data){
   var aux = [];
   var cont = 0;
-  if(limit < 0 || offset > data.length){
+  if((limit<0) || (offset>data.length)){
     aux = 400; //BAD REQUEST
   } else if(limit >= 0){
     for(var i=offset;i<data.length;i++){
