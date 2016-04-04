@@ -88,22 +88,15 @@ exports.isDataCorrect = (req, type) =>{
   var tm = req.body[0];
   var province = req.params.province;
   var year = req.params.year;
-  var number = tm.length;
-  console.log(tm['province'])
-  console.log(tm['year'])
-  console.log(tm['installed'])
-  console.log(tm['uninstalled'])
-  console.log(tm['actived'])
-  console.log(number);
-
+  var number = Object.keys(tm).length;
   if(type == 'post'){
     if(tm['province'] == undefined || tm['year'] == undefined ||
         tm['installed'] == undefined || tm['uninstalled'] == undefined ||
-        tm['actived'] == undefined){ return false;}
+        tm['actived'] == undefined || number != 5){ return false;}
   }else{
     if(tm['province'] != province || tm['year'] != year ||
         tm['installed'] == undefined || tm['uninstalled'] == undefined ||
-        tm['actived'] == undefined){ return false;}
+        tm['actived'] == undefined || number != 5){ return false;}
   }
   return true;
 }
