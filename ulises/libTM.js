@@ -107,9 +107,11 @@ exports.verifyAccess = (key) =>{
 
 exports.isDataCorrect = (req, type) =>{
   var tm = req.body[0];
+  console.log(tm)
   var province = req.params.province;
   var year = req.params.year;
   var number = Object.keys(tm).length;
+  console.log(number)
   if(type == 'post'){
     if(tm['province'] == undefined || tm['year'] == undefined ||
         tm['installed'] == undefined || tm['uninstalled'] == undefined ||
