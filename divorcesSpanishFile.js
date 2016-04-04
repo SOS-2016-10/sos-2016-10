@@ -250,19 +250,19 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   if((n != nn) || (y != yy)){
     console.log("400 BAD REQUEST");
     res.sendStatus(400);
-  }
-  var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
-  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  if(ay.v3.length == 1){ //Si hay 1 elemento(ACTUALIZO)
-      //divorces.splice(i, 1); //Elimino objeto
-      functions.deleteOneResource(divorces,n,y);
-      divorces.push(req.body); //Añado objeto
-      console.log("New PUT of resource "+n+" "+y);
-      res.sendStatus(200);
-    }
   } else {
-    console.log("Resource \""+n+" "+y+"\" NOT exist");
-    res.sendStatus(404);
+    var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
+    var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+    if(ay.v3.length == 1){ //Si hay 1 elemento(ACTUALIZO)
+        //divorces.splice(i, 1); //Elimino objeto
+        functions.deleteOneResource(divorces,n,y);
+        divorces.push(req.body); //Añado objeto
+        console.log("New PUT of resource "+n+" "+y);
+        res.sendStatus(200);
+      } else {
+      console.log("Resource \""+n+" "+y+"\" NOT exist");
+      res.sendStatus(404);
+    }
   }
 });
 router.delete("/:autonomous_community/:year", (req,res)=>{
