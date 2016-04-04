@@ -56,23 +56,6 @@ router.get("/loadInitialData", (req,res)=>{
   }
 });
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// Funciones //////////////////////////////////////
-
-//vistas
-function field(dat,BasinsSeg){
-  var BasinsSeg2 = [];
-  return BasinsSeg;
-}
-
-function compruebaApiKey(key){
-  var res = false;
-  if(key == "sos"){
-    res = true;
-  }
-  return res;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre lista de recursos ////////////////////
 router.get("/", (req,res)=>{
@@ -89,20 +72,20 @@ router.get("/", (req,res)=>{
 });
 router.post("/", (req,res)=>{
   var divorce = req.body;
-
-  //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
-  var eiaux = functions.find_community(divorces,req.body.autonomous_community);//functions.find_resource(divorces,divorce.autonomous_community)[0];
-  var eiaux2 = functions.find_year(eiaux.v3,req.body.year);
-  if((eiaux.v1 == 0) && (eiaux2.v1 == 0)){ //No hay error(lo encuentra, ya existe)
-    res.sendStatus(409); //Conflict
-    console.log("NOT POST because \""+divorce.autonomous_community+"\" or \""+divorce.year+"\" exist");
-  //} else if(divorce.length != 6){ //6 campos en cada objeto
-    //console.log("400 BAD REQUEST");
-    //res.sendStatus(400);
+  if(Object.keys(divorce).length != 6){
+    res.sendStatus(400); //BAD REQUEST
   } else {
-    divorces.push(divorce);
-    console.log("New POST of resource "+divorce.autonomous_community+" "+divorce.year);
-    res.sendStatus(201); //CREATED
+    //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
+    var eiaux = functions.find_community(divorces,req.body.autonomous_community);//functions.find_resource(divorces,divorce.autonomous_community)[0];
+    var eiaux2 = functions.find_year(eiaux.v3,req.body.year);
+    if((eiaux.v1 == 0) && (eiaux2.v1 == 0)){ //No hay error(lo encuentra, ya existe)
+      res.sendStatus(409); //Conflict
+      console.log("NOT POST because \""+divorce.autonomous_community+"\" or \""+divorce.year+"\" exist");
+    } else {
+      divorces.push(divorce);
+      console.log("New POST of resource "+divorce.autonomous_community+" "+divorce.year);
+      res.sendStatus(201); //CREATED
+    }
   }
 });
 //NO PERMITIDO
@@ -182,10 +165,6 @@ router.get("/:year(\\d+)", (req,res)=>{ //"d" patrón para digito
     res.sendStatus(404);
   }
 });
-/*router.post("/:year", (req,res)=>{
-  console.log("POST NOT ALLOWED");
-  res.sendStatus(405);
-});*/
 router.put("/:year", (req,res)=>{
   var y = req.body.year;
 
@@ -250,6 +229,8 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   if((n != nn) || (y != yy)){
     console.log("400 BAD REQUEST");
     res.sendStatus(400);
+  } else if(Object.keys(divorce).length != 6){
+    res.sendStatus(400); //BAD REQUEST
   } else {
     var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
     var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
@@ -271,8 +252,6 @@ router.delete("/:autonomous_community/:year", (req,res)=>{
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  //var e = functions.find_year(ay.v3,y);
-
   //if(ay.v1 == 0){ //Lo encuentro en "divorces"
   if(ay.v3.length == 1){ //Si hay 1 elemento(ELIMINO)
     //divorces.splice(i, 1); //delete divorces[i];
