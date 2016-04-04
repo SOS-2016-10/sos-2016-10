@@ -138,7 +138,7 @@ router.post('/',(req,res)=>{
 
 exports.postTM = (req,res)=>{
   if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  if(!lib.isDataCorrect(req,'post')){ return res.sendStatus(400);};
+  if(!lib.isDataCorrect(req,'post')){ return res.sendStatus(400);}
   var tm = req.body;
   var subArray1 = lib.filterBy(tms, 'province', tm[0]['province']);
   var subArray2 = lib.filterBy(subArray1, 'year', tm[0]['year']);
