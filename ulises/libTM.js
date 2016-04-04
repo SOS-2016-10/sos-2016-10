@@ -1,4 +1,4 @@
-ar lib = require('./libTM.js')
+var lib = require('./libTM.js')
 var crypto = require('crypto');
 
 
