@@ -247,15 +247,13 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   var nn = req.params.autonomous_community;
   var yy = req.params.year;
 
+  if((n != nn) || (y != yy)){
+    console.log("400 BAD REQUEST");
+    res.sendStatus(400);
+  }
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  ///var e = functions.find_year(ay.v3,y);
-  //if(e.v1 == 0){ //No hay error(lo encuentra, ya existe)
   if(ay.v3.length == 1){ //Si hay 1 elemento(ACTUALIZO)
-    if((n != nn) || (y != yy)){
-      console.log("400 BAD REQUEST");
-      res.sendStatus(400);
-    } else {
       //divorces.splice(i, 1); //Elimino objeto
       functions.deleteOneResource(divorces,n,y);
       divorces.push(req.body); //Añado objeto
