@@ -67,7 +67,6 @@ app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////      ULISES      //////////////////////////////////
 //Resource Unions
-app.get("/api/v1/telematic-monitorings/loadInitialData", telematicMonitoringsCtl.loadInitialData); //Initialize telematic-monitorings "/api/v1/telematic-monitorings/loadInitialData"
 app.get("/api/sandbox/unions", unionsCtl.getUnions);
 app.post("/api/sandbox/unions", unionsCtl.postUnions);
 app.put("/api/sandbox/unions", unionsCtl.putUnions);
