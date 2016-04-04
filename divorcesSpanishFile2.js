@@ -1,4 +1,3 @@
-//SIN APIKEY
 var express = require("express");
 var app = express();
 var router = express.Router();
@@ -38,7 +37,7 @@ var divorces = [];
 //Para inicializar la API REST "divorces-spanish" ///////////////////////////////////////////////////////////////
 // /api/v1/divorces-spanish/loadInitialData“ ////////////////////////////////////////////////////////////////////
 //module.exports.loadInitialData = (req,res)=>{
-router.get("/loadInitialData", (req,res)=>{
+router.get("/loadInitialData", checkAuthentication, (req,res)=>{
   if(divorces.length == 0){ //Cargo los datos si está vacío
     console.log("/api/v1/divorces-spanish/loadInitialData");
     divorces.push({ autonomous_community: "canarias", year: 2014, age_0_18: 0, age_19_24: 10, age_25_29: 149, age_30_34: 429 });//No es JSON(es JavaScript)
@@ -75,7 +74,7 @@ function compruebaApiKey(key){
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre lista de recursos ////////////////////
-router.get("/", (req,res)=>{
+router.get("/", checkAuthentication, (req,res)=>{
   var q = req.query;
   var aux = [];
   if(Object.keys(q).length == 0){ //No hay busqueda(nº parámetros = 0)
@@ -87,7 +86,7 @@ router.get("/", (req,res)=>{
     res.send(aux);
   }
 });
-router.post("/", (req,res)=>{
+router.post("/", checkAuthentication, (req,res)=>{
   var divorce = req.body;
 
   //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
@@ -106,11 +105,11 @@ router.post("/", (req,res)=>{
   }
 });
 //NO PERMITIDO
-router.put("/", (req,res)=>{
+router.put("/", checkAuthentication, (req,res)=>{
   console.log("PUT NOT ALLOWED");
   res.sendStatus(405);
 });
-router.delete("/", (req,res)=>{
+router.delete("/", checkAuthentication, (req,res)=>{
   console.log("New DELETE of \"divorces-spanish\"");
   functions.deleteAll(divorces);
   res.sendStatus(200);
@@ -118,7 +117,7 @@ router.delete("/", (req,res)=>{
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre 1 recurso (autonomous_community) ////////////////////
-router.get("/:autonomous_community(\\D+)", (req,res)=>{ //"D+" patrón para NO dígitos(letras)
+router.get("/:autonomous_community(\\D+)", checkAuthentication, (req,res)=>{ //"D+" patrón para NO dígitos(letras)
   var n = req.params.autonomous_community;
   console.log("New GET of resource "+n);
 
@@ -131,12 +130,12 @@ router.get("/:autonomous_community(\\D+)", (req,res)=>{ //"D+" patrón para NO d
   }
 });
 //NO PERMITIDO
-router.post("/:autonomous_community", (req,res)=>{
+router.post("/:autonomous_community", checkAuthentication, (req,res)=>{
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
 });
 
-router.put("/:autonomous_community", (req,res)=>{
+router.put("/:autonomous_community", checkAuthentication, (req,res)=>{
   var n = req.body.autonomous_community;
   var y = req.body.year;
 
@@ -155,7 +154,7 @@ router.put("/:autonomous_community", (req,res)=>{
   }
 });
 
-router.delete("/:autonomous_community(\\D+)", (req,res)=>{
+router.delete("/:autonomous_community(\\D+)", checkAuthentication, (req,res)=>{
   var n = req.params.autonomous_community;
   var prop = "autonomous_community";
 
@@ -173,7 +172,7 @@ router.delete("/:autonomous_community(\\D+)", (req,res)=>{
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //OPERACIONES sobre 1 DIVORCE(recurso) ":year"////////////////////////////////////////////////////////////////
-router.get("/:year(\\d+)", (req,res)=>{ //"d" patrón para digito
+router.get("/:year(\\d+)", checkAuthentication, (req,res)=>{ //"d" patrón para digito
   var y = req.params.year;
 
   var eiaux2 = functions.find_year(divorces,y);
@@ -187,7 +186,7 @@ router.get("/:year(\\d+)", (req,res)=>{ //"d" patrón para digito
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
 });*/
-router.put("/:year", (req,res)=>{
+router.put("/:year", checkAuthentication, (req,res)=>{
   var y = req.body.year;
 
   var eiaux2 = functions.find_year(divorces,y);
@@ -203,7 +202,7 @@ router.put("/:year", (req,res)=>{
 
   }
 });
-router.delete("/:year(\\d+)", (req,res)=>{
+router.delete("/:year(\\d+)", checkAuthentication, (req,res)=>{
   var y = req.params.year;
   var prop = "year";
 
@@ -220,7 +219,7 @@ router.delete("/:year(\\d+)", (req,res)=>{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre 1 recurso (autonomous_community/year) ////////////////////////////////////////
-router.get("/:autonomous_community/:year", (req,res)=>{
+router.get("/:autonomous_community/:year", checkAuthentication, (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
   console.log("New GET of resource "+n+" "+y);
@@ -237,11 +236,11 @@ router.get("/:autonomous_community/:year", (req,res)=>{
   }
 });
 //NO PERMITIDO
-router.post("/:autonomous_community/:year", (req,res)=>{
+router.post("/:autonomous_community/:year", checkAuthentication, (req,res)=>{
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
 });
-router.put("/:autonomous_community/:year", (req,res)=>{
+router.put("/:autonomous_community/:year", checkAuthentication, (req,res)=>{
   //var n = req.body.year;
   var n = req.body.autonomous_community;
   var y = req.body.year;
@@ -268,7 +267,7 @@ router.put("/:autonomous_community/:year", (req,res)=>{
     res.sendStatus(404);
   }
 });
-router.delete("/:autonomous_community/:year", (req,res)=>{
+router.delete("/:autonomous_community/:year", checkAuthentication, (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
 

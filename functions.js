@@ -97,7 +97,18 @@ module.exports.find_year = function(array,year){
     v3: aux2
   };
 };
-
+//Busqueda FROM_TO
+module.exports.find_fromTO = function(from,to,array){
+  var aux = [];
+  for(var i=from;i<=to;i++){ //AÑOS(2012,2013,.....)
+    for(var j=0;j<array.length;j++){
+      if(array[j].year == i){
+        aux.push(array[j]);
+      }
+    }
+  }
+  return aux;
+};
 //Busqueda
 module.exports.search = function(data,query){
   var aux = [];
@@ -106,7 +117,8 @@ module.exports.search = function(data,query){
   for(var i=0;i<Object.keys(query).length;i++){
     var valor = Object.keys(query)[i];
     if((valor[i] != "limit") || (valor[i] != "offset")){ ///////NO HAGO PAGINACION
-      if(i == 0){ //////////1ª vez que entro en bucle
+      if(aux.length == 0){
+      //if(a == 0){ //////////1ª vez que entro en bucle(1º propiedad de la QUERY)
         //Recorro array dado
         for(var j=0;j<data.length;j++){
           var v = query[valor]; //obtengo el contenido de la request
@@ -123,18 +135,29 @@ module.exports.search = function(data,query){
        }
        //aux3 = aux4;
      }
-    }
+   } //////////////////////////////////////////////////////// FIN if PAGINATION
   }// FIN for principal
 
   //////////////////////Devolver 1 cosa u otra //////////////////////////
-  if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
-    if((query.limit != undefined) && (query.offset != undefined)){
+  if(aux.length == 0){ //los parámetros de busqueda son SOLO (from y to)
+    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+      aux = this.find_fromTO(query.from,query.to,data);
+    }
+    return aux;
+  } else if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
+    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+      aux = this.find_fromTO(query.from,query.to,aux);
+    }
+    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
       aux = this.pagination(query.limit,query.offset,aux);
     }
     return aux;
   } else {
     //res.send(aux4);
-    if((query.limit != undefined) && (query.offset != undefined)){
+    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+      aux2 = this.find_fromTO(query.from,query.to,aux2);
+    }
+    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
       aux2 = this.pagination(query.limit,query.offset,aux2);
     }
     return aux2;
