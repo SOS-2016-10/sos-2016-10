@@ -143,13 +143,16 @@ module.exports.search = function(data,query){
     if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
       aux = this.find_fromTO(query.from,query.to,data);
     }
+    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
+      aux = this.pagination(query.limit,query.offset,data);
+    }
     return aux;
   } else if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
     if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
       aux = this.find_fromTO(query.from,query.to,aux);
     }
     if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
-      aux = this.pagination(query.limit,query.offset,aux);
+      aux = this.pagination(query.limit,query.offset,data);
     }
     return aux;
   } else {
