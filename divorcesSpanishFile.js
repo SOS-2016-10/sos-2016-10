@@ -220,7 +220,6 @@ router.post("/:autonomous_community/:year", (req,res)=>{
   res.sendStatus(405);
 });
 router.put("/:autonomous_community/:year", (req,res)=>{
-  //var n = req.body.year;
   var n = req.body.autonomous_community;
   var y = req.body.year;
   var nn = req.params.autonomous_community;
@@ -229,7 +228,7 @@ router.put("/:autonomous_community/:year", (req,res)=>{
   if((n != nn) || (y != yy)){
     console.log("400 BAD REQUEST");
     res.sendStatus(400);
-  } else if(Object.keys(divorce).length != 6){
+  } else if(Object.keys(req.body).length != 6){
     res.sendStatus(400); //BAD REQUEST
   } else {
     var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
