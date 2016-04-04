@@ -1,0 +1,12 @@
+[
+{"province":"Sevilla","year":2000,"installed":1,"uninstalled":2,"actived":3},
+{"province":"Madrid","year":2000,"installed":4,"uninstalled":5,"actived":6},
+{"province":"Málaga","year":2001,"installed":7,"uninstalled":8,"actived":9},
+{"province":"Granada","year":2001,"installed":10,"uninstalled":11,"actived":12},
+{"province":"Zaragoza","year":2002,"installed":13,"uninstalled":14,"actived":15},
+{"province":"Huelva","year":2002,"installed":16,"uninstalled":17,"actived":18},
+{"province":"Cádiz","year":2003,"installed":19,"uninstalled":20,"actived":21},
+{"province":"Gerona","year":2003,"installed":22,"uninstalled":23,"actived":24},
+{"province":"Huesca","year":2004,"installed":25,"uninstalled":26,"actived":27},
+{"province":"Valencia","year":2004,"installed":28,"uninstalled":29,"actived":30}
+]
