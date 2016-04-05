@@ -3,12 +3,6 @@ var express = require("express");
 var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceversa
 
 //Importar Controladores hechos por nosotros
-var teamsCtl = require("./teamsFile.js");
-var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
-var unionsCtl = require("./ulises/unions.js");
-var telematicMonitorings = require("./ulises/telematicMonitorings.js");
-var videogamesCtl = require("./videogames.js");
-var mortalVictimsCtl = require("./mortalVictims.js");
 
 var app = express();
 //Puede tener 2 valores, o la variable entorno PORT o 3000
@@ -28,6 +22,13 @@ app.listen(port, ()=>{
 app.use("/",express.static(__dirname + '/css')); //Es como si folder "css" no existiera, y estuviera todo en RAIZ
 app.use("/",express.static(__dirname + '/html')); //Es como si folder "html" no existiera, y estuviera todo en RAIZ
 //app.use('/about/divorces-spanish', express.static(__dirname + '/html/about/divorces-spanish')); //lo que quiero que ponga en url, donde está realmente
+
+var teamsCtl = require("./teamsFile.js");
+var divorcesSpanishCtl = require("./divorcesSpanishFile.js");
+var unionsCtl = require("./ulises/unions.js");
+var telematicMonitorings = require("./ulises/telematicMonitorings.js");
+var videogamesCtl = require("./videogames.js");
+var mortalVictimsCtl = require("./mortalVictimsFile.js");
 
 //GET para página principal
 app.get("/",(req,res) => {
@@ -97,15 +98,22 @@ app.put("/api/sandbox/videogames/:name", videogamesCtl.putVideogame);
 app.put("/api/sandbox/videogames/:name", videogamesCtl.deleteVideogame);
 
 //mortal-victims
-//initialize mortal-victims test data "/api/v1/mortal-victims/loadInitialData"
-app.get("/api/v1/mortal-victims/loadInitialData", mortalVictimsCtl.loadInitialData);
-// Calling mortal-victims resource
-app.get("/api/v1/mortal-victims", mortalVictimsCtl.getVictims);
-app.post("/api/v1/mortal-victims", mortalVictimsCtl.postVictims);
-app.put("/api/v1/mortal-victims", mortalVictimsCtl.putVictims);
-app.delete("/api/v1/mortal-victims", mortalVictimsCtl.deleteVictims);
-//Calling mortal-victims concrete resource
-app.get("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.getVictim);
+app.get("/api/v1/mortal-victims/", mortalVictimsCtl.getVictims);
+
+app.post("/api/v1/mortal-victims/", mortalVictimsCtl.postVictims);
+
+app.put("/api/v1/mortal-victims/", mortalVictimsCtl.putVictims);
+
+app.delete("/api/v1/mortal-victims/", mortalVictimsCtl.deleteVictims);
+
+app.get("/api/v1/mortal-victims/:dat", mortalVictimsCtl.getVictim);
+
+app.get("/api/v1/mortal-victims/:autonomous_community/:year", mortalVictimsCtl.getVictimYear);
+
 app.post("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.postVictim);
+
 app.put("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.putVictim);
+
+app.put("/api/v1/mortal-victims/:autonomous_community/:dat", mortalVictimsCtl.putVictimDat);
+
 app.delete("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.deleteVictim);
