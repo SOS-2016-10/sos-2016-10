@@ -140,27 +140,30 @@ module.exports.search = function(data,query){
 
   //////////////////////Devolver 1 cosa u otra //////////////////////////
   if(aux.length == 0){ //los parámetros de busqueda son SOLO (from y to)
-    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+    if(query.apikey == "juanlu"){
+      aux = data.slice();
+    }
+    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
       aux = this.find_fromTO(query.from,query.to,data);
     }
-    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
+    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
       aux = this.pagination(query.limit,query.offset,data);
     }
     return aux;
   } else if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
-    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
       aux = this.find_fromTO(query.from,query.to,aux);
     }
-    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
+    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
       aux = this.pagination(query.limit,query.offset,data);
     }
     return aux;
   } else {
     //res.send(aux4);
-    if((query.from != undefined) && (query.to != undefined)){ //Hay busqueda FROM & TO
+    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
       aux2 = this.find_fromTO(query.from,query.to,aux2);
     }
-    if((query.limit != undefined) && (query.offset != undefined)){//HAGO PAGINATION
+    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
       aux2 = this.pagination(query.limit,query.offset,aux2);
     }
     return aux2;
