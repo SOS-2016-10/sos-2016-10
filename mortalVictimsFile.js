@@ -211,7 +211,7 @@ module.exports.postVictim = (req, res) => {
     res.sendStatus(401);
   }
 }
-
+// update victim, or create if it doest exist
 module.exports.putVictim = (req, res) => {
   var key = req.query.apikey;
   if(compruebaApiKey(key)){
@@ -251,7 +251,7 @@ module.exports.putVictim = (req, res) => {
     res.sendStatus(401);
   }
 }
-
+//update victim by a certain parameter, create victim if it doesnt exist
 module.exports.putVictimDat = (req, res) => {
   var key = req.query.apikey;
   if(checkApiKey(key)){
@@ -284,7 +284,7 @@ module.exports.putVictimDat = (req, res) => {
     res.sendStatus(401);
   }
 }
-
+//victim deletion. Delete all the victims in one Autonomous community
 module.exports.deleteVictim = (req, res) => {
   var key = req.query.apikey;
   if(checkApiKey(key)){
@@ -308,7 +308,7 @@ function searchs(data,VictimsSec){
   var VictimsSec2 = [];
 
   if(data[2] || data[3] || data[4] || data[5] || data[6] || data[7]){
-    // COMPRUEBA/HACE FROM Y TO (YEAR)
+    // from and to YEAR, searchs
     if(data[2]){
       if(data[3]){
         for (var i = 0; i < VictimsSec.length; i++){
@@ -334,7 +334,7 @@ function searchs(data,VictimsSec){
       VictimsSec1 = VictimsSec;
     }
 
-    // FILTRADO POR YEAR, <18 , 18-40 , +40
+    // filtering YEAR, <18 , 18-40 , +40
     if(data[4]){
       for (var i = 0; i < VictimsSec1.length; i++){
         if (VictimsSec1[i].year == data[4]){
@@ -381,7 +381,7 @@ function searchs(data,VictimsSec){
   return VictimsSec2;
 }
 
-// TRATAMIENTO LIMIT Y OFFSET
+// Limit and Offset treatment, pagination
 function pagination(data,VictimsSec){
   var VictimsSec2 = [];
   var aux = 0;
@@ -407,7 +407,7 @@ function field(data,VictimsSec){
   var VictimsSec2 = [];
   return VictimsSec;
 }
-
+//apikey checker
 function checkApiKey(key){
   var res = false;
   if(key == "requena"){
@@ -415,7 +415,7 @@ function checkApiKey(key){
   }
   return res;
 }
-
+//correct format checker
 function checkJSON(body){
   var res = false;
   if(body.autonomous_community && body.year && body.under18age && body.from18to40age && body.over40age){
