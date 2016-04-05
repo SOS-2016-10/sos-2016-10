@@ -419,7 +419,7 @@ function checkApiKey(key){
 function checkJSON(body){
   var res = false;
   if(body.autonomous_community && body.year && body.under18age && body.from18to40age && body.over40age){
-    res = true;
+    res = true;;
   }
   return res;
 }
