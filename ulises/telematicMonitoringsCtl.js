@@ -1,14 +1,38 @@
 // URI:/api/v1/telematic-monitorings
 var fs = require('fs');
 var lib = require('./libTM.js');
+var passport = require('passport');
+LocalAPIKeyStrategy = require('passport-localapikey-update').Strategy;
 
+passport.use(new LocalAPIKeyStrategy((apikey, done)=> { done(null,apikey); }));
 
+exports.WriteAccess = (req, res, next)=> {
+    passport.authenticate('localapikey', (err, apikey, info) =>{
+        if(!apikey){
+            return res.sendStatus(401);
+        }else if (apikey!="write") {
+            return res.sendStatus(403);
+        }
+        return next();
+    })(req, res, next);
+};
+
+exports.ReadAccess = (req, res, next)=> {
+    passport.authenticate('localapikey', (err, apikey, info) =>{
+        if(!apikey){
+          return res.sendStatus(401);
+        }else if (apikey!="read") {
+          return res.sendStatus(403);
+        }
+        return next();
+    })(req, res, next);
+};
 
 
 var tms = [];//[{province:"Sevilla",year:2013,installed:22,uninstalled:23,actived:27}];
 //////////////////////////////      GET       //////////////////////////////////
 exports.loadInitialData = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   tms = JSON.parse(fs.readFileSync('./ulises/tm_initial_data.json','utf8'));
   res.sendStatus(200);
 };
@@ -16,7 +40,7 @@ exports.loadInitialData = (req,res)=>{
 //search & pagination implemented
 exports.getTMs = (req,res)=>{
   console.log("New GET of TMs.");
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   switch (lib.whichCase(req)) {
     case 0://Bad request.
       return res.sendStatus(400);
@@ -51,7 +75,7 @@ exports.getTMs = (req,res)=>{
 
 //search & pagination implemented
 exports.getTMsByProvince = (req, res) => {// '/:province(\\D+)/ replaced for '/:province(\\w+)/
-    if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+    //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
     var value = req.params.province;
     switch (lib.whichCase(req)) {
       case 0://Bad request.
@@ -81,7 +105,7 @@ exports.getTMsByProvince = (req, res) => {// '/:province(\\D+)/ replaced for '/:
 
 //search & pagination implemented
 exports.getTMsByYear = (req, res) => {
-    if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+    //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
     var value = req.params.year;
     switch (lib.whichCase(req)) {
       case 0://Bad request.
@@ -111,7 +135,7 @@ exports.getTMsByYear = (req, res) => {
 
 //only one element can exits, so it is NOT necessary PAGINATION or SEARCH.
 exports.getTM = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   var value1 = req.params.province;
   var value2 = req.params.year;
   console.log("New get of /"+value1+'/'+value2);
@@ -144,7 +168,7 @@ router.post('/',(req,res)=>{
 */
 
 exports.postTM = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   if(!lib.isDataCorrect(req,'post')){ return res.sendStatus(400);}
   var tm = req.body;
   var subArray1 = lib.filterBy(tms, 'province', tm[0]['province']);
@@ -159,7 +183,7 @@ exports.postTM = (req,res)=>{
 };
 
 exports.postTMByProvince = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   res.sendStatus(405);
   console.log("Post not allowed.")
 };
@@ -172,7 +196,7 @@ exports.postTMByProvinceYear('/:province/:year', (req,res)=>{
 
 //////////////////////////////     PUT     /////////////////////////////////////
 exports.putToTMs = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   console.log("Put not allowed.");
   res.sendStatus(405);
 };
@@ -186,7 +210,7 @@ exports.putByProvince = (req,res)=>{
 */
 
 exports.putTMByProvinceYear = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   if(!lib.isDataCorrect(req,'put')){ return res.sendStatus(400)};
   var tm = req.body[0];
   var value1 = req.params.province;
@@ -203,7 +227,7 @@ exports.putTMByProvinceYear = (req,res)=>{
 
 /////////////////////////////       DELETE     /////////////////////////////////
 exports.deleteTMs = (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   console.log("Deleting TMs.");
   tms = [];
   res.sendStatus(200);
@@ -216,7 +240,7 @@ router.delete('/:province', (req, res)=>{
 */
 
 exports.deleteTM =  (req,res)=>{
-  if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
+  //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   var value1 = req.params.province;
   var value2 = req.params.year;
   var index = lib.indexOf(tms, 'province', value1, 'year', value2);
