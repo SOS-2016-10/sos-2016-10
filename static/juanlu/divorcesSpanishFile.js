@@ -239,7 +239,7 @@ router.put("/:autonomous_community/:year", WriteAccess, (req,res)=>{
     res.sendStatus(400); //BAD REQUEST
   } else {
     var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
-    var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+    var ay = functions.find_year(eiaux,y); //obtengo arrayYear de arrayComunidades
     if(ay.length == 1){ //Si hay 1 elemento(ACTUALIZO)
         functions.deleteOneResource(divorces,n,y);
         divorces.push(req.body); //Añado objeto
