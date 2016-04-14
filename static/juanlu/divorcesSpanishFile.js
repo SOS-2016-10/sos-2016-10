@@ -64,7 +64,7 @@ router.get("/loadInitialData", WriteAccess, (req,res)=>{
 router.get("/", ReadAccess, (req,res)=>{
   var q = req.query;
   var aux = [];
-  if(Object.keys(q).length == 0){ //No hay busqueda(nº parámetros = 0)
+  if(Object.keys(q).length == 1){ //No hay busqueda(nº parámetros = 0)
     console.log("New GET of \"divorces-spanish\"");
     res.send(divorces);
   } else { //Hay parámetros de busqueda
