@@ -69,7 +69,14 @@ router.get("/", ReadAccess, (req,res)=>{
     res.send(divorces);
   } else { //Hay parámetros de busqueda
     console.log("New GET to "+q);
-    var aux = functions.search(divorces,q); //dentro tengo incluida la PAGINATION
+    var aux = functions.search(divorces,q);
+    if((q.limit != undefined) && (q.offset != undefined)){//Pagination
+      if(Object.keys(q).length == 2){ //Only LIMIT and OFFSET
+        aux = functions.pagination(q.limit,q.offset,divorces);
+      } else {
+        aux = functions.pagination(q.limit,q.offset,aux);
+      }
+    }
     res.send(aux);
   }
 });
@@ -80,8 +87,8 @@ router.post("/", WriteAccess, (req,res)=>{
   } else {
     //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
     var eiaux = functions.find_community(divorces,req.body.autonomous_community);//functions.find_resource(divorces,divorce.autonomous_community)[0];
-    var eiaux2 = functions.find_year(eiaux.v3,req.body.year);
-    if((eiaux.v1 == 0) && (eiaux2.v1 == 0)){ //No hay error(lo encuentra, ya existe)
+    var eiaux2 = functions.find_year(eiaux,req.body.year);
+    if((eiaux.length != 0) && (eiaux2.length != 0)){ //(lo encuentra, ya existe)
       res.sendStatus(409); //Conflict
       console.log("NOT POST because \""+divorce.autonomous_community+"\" or \""+divorce.year+"\" exist");
     } else {
@@ -109,9 +116,8 @@ router.get("/:autonomous_community(\\D+)", ReadAccess, (req,res)=>{ //"D+" patr�
   console.log("New GET of resource "+n);
 
   var eiaux = functions.find_community(divorces,n);
-  if(eiaux.v1 == 0){ //Error == 0 "NO hay error"
-    //res.send(divorces[i]);
-    res.send(eiaux.v3);
+  if(eiaux.length != 0){ //Hay datos
+    res.send(eiaux);
   } else {
     res.sendStatus(404);
   }
@@ -127,10 +133,10 @@ router.put("/:autonomous_community", WriteAccess, (req,res)=>{
 
   var eiaux = functions.find_community(divorces,n);
   //var eiaux2 = functions.find_year(eiaux.v3,y);
-  if(eiaux.v3.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
+  if(eiaux.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
     console.log("Resource \""+n+"\" NOT exist");
     res.sendStatus(404);
-  } else if(eiaux.v3.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
+  } else if(eiaux.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
     console.log("New PUT of resource "+n);
@@ -145,7 +151,7 @@ router.delete("/:autonomous_community(\\D+)", WriteAccess, (req,res)=>{
   var prop = "autonomous_community";
 
   var eiaux = functions.find_community(divorces,n);
-  if(eiaux.v1 == 0){ //Lo encuentro en "divorces"
+  if(eiaux.length != 0){ //Lo encuentro en "divorces"
     //divorces.splice(i, 1); //delete divorces[i];
     divorces = functions.deleteParam(divorces,n,prop);
     console.log("New DELETE of resource "+n);
@@ -162,8 +168,8 @@ router.get("/:year(\\d+)", ReadAccess, (req,res)=>{ //"d" patrón para digito
   var y = req.params.year;
 
   var eiaux2 = functions.find_year(divorces,y);
-  if(eiaux2.v1 == 0){ //Error == 0 "NO hay error"
-    res.send(eiaux2.v3);
+  if(eiaux2.length != 0){ //Error == 0 "NO hay error"
+    res.send(eiaux2);
   } else {
     res.sendStatus(404);
   }
@@ -172,10 +178,10 @@ router.put("/:year", WriteAccess, (req,res)=>{
   var y = req.body.year;
 
   var eiaux2 = functions.find_year(divorces,y);
-  if(eiaux2.v3.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
+  if(eiaux2.length == 0){ //Hay 0 recurso que cumple el filtro(NOT FOUND)
     console.log("Resource \""+y+"\" NOT exist");
     res.sendStatus(404); //NOT FOUND
-  } else if(eiaux2.v3.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
+  } else if(eiaux2.length == 1){ //Hay 1 recurso que cumple filtro(HAGO PUT)
     divorces.splice(i, 1); //Elimino objeto
     divorces.push(req.body); //Añado objeto
     console.log("New PUT of resource "+y);
@@ -189,7 +195,7 @@ router.delete("/:year(\\d+)", WriteAccess, (req,res)=>{
   var prop = "year";
 
   var eiaux2 = functions.find_year(divorces,y);
-  if(eiaux2.v1 == 0){ //Lo encuentro en "divorces"
+  if(eiaux2.length != 0){ //Lo encuentro en "divorces"
     divorces = functions.deleteParam(divorces,y,prop); //divorces.splice(i, 1); //delete divorces[i];
     console.log("New DELETE of resource "+y);
     res.sendStatus(200);
@@ -208,10 +214,8 @@ router.get("/:autonomous_community/:year", ReadAccess, (req,res)=>{
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  //var e = functions.find_year(ay.v3,y);
 
-  if(ay.v1 == 0){ //Error == 0 "NO hay error"
-    //res.send(divorces[i]);
+  if(ay.length != 0){ //Encuentro datos
     res.send(ay.v3);
   } else {
     res.sendStatus(404);
@@ -236,7 +240,7 @@ router.put("/:autonomous_community/:year", WriteAccess, (req,res)=>{
   } else {
     var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
     var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-    if(ay.v3.length == 1){ //Si hay 1 elemento(ACTUALIZO)
+    if(ay.length == 1){ //Si hay 1 elemento(ACTUALIZO)
         //divorces.splice(i, 1); //Elimino objeto
         functions.deleteOneResource(divorces,n,y);
         divorces.push(req.body); //Añado objeto
@@ -255,7 +259,7 @@ router.delete("/:autonomous_community/:year", WriteAccess, (req,res)=>{
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
   var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
   //if(ay.v1 == 0){ //Lo encuentro en "divorces"
-  if(ay.v3.length == 1){ //Si hay 1 elemento(ELIMINO)
+  if(ay.length == 1){ //Si hay 1 elemento(ELIMINO)
     //divorces.splice(i, 1); //delete divorces[i];
     functions.deleteOneResource(divorces,n,y);
     console.log("New DELETE of resource "+n);

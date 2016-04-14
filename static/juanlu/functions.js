@@ -24,78 +24,25 @@ module.exports.deleteOneResource = function(data,ac,y){
   }
 };
 
-//find
-module.exports.find = function(array,name){
-  var aux2 = []; //Me creo array vacío
-  for(var i=0;i<array.length;i++){
-    if(array[i][name] == name){
-      var error = 0; //No hay error
-      aux2.push(array[i]);
-    }
-  }
-  if(aux2.length == 0){
-    var error = 1; //Hay error
-  }
-  return [error, i, aux2];
-};
-//Buscar recursos
-module.exports.find_resource = function(array,name){
-  for(var i=0;i<array.length;i++){
-    if(array[i].autonomous_community == name){
-      //console.log(array[i]);
-      var error = 0; //No hay error
-      break;
-    } else {
-      var error = 1; //Hay error
-    }
-  }
-  //return [error, i];
-  return {
-    v1: error,
-    v2: i
-  };
-};
 //Busqueda por comunidad(autonoma)
 module.exports.find_community = function(array,name){
   var aux = []; //Me creo array vacío
   for(var i=0;i<array.length;i++){
     if(array[i].autonomous_community == name){
-      //console.log(array[i]);
-      var error = 0; //No hay error
-      //break;
       aux.push(array[i]);
-    } //else {
-      //var error = 1; //Hay error
-    //}
+    }
   }
-  if(aux.length == 0){
-    var error = 1; //Hay error
-  }
-  //return [error, i, aux];
-  return {
-    v1: error,
-    v2: i,
-    v3: aux
-  };
+  return aux;
 };
 //Busqueda por año
 module.exports.find_year = function(array,year){
   var aux2 = []; //Me creo array vacío
   for(var i=0;i<array.length;i++){
     if(array[i].year == year){
-      var error = 0; //No hay error
       aux2.push(array[i]);
     }
   }
-  if(aux2.length == 0){
-    var error = 1; //Hay error
-  }
-  //return [error, i, aux2];
-  return {
-    v1: error,
-    v2: i,
-    v3: aux2
-  };
+  return aux2;
 };
 //Busqueda FROM_TO
 module.exports.find_fromTO = function(from,to,array){
@@ -109,66 +56,36 @@ module.exports.find_fromTO = function(from,to,array){
   }
   return aux;
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Busqueda
 module.exports.search = function(data,query){
   var aux = [];
-  var aux2 = [];
-  //Hago el BUCLE según el nº de parámetros
+
   for(var i=0;i<Object.keys(query).length;i++){
     var valor = Object.keys(query)[i];
-    if((valor[i] != "limit") || (valor[i] != "offset")){ ///////NO HAGO PAGINACION
-      if(aux.length == 0){
-      //if(a == 0){ //////////1ª vez que entro en bucle(1º propiedad de la QUERY)
-        //Recorro array dado
-        for(var j=0;j<data.length;j++){
-          var v = query[valor]; //obtengo el contenido de la request
-          if(data[j][valor] == v){ //data[0].year == 2014
-            aux.push(data[j]);
-          }
-        } //FIN for secundario
-      } else { //////////Resto de veces que entro en bucle(aux ya está lleno)
-       for(var j=0;j<aux.length;j++){
-         var v = query[valor]; //obtengo el contenido de la request
-         if(aux[j][valor] == v){
-           aux2.push(aux[j]);
-         }
-       }
-       //aux3 = aux4;
-     }
-   } //////////////////////////////////////////////////////// FIN if PAGINATION
-  }// FIN for principal
-
-  //////////////////////Devolver 1 cosa u otra //////////////////////////
-  if(aux.length == 0){ //los parámetros de busqueda son SOLO (from y to)
-    if(query.apikey == "juanlu"){
-      aux = data.slice();
+    if((valor == "limit") || (valor == "offset") || (valor == "from") || (valor == "to")){
+      continue;
+    } else {
+      //Recorro array dado
+      for(var j=0;j<data.length;j++){
+        var v = query[valor]; //obtengo el contenido de la request
+        if(data[j][valor] == v){ //data[0].year == 2014
+          aux.push(data[j]);
+        }
+      }
     }
-    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
+  }
+  if((query.from != undefined) && (query.to != undefined)) { //Search FROM and TO
+    if((Object.keys(query).length == 2) || ((Object.keys(query).length == 4) && (query.limit != undefined) && (query.offset != undefined))){ //Only FROM and TO
       aux = this.find_fromTO(query.from,query.to,data);
-    }
-    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
-      aux = this.pagination(query.limit,query.offset,data);
-    }
-    return aux;
-  } else if(aux2.length == 0){//(Está vacio)Devuelvo 1 cosa u otra
-    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
+    } else {
       aux = this.find_fromTO(query.from,query.to,aux);
     }
-    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
-      aux = this.pagination(query.limit,query.offset,data);
-    }
-    return aux;
-  } else {
-    //res.send(aux4);
-    if((query.from != undefined) && (query.to != undefined) && (query.apikey == "juanlu")){ //Hay busqueda FROM & TO
-      aux2 = this.find_fromTO(query.from,query.to,aux2);
-    }
-    if((query.limit != undefined) && (query.offset != undefined) && (query.apikey == "juanlu")){//HAGO PAGINATION
-      aux2 = this.pagination(query.limit,query.offset,aux2);
-    }
-    return aux2;
   }
+  return aux;
 };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Paginacion
 module.exports.pagination = function(limit,offset,data){
   var aux = [];
