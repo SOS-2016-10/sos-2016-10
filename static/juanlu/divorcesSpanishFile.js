@@ -213,10 +213,10 @@ router.get("/:autonomous_community/:year", ReadAccess, (req,res)=>{
   console.log("New GET of resource "+n+" "+y);
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
-  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
+  var ay = functions.find_year(eiaux,y); //obtengo arrayYear de arrayComunidades
 
   if(ay.length != 0){ //Encuentro datos
-    res.send(ay.v3);
+    res.send(ay);
   } else {
     res.sendStatus(404);
   }
@@ -241,7 +241,6 @@ router.put("/:autonomous_community/:year", WriteAccess, (req,res)=>{
     var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
     var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
     if(ay.length == 1){ //Si hay 1 elemento(ACTUALIZO)
-        //divorces.splice(i, 1); //Elimino objeto
         functions.deleteOneResource(divorces,n,y);
         divorces.push(req.body); //Añado objeto
         console.log("New PUT of resource "+n+" "+y);
@@ -257,10 +256,8 @@ router.delete("/:autonomous_community/:year", WriteAccess, (req,res)=>{
   var y = req.params.year;
 
   var eiaux = functions.find_community(divorces,n); //obtengo arrayComunidades
-  var ay = functions.find_year(eiaux.v3,y); //obtengo arrayYear de arrayComunidades
-  //if(ay.v1 == 0){ //Lo encuentro en "divorces"
+  var ay = functions.find_year(eiaux,y); //obtengo arrayYear de arrayComunidades
   if(ay.length == 1){ //Si hay 1 elemento(ELIMINO)
-    //divorces.splice(i, 1); //delete divorces[i];
     functions.deleteOneResource(divorces,n,y);
     console.log("New DELETE of resource "+n);
     res.sendStatus(200);
