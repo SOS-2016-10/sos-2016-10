@@ -76,7 +76,7 @@ module.exports.search = function(data,query){
     }
   }
   if((query.from != undefined) && (query.to != undefined)) { //Search FROM and TO
-    if((Object.keys(query).length == 2) || ((Object.keys(query).length == 4) && (query.limit != undefined) && (query.offset != undefined))){ //Only FROM and TO
+    if((Object.keys(query).length == 3) || ((Object.keys(query).length == 5) && (query.limit != undefined) && (query.offset != undefined))){ //Only FROM and TO
       aux = this.find_fromTO(query.from,query.to,data);
     } else {
       aux = this.find_fromTO(query.from,query.to,aux);

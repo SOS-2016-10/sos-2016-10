@@ -71,7 +71,7 @@ router.get("/", ReadAccess, (req,res)=>{
     console.log("New GET to "+q);
     var aux = functions.search(divorces,q);
     if((q.limit != undefined) && (q.offset != undefined)){//Pagination
-      if(Object.keys(q).length == 2){ //Only LIMIT and OFFSET
+      if(Object.keys(q).length == 3){ //Only LIMIT and OFFSET
         aux = functions.pagination(q.limit,q.offset,divorces);
       } else {
         aux = functions.pagination(q.limit,q.offset,aux);
