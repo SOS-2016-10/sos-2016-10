@@ -5,27 +5,63 @@
     <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
     <script>
       $(document).ready(function() {
-      //$("body").ready(function()) {
+
+        var ac;
+        var year;
+
+
         console.log("JQuery Ready!");
         $("#button").click(()=>{
           //$("#log").html("<h1>HELLO WORLD!!!!</h1>");
           console.log("Handling click");
 
+          var urlHTML = $("#url").val();
           var method = $("input[type=radio]:checked").attr("id");
+          var dataJSON = $("#payload").val();
 
           var request = $.ajax({
-            url: $("#url").val(),//"/api/v1/divorces-spanish?apikey=juanlu",
-            type: method//type: "GET"
-
+            url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
+            type: method,
+            //data: dataJSON,
+            contentType: "application/json",
+            cache: false
           });
+          //Request done
           request.done(function(data,status,jqXHR) {//Se ejecuta cuando la petición haya sido correcta
             // Tratamiento en caso de exito
             console.log("Handling request (OK)");
             console.log(data);
+            var table = $('<table border="1">'); //Inicializo tabla
+            var head = "<tr>";
+            for (var i in data[0]){
+              head = head + ("<th>"+i+"</th>");
+            }
+            head = head + "<tr>";
+            $(head).appendTo(table);
+            $.each(data, function(index, value){
+              var row = "<tr>";
+              $.each(value, function(key,val){
+                row = row + ("<td>"+val+"</td>");
+              });
+              row = row + "</tr>";
+              $(table).append(row);
+            });
+            //return ($(table));
+
+            $(table).appendTo("#data");
           });
 
-        });
-      });
+
+          //Request always
+          request.always(function(jqXHR, status){
+            if(jqXHR.status == undefined){
+              $("#status").text("OK");
+            } else {
+              $("#status").text(jqXHR.status + " " + jqXHR.statusText);
+            }
+          });
+        }); //END #button.click
+      }); //END document.ready
     </script>
   </head>
   <body>
@@ -42,7 +78,9 @@
     <br/><hr/>
       HTTP Status: <span id="status"></span>
     <br/><hr/>
-      <span id="data"></span>
+      <span id="data">
+        <table id="tableData"></table>
+      </span>
     <br/><hr/>
       <ul id="list"></ul>
     <hr/>
