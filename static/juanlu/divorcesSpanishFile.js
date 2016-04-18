@@ -40,10 +40,11 @@ var divorces = [];
 
 //Para inicializar la API REST "divorces-spanish" ///////////////////////////////////////////////////////////////
 // /api/v1/divorces-spanish/loadInitialData“ ////////////////////////////////////////////////////////////////////
-//module.exports.loadInitialData = (req,res)=>{
 router.get("/loadInitialData", WriteAccess, (req,res)=>{
   if(divorces.length == 0){ //Cargo los datos si está vacío
     console.log("/api/v1/divorces-spanish/loadInitialData");
+    ////divorces = functions.loadInitialData();
+    ///divorces = [{ "autonomous_community": "canarias", "year": 2014, "age_0_18": 0, "age_19_24": 10, "age_25_29": 149, "age_30_34": 429 }];
     divorces.push({ autonomous_community: "canarias", year: 2014, age_0_18: 0, age_19_24: 10, age_25_29: 149, age_30_34: 429 });//No es JSON(es JavaScript)
     divorces.push({ autonomous_community: "cantabria", year: 2014, age_0_18: 0, age_19_24: 5, age_25_29: 25, age_30_34: 103 });
     divorces.push({ autonomous_community: "extremadura", year: 2014, age_0_18: 0, age_19_24: 3, age_25_29: 39, age_30_34: 180 });
@@ -52,6 +53,8 @@ router.get("/loadInitialData", WriteAccess, (req,res)=>{
     divorces.push({ autonomous_community: "andalucia", year: 2013, age_0_18: 3, age_19_24: 77, age_25_29: 607, age_30_34: 1956 });
     divorces.push({ autonomous_community: "andalucia", year: 2014, age_0_18: 1, age_19_24: 56, age_25_29: 537, age_30_34: 1860 });
     //res.send(divorces);
+    ///JSON.stringify(divorces);
+    ///JSON.parse(divorces);
     res.sendStatus(200); //OK
   } else {
     console.log("No charge DATA, because exist data");

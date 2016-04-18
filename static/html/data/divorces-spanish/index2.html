@@ -22,11 +22,10 @@
           var request = $.ajax({
             url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
             type: method,
-            //data: $("#payload").text(dataJSON), ///
-            data: dataJSON,
-            dataType: 'json', ///
-            contentType: "application/json",
-            cache: false
+            data: $("#payload").text(dataJSON), ///
+            //dataType: 'json', ///
+            contentType: "application/json"
+            //cache: false
           });
           console.log(request);
 
@@ -35,24 +34,11 @@
             // Tratamiento en caso de exito
             console.log("Handling request (OK)");
             console.log(data);
-            var table = $('<table border="1">'); //Inicializo tabla
-            var head = "<tr>";
-            for (var i in data[0]){
-              head = head + ("<th>"+i+"</th>");
-            }
-            head = head + "<tr>";
-            $(head).appendTo(table);
+            var row = '';
             $.each(data, function(index, value){
-              var row = "<tr>";
-              $.each(value, function(key,val){
-                row = row + ("<td>"+val+"</td>");
-              });
-              row = row + "</tr>";
-              $(table).append(row);
+              row = row + ("<tr><td>"+data[index].autonomous_community+"</td><td>"+data[index].year+"</td><td>"+data[index].age_0_18+"</td><td>"+data[index].age_19_24+"</td><td>"+data[index].age_25_29+"</td><td>"+data[index].age_30_34+"</td></tr>");
             });
-            //return ($(table));
-
-            $(table).appendTo("#data");
+            $(tableRow).append(row);
           });
 
 
@@ -83,7 +69,17 @@
       HTTP Status: <span id="status"></span>
     <br/><hr/>
       <span id="data">
-        <table id="tableData"></table>
+        <table id="tableData" border='1'>
+          <tr>
+            <th>autonomous_community</th>
+            <th>year</th>
+            <th>age_0_18</th>
+            <th>age_19_24</th>
+            <th>age_25_29</th>
+            <th>age_30_34</th>
+          </tr>
+        </table>
+        <table id="tableRow" border='1'></table>
       </span>
     <br/><hr/>
       <ul id="list"></ul>
