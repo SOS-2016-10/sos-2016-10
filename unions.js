@@ -9,7 +9,7 @@ function search(array, acronym){
   }
   return -1;
 }
-////
+
 
 module.exports.getUnions = (req,res)=>{
   console.log("New request of unions.");
