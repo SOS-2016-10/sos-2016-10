@@ -19,15 +19,26 @@
           var method = $("input[type=radio]:checked").attr("id");
           var dataJSON = $("#payload").val();
           //console.log("DataJSON = "+dataJSON.text());
-          var request = $.ajax({
-            url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
-            type: method,
-            //data: $("#payload").text(dataJSON), ///
-            data: dataJSON,
-            dataType: 'json', ///
-            contentType: "application/json",
-            cache: false
-          });
+          
+          if(method == "GET"){
+            var request = $.ajax({
+              url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
+              type: method,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
+          } else {
+            var request = $.ajax({
+              url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
+              type: method,
+              data: dataJSON,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
+          }
+
           console.log(request);
 
           //Request done
