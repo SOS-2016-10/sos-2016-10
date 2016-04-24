@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <!-- <link href="/style.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        console.log("JQuery Ready!");
+        $("#button").click(()=>{
+          //$("#log").html("<h1>HELLO WORLD!!!!</h1>");
+          console.log("Handling click");
+
+          var urlHTML = $("#url").val();
+          var method = $("input[type=radio]:checked").attr("id");
+          var dataJSON = $("#payload").val();
+          //console.log("DataJSON = "+dataJSON.text());
+
+          if(method == "GET"){
+            var request = $.ajax({
+              url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
+              type: method,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
+          } else {
+            var request = $.ajax({
+              url: urlHTML,//"/api/v1/divorces-spanish?apikey=juanlur",
+              type: method,
+              data: dataJSON,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
+          }
+
+          console.log(request);
+
+          //Request done
+          request.done(function(data,status,jqXHR) {//Se ejecuta cuando la petición haya sido correcta
+            // Tratamiento en caso de exito
+            console.log("Handling request (OK)");
+            console.log(data);
+            var table = $('<table border="1">'); //Inicializo tabla
+            var head = "<tr>";
+            for (var i in data[0]){
+              head = head + ("<th>"+i+"</th>");
+            }
+            head = head + "<tr>";
+            $(head).appendTo(table);
+            $.each(data, function(index, value){
+              var row = "<tr>";
+              $.each(value, function(key,val){
+                row = row + ("<td>"+val+"</td>");
+              });
+              row = row + "</tr>";
+              $(table).append(row);
+            });
+            //return ($(table));
+
+            $(table).appendTo("#data");
+          });
+
+
+          //Request always
+          request.always(function(jqXHR, status){
+            if(jqXHR.status == undefined){
+              $("#status").text("OK");
+            } else {
+              $("#status").text(jqXHR.status + " " + jqXHR.statusText);
+            }
+          });
+        }); //END #button.click
+      }); //END document.ready
+    </script>
+  </head>
+  <body>
+    <h1>JQuery REST Client</h1>
+      URL: <input id="url" size="30" value="/api/v1/divorces-spanish?apikey=juanlur"/>
+      GET <input name="method" type="radio" id="GET" checked="checked"/> &nbsp;&nbsp;
+      POST <input name="method" type="radio" id="POST" /> &nbsp;&nbsp;
+      PUT <input name="method" type="radio" id="PUT" /> &nbsp;&nbsp;
+      DELETE <input name="method" type="radio" id="DELETE" /> &nbsp;&nbsp;
+    <br/>
+      Payload: <input id="payload" size="60" value='{ "autonomous_community": "aa", "year": 2014, "age_0_18": 0, "age_19_24": 6, "age_25_29": 69, "age_30_34": 235 }'/>
+    <br/><br/>
+      <span id="button">Send</span>
+    <br/><hr/>
+      HTTP Status: <span id="status"></span>
+    <br/><hr/>
+      <span id="data">
+        <table id="tableData"></table>
+      </span>
+    <br/><hr/>
+      <ul id="list"></ul>
+    <hr/>
+      Log: <span id="log"></span>
+  </body>
+</html>
