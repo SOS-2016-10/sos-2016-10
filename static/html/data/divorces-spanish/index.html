@@ -4,6 +4,11 @@
   <link href="/style.css" rel="stylesheet" type="text/css">
   <title>Divorces Spanish</title>
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+
+  <!-- DATATABLES -->
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
+
   <script>
     $(document).ready(function (){
       console.log("JQuery ready");
@@ -11,14 +16,25 @@
         type: "GET",
         url:"/api/v1/divorces-spanish?apikey=juanlur"
       });
-      request.done((data)=>{
-        var divorces = "";
-        $.each(data, function (i, item) {
-          divorces += "<tr><td style=\"width: 250px;\">" + data[i].autonomous_community + "</td><td style=\"width: 150px;\">" + data[i].year +"</td><td style=\"width: 50px;\">"+ data[i].age_0_18 + "</td><td style=\"width: 50px;\">" + data[i].age_19_24 + "</td><td style=\"width: 50px;\">"+ data[i].age_25_29 + "</td><td style=\"width: 50px;\">"+data[i].age_30_34+"</td></tr>";
-        });
-        $('#raws').html(divorces);
-        console.log(divorces);
-      });
+
+      request.done((data,status,jqXHR)=>{
+        //var parsedData = $.parseJSON(data);
+        //console.log(parsedData);
+        $(document).ready( function () {
+    				$("#columns").DataTable( {
+    					data: data,//parsedData
+              "columns": [
+                { data: "autonomous_community" },
+                { data: "year"},
+                { data: "age_0_18"},
+                { data: "age_19_24"},
+                { data: "age_25_29"},
+                { data: "age_30_34"}
+              ]
+            });
+          }); //fin ready
+        }); //fin done
+
       request.always((jqXHR,status)=>{
       });
     });
@@ -30,17 +46,17 @@
 
   <!--Tabla -->
   <!-- Columnas -->
-  <table id="columns" border="1" style="width: 700px;">
-    <tr>
-      <th style="width: 250px;">autonomous-community</th>
-      <th style="width: 150px;">year</th>
-      <th style="width: 50px;"><18 age</th>
-      <th style="width: 50px;">19<24 age</th>
-      <th style="width: 50px;">25<29 age</th>
-      <th style="width: 50px;">30<34 age</th>
-    </tr>
+  <table id="columns">
+    <thead>
+      <tr>
+        <th>autonomous-community</th>
+        <th>year</th>
+        <th><18 age</th>
+        <th>19<24 age</th>
+        <th>25<29 age</th>
+        <th>30<34 age</th>
+      </tr>
+    </thead>
   </table>
-  <!-- Filas -->
-  <table id="raws" border="1" style="width: 700px;"></table>
 </body>
 </html>
