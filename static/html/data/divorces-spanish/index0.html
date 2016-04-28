@@ -14,8 +14,8 @@
   <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
 
   <!-- DataTables para seleccionar y eliminar 1 fila -->
-	<!--<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script> -->
+	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 
   <script>
     $(document).ready(function (){
@@ -26,7 +26,7 @@
       });
 
       request.done((data,status,jqXHR)=>{
-        //$(document).ready( function () {
+        //$(document).ready( function () { ////
         $("#columns").DataTable( {
           data: data,//parsedData
           "columns": [
@@ -39,7 +39,7 @@
           ]
         });
 
-        var table = $("columns").DataTable(); //Tabla "table"
+        var table = $("#columns").DataTable(); //Tabla "table"
         //**** Seleccionar una fila ****
         $('#columns tbody').on( 'click', 'tr', function () {
             if ( $(this).hasClass('selected') ) { //Si está en Clase "selected"
@@ -62,35 +62,58 @@
 						type : "delete",
 						dataType : "json"
 					});
-					//location.reload(); //Reload
+					location.reload(); //Reload
 				});
-
+        ////POST
+        $("#sendPost").click( function (){
+          var ac = $("#autonomous-community").val(); //Con guion pk así es ID en html
+          var year = $("#year").val();
+          var a1 = $("#age_0_18").val();
+          var a2 = $("#age_19_24").val();
+          var a3 = $("#age_25_29").val();
+          var a4 = $("#age_30_34").val();
+          var mge = '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
+          console.log("Mensaje para POST: "+mge);
+          var request = $.ajax({
+            url : "/api/v1/divorces-spanish?apikey=juanluw",
+            type : "POST",
+            data : mge,//JSON.stringify(mge),
+            dataType : 'json',
+            contentType : 'application/json'
+          });
+          location.reload();
+        }); //fin POST
         ////UPDATE
-				$('#button_update').click( function () {
+				$("#button_update").click( function () {
 			    var row = table.rows('.selected').data();
 			    var datos = "";
-			    datos += '{"autonomous_community"='; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
+			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
 					datos += '"';
 					datos += row[0].autonomous_community;
 					datos += '"';
 					datos += ',';
-					datos += '"year"=';
-					datos += $("#provinceU").val();
+					datos += '"year":';
+					datos += $("#yearU").val();
 					datos += ',';
-					datos += '"town"=';
-					datos += $("#townU").val();
+					datos += '"age_0_18":';
+					datos += $("#age_0_18U").val();
 					datos += ',';
-					datos += '"length"=';
-					datos += $("#lengthU").val();
+					datos += '"age_19_24":';
+					datos += $("#age_19_24U").val();
 					datos += ',';
-					datos += '"width"=';
-					datos += $("#widthU").val();
+					datos += '"age_25_29":';
+					datos += $("#age_25_29U").val();
+          datos += ',';
+					datos += '"age_30_34":';
+					datos += $("#age_30_34U").val();
 					datos += '}';
+          console.log("TOMA UPDATE: "+datos);
 					var request = $.ajax({
+            url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
 						type : "PUT",
-						url : "/api/v1/divorces-spanish/"+row[0].name+"?apikey=juanluw",
-						dataType : 'json',
-						data : datos
+            data : datos,
+						dataType : "json",
+            contentType : 'application/json'
 					});
 			  } );
  				////finUPDATE
@@ -98,16 +121,23 @@
         // ***** Eliminar 1 Fila *****
     		$('#DELETE').click( function () {
     			var row = table.rows('.selected').data();
-					var request = $.ajax({
-						url : "/api/v1/beaches/" + row[0].name,
-						type : "delete",
-						dataType : "json"
-					});
+          //console.log("ELIMINO 1 FILA: "+row[0].autonomous_community);
+          console.log("ELIMINO 1 FILA: "+row.length);
+          if(row.length == 0){
+            alert("You should select 1 row to DELETE");
+          } else {
+            var request = $.ajax({
+  						url : "/api/v1/divorces-spanish/" + row[0].autonomous_community + "?apikey=juanluw",
+  						type : "delete",
+  						dataType : "json"
+  					});
+          }
 				});
-        //}); //fin ready
+      //}); //fin ready ////
       }); //fin done
 
       request.always((jqXHR,status)=>{
+        //reload();
       });
 
     }); //FIN ready
@@ -137,39 +167,38 @@
 	<input id="POST" type="button" value="Add" onclick="mostrar()"/>
 	<input id="PUT" type="button" value="Update" onclick="mostrarUpdate()" />
 	<input id="DELETE_ALL" type="button" value="Delete ALL" />
-	<input id="DELETE" type="button" value="Delete selected ALL" onclick="reload()" />
+	<input id="DELETE" type="button" value="Delete selected row" onclick="reload()" />
 
   <!-- ******************* FORMULARIO OCULTO ****************** -->
 	<div id="oculto" style="display:none;">
 	<hr>
 	<form id="fm" method="post">
 				<div class="fitem">
-					<label>Autonomous Community Name:</label> <input id="autonomous-community" name="autonomous-community"
+					<label>Autonomous Community Name:</label> <input id="autonomous-community"
 						class="easyui-validatebox" required="true">
 				</div>
 				<div class="fitem">
 					<label>Year:</label> <input id="year"
-						name="year" class="easyui-validatebox" required="true">
-				</div>
-				<div class="fitem">
-					<label>Age < 18:</label> <input id="age_0_18" name="age_0_18"
 						class="easyui-validatebox" required="true">
 				</div>
 				<div class="fitem">
-					<label>Age 19<24:</label> <input id="age_19_24" name="age_19_24"
+					<label>Age < 18:</label> <input id="age_0_18"
 						class="easyui-validatebox" required="true">
 				</div>
 				<div class="fitem">
-					<label>Age 25<29</label> <input id="age_25_29" name="age_25_29"
+					<label>Age 19<24:</label> <input id="age_19_24"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div class="fitem">
+					<label>Age 25<29</label> <input id="age_25_29"
 						class="easyui-validatebox" required="true">
 				</div>
         <div class="fitem">
-					<label>Age 30<34</label> <input id="age_30_34" name="age_30_34"
+					<label>Age 30<34</label> <input id="age_30_34"
 						class="easyui-validatebox" required="true">
 				</div>
 				<div>
-					<button id="sendPost" class="easyui-linkbutton" iconCls="icon-ok"
-						onclick="post()">Add</button>
+					<button id="sendPost" class="easyui-linkbutton" iconCls="icon-ok" >Add</button>
 				</div>
 			</form>
 	</div>
@@ -183,23 +212,23 @@
         class="easyui-validatebox" required="true">
       </div> -->
       <div class="fitem">
-        <label>Year:</label> <input id="year"
-          name="year" class="easyui-validatebox" required="true">
-      </div>
-      <div class="fitem">
-        <label>Age < 18:</label> <input id="age_0_18" name="age_0_18"
+        <label>Year:</label> <input id="yearU"
           class="easyui-validatebox" required="true">
       </div>
       <div class="fitem">
-        <label>Age 19<24:</label> <input id="age_19_24" name="age_19_24"
+        <label>Age < 18:</label> <input id="age_0_18U"
           class="easyui-validatebox" required="true">
       </div>
       <div class="fitem">
-        <label>Age 25<29</label> <input id="age_25_29" name="age_25_29"
+        <label>Age 19<24:</label> <input id="age_19_24U"
           class="easyui-validatebox" required="true">
       </div>
       <div class="fitem">
-        <label>Age 30<34</label> <input id="age_30_34" name="age_30_34"
+        <label>Age 25<29</label> <input id="age_25_29U"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div class="fitem">
+        <label>Age 30<34</label> <input id="age_30_34U"
           class="easyui-validatebox" required="true">
       </div>
       <div>

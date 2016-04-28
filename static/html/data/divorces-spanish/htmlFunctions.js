@@ -22,43 +22,13 @@ function post(){
   var a2 = $("#age_19_24").val();
   var a3 = $("#age_25_29").val();
   var a4 = $("#age_30_34").val();
-  var mge = '{"autonomous_community" =' + ac + ',"year" = ' + year + ', "age_0_18" =' + a1 + ', "age_19_24" =' + a2 + ', "age_25_29" =' + a3 + ', "age_30_34" =' + a4 + '}';
-
+  var mge = '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
+  console.log("Mensaje para POST: "+mge);
   var request = $.ajax({
-    type : "POST",
     url : "/api/v1/divorces-spanish?apikey=juanluw",
-    dataType : 'json',
-    data : JSON.stringify(mge),
-    contentType : 'application/json',
-    mimeType : 'application/json',
-    data : mge
-  });
-
-  reload();
-}
-
-//PUT
-//para cuando clicke en el boton actualizar
-function update(){
-  console.warn("LLEGAS o NO");
-  var name = $("#name").val();
-  console.warn(name);
-  var province = $("#province").val();
-  var town = $("#town").val();
-  var length = $("#length").val();
-  var width = $("#width").val();
-  var mge = '{"name" =' + name + ',"province" = ' + province + ', "town" =' + town + ', "length" =' + length + ', "width" =' + width + '}';
-
-  var request = $.ajax({
     type : "POST",
-    url : "/api/v1/beaches",
+    data : mge,//JSON.stringify(mge),
     dataType : 'json',
-    data : JSON.stringify(mge),
-    contentType : 'application/json',
-    mimeType : 'application/json',
-    data : mge
+    contentType : 'application/json'
   });
-
-  //Reload
-  reload();
 }
