@@ -22,13 +22,23 @@ function post(){
   var a2 = $("#age_19_24").val();
   var a3 = $("#age_25_29").val();
   var a4 = $("#age_30_34").val();
-  var mge = '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
+  var mge = "";
+  mge += '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
   console.log("Mensaje para POST: "+mge);
+
   var request = $.ajax({
-    url : "/api/v1/divorces-spanish?apikey=juanluw",
+    url : "/api/v1/divorces-spanish/?apikey=juanluw",
     type : "POST",
-    data : mge,//JSON.stringify(mge),
-    dataType : 'json',
-    contentType : 'application/json'
+    data : mge,
+    dataType : "json",
+    contentType : "application/json",
+    statusCode: {
+      201: function(xhr) {
+        console.log("CAMBIAR URL ");
+        var request = $.ajax({
+          url : "/api/v1/divorces-spanish/?apikey=juanlur"
+        });
+      }
+    }
   });
 }

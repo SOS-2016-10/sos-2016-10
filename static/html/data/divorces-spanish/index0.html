@@ -24,11 +24,10 @@
         type: "GET",
         url:"/api/v1/divorces-spanish?apikey=juanlur"
       });
-
       request.done((data,status,jqXHR)=>{
         //$(document).ready( function () { ////
         $("#columns").DataTable( {
-          data: data,//parsedData
+          data: data,
           "columns": [
             { data: "autonomous_community" },
             { data: "year"},
@@ -42,21 +41,21 @@
         var table = $("#columns").DataTable(); //Tabla "table"
         //**** Seleccionar una fila ****
         $('#columns tbody').on( 'click', 'tr', function () {
-            if ( $(this).hasClass('selected') ) { //Si está en Clase "selected"
+            $(this).toggleClass('selected');
+            /*if ( $(this).hasClass('selected') ) { //Si está en Clase "selected"
                 $(this).removeClass('selected'); //entonces lo quito de "selected"
             }
             else {
                 table.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected'); //Añado a la clase "selected"
-            }
+            }*/
         });
+
 
         //Eliminar todo
     		$('#DELETE_ALL').on( 'click', function () {
 					//table.row('.selected').remove().draw( false );
 					var row = table.row('.selected');
-					console.warn(row.name);
-					//var url = '/api/v1/beaches/' + row.name;
 					var request = $.ajax({
 						url : "/api/v1/divorces-spanish?apikey=juanluw",
 						type : "delete",
@@ -64,57 +63,44 @@
 					});
 					location.reload(); //Reload
 				});
-        ////POST
-        $("#sendPost").click( function (){
-          var ac = $("#autonomous-community").val(); //Con guion pk así es ID en html
-          var year = $("#year").val();
-          var a1 = $("#age_0_18").val();
-          var a2 = $("#age_19_24").val();
-          var a3 = $("#age_25_29").val();
-          var a4 = $("#age_30_34").val();
-          var mge = '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
-          console.log("Mensaje para POST: "+mge);
-          var request = $.ajax({
-            url : "/api/v1/divorces-spanish?apikey=juanluw",
-            type : "POST",
-            data : mge,//JSON.stringify(mge),
-            dataType : 'json',
-            contentType : 'application/json'
-          });
-          location.reload();
-        }); //fin POST
+
+
         ////UPDATE
 				$("#button_update").click( function () {
 			    var row = table.rows('.selected').data();
-			    var datos = "";
-			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
-					datos += '"';
-					datos += row[0].autonomous_community;
-					datos += '"';
-					datos += ',';
-					datos += '"year":';
-					datos += $("#yearU").val();
-					datos += ',';
-					datos += '"age_0_18":';
-					datos += $("#age_0_18U").val();
-					datos += ',';
-					datos += '"age_19_24":';
-					datos += $("#age_19_24U").val();
-					datos += ',';
-					datos += '"age_25_29":';
-					datos += $("#age_25_29U").val();
-          datos += ',';
-					datos += '"age_30_34":';
-					datos += $("#age_30_34U").val();
-					datos += '}';
-          console.log("TOMA UPDATE: "+datos);
-					var request = $.ajax({
-            url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
-						type : "PUT",
-            data : datos,
-						dataType : "json",
-            contentType : 'application/json'
-					});
+          if(row.length == 0){
+            alert("You should select 1 row to DELETE");
+          } else {
+            var datos = "";
+  			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
+  					datos += '"';
+  					datos += row[0].autonomous_community;
+  					datos += '"';
+  					datos += ',';
+  					datos += '"year":';
+  					datos += $("#yearU").val();
+  					datos += ',';
+  					datos += '"age_0_18":';
+  					datos += $("#age_0_18U").val();
+  					datos += ',';
+  					datos += '"age_19_24":';
+  					datos += $("#age_19_24U").val();
+  					datos += ',';
+  					datos += '"age_25_29":';
+  					datos += $("#age_25_29U").val();
+            datos += ',';
+  					datos += '"age_30_34":';
+  					datos += $("#age_30_34U").val();
+  					datos += '}';
+            console.log("TOMA UPDATE: "+datos);
+  					var request = $.ajax({
+              url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
+  						type : "PUT",
+              data : datos,
+  						dataType : "json",
+              contentType : "application/json"
+  					});
+          }
 			  } );
  				////finUPDATE
 
@@ -126,13 +112,41 @@
           if(row.length == 0){
             alert("You should select 1 row to DELETE");
           } else {
-            var request = $.ajax({
+            /*var request = $.ajax({
   						url : "/api/v1/divorces-spanish/" + row[0].autonomous_community + "?apikey=juanluw",
   						type : "delete",
   						dataType : "json"
-  					});
+  					});*/
+            for(var i=0;i<row.length;i++){
+              var request = $.ajax({
+    						url : "/api/v1/divorces-spanish/" + row[i].autonomous_community + "?apikey=juanluw",
+    						type : "delete",
+    						dataType : "json"
+    					});
+            }
           }
 				});
+
+        ////POST
+        /*$("#sendPost").click( function (){
+          var ac = $("#autonomous-community").val(); //Con guion pk así es ID en html
+          var year = $("#year").val();
+          var a1 = $("#age_0_18").val();
+          var a2 = $("#age_19_24").val();
+          var a3 = $("#age_25_29").val();
+          var a4 = $("#age_30_34").val();
+          var mge = "";
+          mge += '{"autonomous_community":\"' + ac + '\","year":' + year + ', "age_0_18":' + a1 + ', "age_19_24":' + a2 + ', "age_25_29":' + a3 + ', "age_30_34":' + a4 + '}';
+          console.log("Mensaje para POST: "+mge);
+
+          var request = $.ajax({
+            url : "/api/v1/divorces-spanish/?apikey=juanluw",
+            type : "POST",
+            data : mge,
+            dataType : "json",
+            contentType : "application/json"
+          });
+        });*/ //fin POST
       //}); //fin ready ////
       }); //fin done
 
@@ -198,7 +212,7 @@
 						class="easyui-validatebox" required="true">
 				</div>
 				<div>
-					<button id="sendPost" class="easyui-linkbutton" iconCls="icon-ok" >Add</button>
+					<button id="sendPost" class="easyui-linkbutton" iconCls="icon-ok" onclick="post()">Add</button>
 				</div>
 			</form>
 	</div>
