@@ -58,7 +58,7 @@ function post(){
   console.log("Mensaje para POST: "+mge);
 
   var request = $.ajax({
-    url : "/api/v1/divorces-spanish/?apikey=juanluw",
+    url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/?apikey=juanluw",
     type : "POST",
     data : mge,
     dataType : "json",
@@ -67,6 +67,10 @@ function post(){
   request.always((jqXHR,status)=>{
     if(jqXHR.status == 409){
       alert("CONFLICT, You should add other AUTONOMOUS-COMMUNITY or YEAR");
+    } else if(jqXHR.status == 403){
+      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
+    } else if(jqXHR.status == 401){
+      alert("UNAUTHORIZED, you should change the apikey");
     }
   });
 }
