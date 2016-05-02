@@ -3,6 +3,10 @@
 <head>
   <link href="/style.css" rel="stylesheet" type="text/css">
   <title>Divorces Spanish</title>
+  <!-- BootStrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
 
@@ -131,7 +135,7 @@
       }); //fin done
 
       request.always((jqXHR,status)=>{
-        if(jqXHR.status == 403){
+        if((jqXHR.status == 401) || (jqXHR.status == 403)){
           alert("You can not modify data, because you don not have permission");
         }
       });
@@ -162,11 +166,11 @@
   </table>
 
   <!-- ******************* BOTONES *************************** -->
-	<input id="POST" type="button" value="Add" onclick="mostrar()"/>
-	<input id="PUT" type="button" value="Update" onclick="mostrarUpdate()" />
-	<input id="DELETE_ALL" type="button" value="Delete ALL" />
-	<input id="DELETE" type="button" value="Delete selected row" onclick="reload()" />
-  <input id="LOAD" type="button" value="Load Initial Data" onclick="loadInitialData()" />
+	<input id="POST" type="button" value="Add" onclick="mostrar()" class="btn btn-primary" />
+	<input id="PUT" type="button" value="Update" onclick="mostrarUpdate()" class="btn btn-primary" />
+	<input id="DELETE_ALL" type="button" value="Delete ALL" class="btn btn-danger" />
+	<input id="DELETE" type="button" value="Delete selected row" onclick="reload()" class="btn btn-danger" />
+  <input id="LOAD" type="button" value="Load Initial Data" onclick="loadInitialData()" class="btn btn-success" />
 
   <!-- ******************* FORMULARIO OCULTO ****************** -->
 	<div id="oculto" style="display:none;">
@@ -197,7 +201,7 @@
 						class="easyui-validatebox" required="true">
 				</div>
 				<div>
-					<button id="sendPost" class="easyui-linkbutton" iconCls="icon-ok" onclick="post()">Add</button>
+					<button id="sendPost" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" onclick="post()" >Add</button>
 				</div>
 			</form>
 	</div>
@@ -231,7 +235,7 @@
           class="easyui-validatebox" required="true">
       </div>
       <div>
-        <button id="button_update" class="easyui-linkbutton" iconCls="icon-ok" >Update</button>
+        <button id="button_update" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" >Update</button>
       </div>
 	   </form>
 	</div>

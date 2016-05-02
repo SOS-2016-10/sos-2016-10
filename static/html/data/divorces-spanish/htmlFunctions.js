@@ -17,9 +17,9 @@ function mostrarUpdate(){
 function keyOK(request){
   request.always((jqXHR,status)=>{
     if(jqXHR.status == 403){
-      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
+      alert("You can not modify data, because you don not have permission\nCHANGE the apikey or DATA");
     } else if(jqXHR.status == 409){
-      alert("CONFLICT exist data yet");
+      alert("CONFLICT exist data yet\n You should add other AUTONOMOUS-COMMUNITY or YEAR");
     } else if(jqXHR.status == 401){
       alert("UNAUTHORIZED, you should change the apikey");
     }
@@ -32,17 +32,8 @@ function loadInitialData(){
     type: "GET",
     url : "/api/v1/divorces-spanish/loadInitialData?apikey="+$("#apikey").val(),  //url:"/api/v1/divorces-spanish/loadInitialData?apikey=juanluw"
   });
-  request.always((jqXHR,status)=>{
-    if(jqXHR.status == 409){
-      alert("NO \"Load Initial Data\" because exist data yet");
-    } else if(jqXHR.status == 403){
-      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
-    } else if(jqXHR.status == 401){
-      alert("UNAUTHORIZED, you should change the apikey");
-    } else {
-      this.reload();
-    }
-  });
+  this.keyOK(request);
+  this.reload();
 }
 //POST
 //cuando clickas en el boton Añadir del formulario
@@ -64,13 +55,5 @@ function post(){
     dataType : "json",
     contentType : "application/json",
   });
-  request.always((jqXHR,status)=>{
-    if(jqXHR.status == 409){
-      alert("CONFLICT, You should add other AUTONOMOUS-COMMUNITY or YEAR");
-    } else if(jqXHR.status == 403){
-      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
-    } else if(jqXHR.status == 401){
-      alert("UNAUTHORIZED, you should change the apikey");
-    }
-  });
+  this.keyOK(request);
 }
