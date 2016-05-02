@@ -4,7 +4,7 @@
   <link href="/style.css" rel="stylesheet" type="text/css">
   <title>Divorces Spanish</title>
   <!-- JQuery -->
-  <!-- <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
 
   <!-- Funciones divorces-spanish -->
 	<script type="text/javascript" src="/data/divorces-spanish/htmlFunctions.js"></script>
@@ -63,6 +63,7 @@
 						type : "delete",
 						dataType : "json"
 					});
+          keyOK(request);
 					location.reload(); //Reload
 				});
 
@@ -71,7 +72,7 @@
 				$("#button_update").click( function () {
 			    var row = table.rows('.selected').data();
           if(row.length == 0){
-            alert("You should select 1 row to DELETE");
+            alert("You should select 1 row to UPDATE");
           } else {
             var datos = "";
   			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
@@ -102,6 +103,7 @@
   						dataType : "json",
               contentType : "application/json"
   					});
+            keyOK(request);
           }
 			  } );
  				////finUPDATE
@@ -116,10 +118,11 @@
           } else {
             for(var i=0;i<row.length;i++){
               var request = $.ajax({
-    						url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/" + row[i].autonomous_community + "?apikey=juanluw",
+    						url : "/api/v1/divorces-spanish/"+ row[i].autonomous_community +"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/" + row[i].autonomous_community + "?apikey=juanluw",
     						type : "delete",
     						dataType : "json"
     					});
+              keyOK(request);
             }
           }
 				});
@@ -127,9 +130,11 @@
       //}); //fin ready ////
       }); //fin done
 
-      /*request.always((jqXHR,status)=>{
-        //reload();
-      });*/
+      request.always((jqXHR,status)=>{
+        if(jqXHR.status == 403){
+          alert("You can not modify data, because you don not have permission");
+        }
+      });
 
     }); //FIN ready
     </script>

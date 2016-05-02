@@ -8,20 +8,37 @@ function mostrar(){
   document.getElementById('oculto').style.display = 'block';
 }
 
-//funcion mostrar formulario Update (PUT)
+//Funcion mostrar formulario Update (PUT)
 function mostrarUpdate(){
   document.getElementById('ocultoUpdate').style.display = 'block';
+}
+
+//Funcion para validar apikey
+function keyOK(request){
+  request.always((jqXHR,status)=>{
+    if(jqXHR.status == 403){
+      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
+    } else if(jqXHR.status == 409){
+      alert("CONFLICT exist data yet");
+    } else if(jqXHR.status == 401){
+      alert("UNAUTHORIZED, you should change the apikey");
+    }
+  });
 }
 
 //loadInitialData
 function loadInitialData(){
   var request= $.ajax({
     type: "GET",
-    url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(),  //url:"/api/v1/divorces-spanish/loadInitialData?apikey=juanluw"
+    url : "/api/v1/divorces-spanish/loadInitialData?apikey="+$("#apikey").val(),  //url:"/api/v1/divorces-spanish/loadInitialData?apikey=juanluw"
   });
   request.always((jqXHR,status)=>{
     if(jqXHR.status == 409){
       alert("NO \"Load Initial Data\" because exist data yet");
+    } else if(jqXHR.status == 403){
+      alert("You can not modify data, because you don not have permission\nCHANGE the apikey");
+    } else if(jqXHR.status == 401){
+      alert("UNAUTHORIZED, you should change the apikey");
     } else {
       this.reload();
     }
