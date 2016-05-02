@@ -13,6 +13,20 @@ function mostrarUpdate(){
   document.getElementById('ocultoUpdate').style.display = 'block';
 }
 
+//loadInitialData
+function loadInitialData(){
+  var request= $.ajax({
+    type: "GET",
+    url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(),  //url:"/api/v1/divorces-spanish/loadInitialData?apikey=juanluw"
+  });
+  request.always((jqXHR,status)=>{
+    if(jqXHR.status == 409){
+      alert("NO \"Load Initial Data\" because exist data yet");
+    } else {
+      this.reload();
+    }
+  });
+}
 //POST
 //cuando clickas en el boton Añadir del formulario
 function post(){
@@ -32,13 +46,10 @@ function post(){
     data : mge,
     dataType : "json",
     contentType : "application/json",
-    statusCode: {
-      201: function(xhr) {
-        console.log("CAMBIAR URL ");
-        var request = $.ajax({
-          url : "/api/v1/divorces-spanish/?apikey=juanlur"
-        });
-      }
+  });
+  request.always((jqXHR,status)=>{
+    if(jqXHR.status == 409){
+      alert("CONFLICT, You should add other AUTONOMOUS-COMMUNITY or YEAR");
     }
   });
 }
