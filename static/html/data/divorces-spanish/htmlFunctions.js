@@ -57,3 +57,112 @@ function post(){
   });
   this.keyOK(request);
 }
+
+//function paginate
+function paginate(){
+  var limit = $("#limit").val();
+  var offset = $("#offset").val();
+  console.log("LIMIT:"+limit+", OFFSET:"+offset);
+
+  if((limit.lenth == 0) && (offset.length == 0)){ //NO HAY BUSQUEDA
+    var request= $.ajax({
+      type: "GET",
+      url:"/api/v1/divorces-spanish?apikey=juanlur"
+    });
+
+    request.done((data,status,jqXHR)=>{
+      //$(document).ready( function () { ////
+      var table = $("#columns").DataTable( {
+        destroy: true,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });
+  } else {
+    var request = $.ajax({
+      url : "/api/v1/divorces-spanish/?apikey="+$("#apikey").val()+"&limit="+limit+"&offset="+offset,
+      type : "GET"
+    });
+    request.done((data,status,jqXHR)=>{
+      //$(document).ready( function () { ////
+      var table = $("#columns").DataTable( {
+        destroy: true,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });
+  }
+
+}
+
+//function searchByYear
+function searchByYear(){
+  var year = $("#yearS").val();
+  console.log(year);
+  if(year.length == 0){ //Search vacío
+    var request= $.ajax({
+      type: "GET",
+      url:"/api/v1/divorces-spanish?apikey=juanlur"
+    });
+
+    request.done((data,status,jqXHR)=>{
+      //$(document).ready( function () { ////
+      var table = $("#columns").DataTable( {
+        destroy: true,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });
+  } else {
+    var request = $.ajax({
+      url : "/api/v1/divorces-spanish/?apikey="+$("#apikey").val()+"&year="+year,
+      type : "GET"
+    });
+    request.done((data,status,jqXHR)=>{
+      var table = $("#columns").DataTable(); //Tabla "table"
+      table.destroy();
+      $("#columns").DataTable( {
+        destroy: true,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });
+  }
+
+}

@@ -32,7 +32,9 @@
 
       request.done((data,status,jqXHR)=>{
         //$(document).ready( function () { ////
-        $("#columns").DataTable( {
+        var table = $("#columns").DataTable( {
+          paging: false,
+          searching: false,
           data: data,
           "columns": [
             { data: "autonomous_community" },
@@ -44,7 +46,9 @@
           ]
         });
 
-        var table = $("#columns").DataTable(); //Tabla "table"
+        //var table = $("#columns").DataTable(); //Tabla "table"
+        //table.destroy();
+
         //**** Seleccionar una fila ****
         $('#columns tbody').on( 'click', 'tr', function () {
             $(this).toggleClass('selected');
@@ -148,7 +152,14 @@
   <h1>Divorces Spanish</h1>
   <p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href="http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase">here.</a></p>
 
-  Apikey to operations: <input id="apikey" size="30" />
+  Apikey to operations: <input id="apikey" size="30" value="juanluw" />
+  Limit: <input id="limit" size="15" />
+  Offset: <input id="offset" size="15" />
+
+  <input id="paginateB" type="button" value="Paginate" class="btn btn-info" onclick="paginate()" />
+  <br/>
+  Search by Year: <input id="yearS" size="30" />
+  <input id="yearSB" type="button" value="Search by Year" class="btn btn-info" onclick="searchByYear()" />
 
   <!--Tabla -->
   <!-- Columnas -->
