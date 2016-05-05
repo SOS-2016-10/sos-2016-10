@@ -147,59 +147,35 @@
 
     }); //FIN ready
     </script>
-    <!-- ***************** GOOGLE CHART ********************* -->
-		<script type="text/javascript">
 
+    <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
+    <script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var request = $.ajax({
+        url: "/api/v1/divorces-spanish?apikey=juanlur"
+      });
+      request.done(function(data,status,jqXHR){
+        var datos = [];
+        datos.push(['Task', 'Age_30_34']);
 
-		////////////////////////////////////////////////////////////////////////7
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-		var request = $.ajax({
-			url: '/api/v1/divorces-spanish?apikey=juanlur'
-		});
-		request.done(function(data,status,jqXHR){
-			var parsedData = $.parseJSON(data);
-			var datos = [];
-			datos.push(['Task', 'Longitud Playas']);
-
-			for(var i in parsedData){ //Recorro todo los objetos
-				var obj = parsedData[i];
-				/*if(i == (parsedData.length-1)){
-					datos += "['"+obj.name+"',"+obj.length+"]]";
-				} else {
-					datos += "['"+obj.name+"',"+obj.length+"],";
-				}*/
-				datos.push([obj.name,obj.length]);
-			}
-			console.warn(datos);
-			var data = google.visualization.arrayToDataTable(datos);
-			var options = {
-          		title: 'Divorces in Spain'
-        	};
-
-        	var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-       	 	chart.draw(data, options);
-		});
-        /*var data = google.visualization.arrayToDataTable([
-          ['Task', 'Longitud Playas'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);*/
-
-        /*var options = {
-          title: 'Longitud Playas'
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.autonomous_community,obj.age_30_34]);
+        }
+        console.warn(datos);
+        var data = google.visualization.arrayToDataTable(datos);
+        var options = {
+          title: 'Divorces in Spain'
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-        chart.draw(data, options);*/
-      }
-      </script>
+        chart.draw(data, options);
+      });
+    }
+    </script>
 </head>
 <body>
   <!-- ******************** HTML ******************** -->
@@ -315,5 +291,8 @@
       </div>
 	   </form>
 	</div>
+
+  <!-- ***************** GOOGLE CHART ********************* -->
+	<div id="piechart" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
