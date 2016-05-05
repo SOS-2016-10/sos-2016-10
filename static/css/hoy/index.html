@@ -1,0 +1,26 @@
+<html>
+<head>
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+  <script>
+  $(document).ready(()=>{
+    $("#btn").click(()=>{
+      var request = $.ajax({
+        url : $("#url").val(),
+        type : "GET",
+        contentType : "application/json"
+      });
+      request.done((data)=>{
+        console.log(data);
+      });
+    });
+  });
+
+  </script>
+</head>
+
+<body>
+  Lanzar Ajax: <input id="url" size="50" />
+  <button id="btn"> AJAX Request </button>
+</body>
+</html>

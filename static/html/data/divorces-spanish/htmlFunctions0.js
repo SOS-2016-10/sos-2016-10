@@ -5,7 +5,7 @@ function paginar(total){
   console.log("HOY SI: "+num);
   var cont = 0;
   for(var i=1;i<=num;i++){
-    $("#paginas").append("<input id=\"pg"+i+"\" type=\"button\" class=\"btn btn-warning\" value=\""+i+"\" onclick=\"create_table('/api/v1/divorces-spanish/?apikey=juanlur&limit="+limit+"&offset="+cont+"')\" />");
+    $("#paginas").append("<input id=\"pg"+i+"\" type=\"button\" value=\""+i+"\" onclick=\"create_table('/api/v1/divorces-spanish/?apikey=juanlur&limit="+limit+"&offset="+cont+"')\" />");
     //console.log("<input id=\"pg"+i+"\" type=\"button\" value=\""+i+"\" onclick=\"create_table('/api/v1/divorces-spanish/?apikey=juanlur&limit="+limit+"&offset="+cont+"')\" />");
     cont = parseInt(cont) + parseInt(limit);
   }
@@ -20,7 +20,6 @@ function create_table(url){
   });
   this.keyOK(request); //CREO
   request.done((data,status,jqXHR)=>{
-    //this.paginar(data.length); //Para hacer paginación
     var table = $("#columns").DataTable( {
       destroy: true,
       ordering: false,
@@ -78,10 +77,6 @@ function loadInitialData(){
     type: "GET",
     url : "/api/v1/divorces-spanish/loadInitialData?apikey="+$("#apikey").val(),  //url:"/api/v1/divorces-spanish/loadInitialData?apikey=juanluw"
   });
-  /*request.done((data)=>{
-    paginar(data.length);
-  });*/
-
   this.keyOK(request);
   this.reload();
 }
@@ -115,10 +110,58 @@ function searchByYear(){
   console.log(year);
   if(year.length == 0){ ///// Search vacío(NO SEARCH) ////////
     this.create_table('/api/v1/divorces-spanish?apikey=juanlur');
+    /*var request= $.ajax({
+      type: "GET",
+      url:"/api/v1/divorces-spanish?apikey=juanlur"
+    });
+
+    request.done((data,status,jqXHR)=>{
+      //$(document).ready( function () { ////
+      var table = $("#columns").DataTable( {
+        destroy: true,
+        ordering: false,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });*/
   } else { ////////////////// HAY SEARCH //////////////////////
     var key = $("#apikey").val();
     var url = "/api/v1/divorces-spanish/?apikey="+key+"&year="+year;
     console.log(url);
     this.create_table(url);
-    } //fin else
+    /*var request = $.ajax({
+      url : "/api/v1/divorces-spanish/?apikey="+$("#apikey").val()+"&year="+year,
+      type : "GET"
+    });
+
+    this.keyOK(request);
+
+    request.done((data,status,jqXHR)=>{
+      $("#columns").DataTable( {
+        destroy: true,
+        ordering: false,
+        paging: false,
+        searching: false,
+        data: data,
+        "columns": [
+          { data: "autonomous_community" },
+          { data: "year"},
+          { data: "age_0_18"},
+          { data: "age_19_24"},
+          { data: "age_25_29"},
+          { data: "age_30_34"}
+        ]
+      });
+    });*/
+  } //fin else
+
 }
