@@ -1,243 +1,99 @@
-
 <html>
-<head>
-  <link href="/style.css" rel="stylesheet" type="text/css">
-  <title>Divorces Spanish</title>
-  <!-- BootStrap -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <head>
+    <!-- <link href="/style.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        console.log("JQuery Ready!");
+        $("#button").click(()=>{
+          //$("#log").html("<h1>HELLO WORLD!!!!</h1>");
+          console.log("Handling click");
 
-  <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+          var urlHTML = $("#url").val();
+          var method = $("input[type=radio]:checked").attr("id");
+          var dataJSON = $("#payload").val();
+          //console.log("DataJSON = "+dataJSON.text());
 
-  <!-- Funciones divorces-spanish -->
-	<script type="text/javascript" src="/telematic-monitorings/htmlFunctions.js"></script>
-
-  <!-- DATATABLES -->
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
-
-  <!-- DataTables para seleccionar y eliminar 1 fila -->
-	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-
-  <script>
-    $(document).ready(function (){
-      console.log("JQuery ready");
-
-      var request= $.ajax({
-        type: "GET",
-        url:"/api/v1/telematic-monitorings?apikey=read"
-      });
-
-      request.done((data,status,jqXHR)=>{
-        //$(document).ready( function () { ////
-        $("#columns").DataTable( {
-          data: data,
-          "columns": [
-            { data: "autonomous_community" },
-            { data: "year"},
-            { data: "age_0_18"},
-            { data: "age_19_24"},
-            { data: "age_25_29"},
-            { data: "age_30_34"}
-          ]
-        });
-
-        var table = $("#columns").DataTable(); //Tabla "table"
-        //**** Seleccionar una fila ****
-        $('#columns tbody').on( 'click', 'tr', function () {
-            $(this).toggleClass('selected');
-            /*if ( $(this).hasClass('selected') ) { //Si está en Clase "selected"
-                $(this).removeClass('selected'); //entonces lo quito de "selected"
-            }
-            else {
-                table.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected'); //Añado a la clase "selected"
-            }*/
-        });
-
-
-        //Eliminar todo
-    		$('#DELETE_ALL').on( 'click', function () {
-					//table.row('.selected').remove().draw( false );
-					var row = table.row('.selected');
-					var request = $.ajax({
-						url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(),   //url : "/api/v1/divorces-spanish?apikey=juanluw",
-						type : "delete",
-						dataType : "json"
-					});
-          keyOK(request);
-					location.reload(); //Reload
-				});
-
-
-        ////UPDATE
-				$("#button_update").click( function () {
-			    var row = table.rows('.selected').data();
-          if(row.length == 0){
-            alert("You should select 1 row to UPDATE");
+          if(method == "GET"){
+            var request = $.ajax({
+              url: urlHTML,
+              type: method,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
           } else {
-            var datos = "";
-  			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
-  					datos += '"';
-  					datos += row[0].autonomous_community;
-  					datos += '"';
-  					datos += ',';
-  					datos += '"year":';
-  					datos += $("#yearU").val();
-  					datos += ',';
-  					datos += '"age_0_18":';
-  					datos += $("#age_0_18U").val();
-  					datos += ',';
-  					datos += '"age_19_24":';
-  					datos += $("#age_19_24U").val();
-  					datos += ',';
-  					datos += '"age_25_29":';
-  					datos += $("#age_25_29U").val();
-            datos += ',';
-  					datos += '"age_30_34":';
-  					datos += $("#age_30_34U").val();
-  					datos += '}';
-            console.log("TOMA UPDATE: "+datos);
-  					var request = $.ajax({
-              url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
-  						type : "PUT",
-              data : datos,
-  						dataType : "json",
-              contentType : "application/json"
-  					});
-            keyOK(request);
+            var request = $.ajax({
+              url: urlHTML,
+              type: method,
+              data: dataJSON,
+              dataType: 'json', ///
+              contentType: "application/json",
+              //cache: false
+            });
           }
-			  } );
- 				////finUPDATE
 
-        // ***** Eliminar 1 Fila *****
-    		$('#DELETE').click( function () {
-    			var row = table.rows('.selected').data();
-          //console.log("ELIMINO 1 FILA: "+row[0].autonomous_community);
-          console.log("ELIMINO 1 FILA: "+row.length);
-          if(row.length == 0){
-            alert("You should select 1 row to DELETE");
-          } else {
-            for(var i=0;i<row.length;i++){
-              var request = $.ajax({
-    						url : "/api/v1/divorces-spanish/"+ row[i].autonomous_community +"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/" + row[i].autonomous_community + "?apikey=juanluw",
-    						type : "delete",
-    						dataType : "json"
-    					});
-              keyOK(request);
+          console.log(request);
+
+          //Request done
+          request.done(function(data,status,jqXHR) {//Se ejecuta cuando la petición haya sido correcta
+            // Tratamiento en caso de exito
+            console.log("Handling request (OK)");
+            console.log(data);
+            var table = $('<table border="1">'); //Inicializo tabla
+            var head = "<tr>";
+            for (var i in data[0]){
+              head = head + ("<th>"+i+"</th>");
             }
-          }
-				});
+            head = head + "<tr>";
+            $(head).appendTo(table);
+            $.each(data, function(index, value){
+              var row = "<tr>";
+              $.each(value, function(key,val){
+                row = row + ("<td>"+val+"</td>");
+              });
+              row = row + "</tr>";
+              $(table).append(row);
+            });
+            //return ($(table));
 
-      //}); //fin ready ////
-      }); //fin done
+            $(table).appendTo("#data");
+          });
 
-      request.always((jqXHR,status)=>{
-        if((jqXHR.status == 401) || (jqXHR.status == 403)){
-          alert("You can not modify data, because you don not have permission");
-        }
-      });
 
-    }); //FIN ready
+          //Request always
+          request.always(function(jqXHR, status){
+            if(jqXHR.status == undefined){
+              $("#status").text("OK");
+            } else {
+              $("#status").text(jqXHR.status + " " + jqXHR.statusText);
+            }
+          });
+        }); //END #button.click
+      }); //END document.ready
     </script>
-</head>
-<body>
-  <!-- ******************** HTML ******************** -->
-  <h1>Divorces Spanish</h1>
-  <p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href="http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase">here.</a></p>
-
-  Apikey to operations: <input id="apikey" size="30" />
-
-  <!--Tabla -->
-  <!-- Columnas -->
-  <table id="columns">
-    <thead>
-      <tr>
-        <th>autonomous-community</th>
-        <th>year</th>
-        <th><18 age</th>
-        <th>19<24 age</th>
-        <th>25<29 age</th>
-        <th>30<34 age</th>
-      </tr>
-    </thead>
-  </table>
-
-  <!-- ******************* BOTONES *************************** -->
-	<input id="POST" type="button" value="Add" onclick="mostrar()" class="btn btn-primary" />
-	<input id="PUT" type="button" value="Update" onclick="mostrarUpdate()" class="btn btn-primary" />
-	<input id="DELETE_ALL" type="button" value="Delete ALL" class="btn btn-danger" />
-	<input id="DELETE" type="button" value="Delete selected row" onclick="reload()" class="btn btn-danger" />
-  <input id="LOAD" type="button" value="Load Initial Data" onclick="loadInitialData()" class="btn btn-success" />
-
-  <!-- ******************* FORMULARIO OCULTO ****************** -->
-	<div id="oculto" style="display:none;">
-	<hr>
-	<form id="fm">
-				<div class="fitem">
-					<label>Autonomous Community Name:</label> <input id="autonomous-community"
-						class="easyui-validatebox" required="true">
-				</div>
-				<div class="fitem">
-					<label>Year:</label> <input id="year"
-						class="easyui-validatebox" required="true">
-				</div>
-				<div class="fitem">
-					<label>Age < 18:</label> <input id="age_0_18"
-						class="easyui-validatebox" required="true">
-				</div>
-				<div class="fitem">
-					<label>Age 19<24:</label> <input id="age_19_24"
-						class="easyui-validatebox" required="true">
-				</div>
-				<div class="fitem">
-					<label>Age 25<29</label> <input id="age_25_29"
-						class="easyui-validatebox" required="true">
-				</div>
-        <div class="fitem">
-					<label>Age 30<34</label> <input id="age_30_34"
-						class="easyui-validatebox" required="true">
-				</div>
-				<div>
-					<button id="sendPost" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" onclick="post()" >Add</button>
-				</div>
-			</form>
-	</div>
-
-	<!-- ******************* FORMULARIO OCULTO UPDATE *********** -->
-	<div id="ocultoUpdate" style="display:none;">
-	   <hr>
-	    <form id="fp">
-      <!-- <div class="fitem">
-        <label>Autonomous Community Name:</label> <input id="autonomous-community" name="autonomous-community"
-        class="easyui-validatebox" required="true">
-      </div> -->
-      <div class="fitem">
-        <label>Year:</label> <input id="yearU"
-          class="easyui-validatebox" required="true">
-      </div>
-      <div class="fitem">
-        <label>Age < 18:</label> <input id="age_0_18U"
-          class="easyui-validatebox" required="true">
-      </div>
-      <div class="fitem">
-        <label>Age 19<24:</label> <input id="age_19_24U"
-          class="easyui-validatebox" required="true">
-      </div>
-      <div class="fitem">
-        <label>Age 25<29</label> <input id="age_25_29U"
-          class="easyui-validatebox" required="true">
-      </div>
-      <div class="fitem">
-        <label>Age 30<34</label> <input id="age_30_34U"
-          class="easyui-validatebox" required="true">
-      </div>
-      <div>
-        <button id="button_update" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" >Update</button>
-      </div>
-	   </form>
-	</div>
-</body>
+  </head>
+  <body>
+    <h1>JQuery REST Client</h1>
+      URL: <input id="url" size="30" value="/api/v1/telematic-monitorings?apikey=read"/>
+      GET <input name="method" type="radio" id="GET" checked="checked"/> &nbsp;&nbsp;
+      POST <input name="method" type="radio" id="POST" /> &nbsp;&nbsp;
+      PUT <input name="method" type="radio" id="PUT" /> &nbsp;&nbsp;
+      DELETE <input name="method" type="radio" id="DELETE" /> &nbsp;&nbsp;
+    <br/>
+      Payload: <input id="payload" size="60" value='{ "province": "aa", "year": 2014, "installed": 0, "uninstalled": 6,}'/>
+    <br/><br/>
+      <span id="button">Send</span>
+    <br/><hr/>
+      HTTP Status: <span id="status"></span>
+    <br/><hr/>
+      <span id="data">
+        <table id="tableData"></table>
+      </span>
+    <br/><hr/>
+      <ul id="list"></ul>
+    <hr/>
+      Log: <span id="log"></span>
+  </body>
 </html>
