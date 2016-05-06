@@ -1,0 +1,243 @@
+
+<html>
+<head>
+  <link href="/style.css" rel="stylesheet" type="text/css">
+  <title>Divorces Spanish</title>
+  <!-- BootStrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+
+  <!-- Funciones divorces-spanish -->
+	<script type="text/javascript" src="/telematic-monitorings/htmlFunctions.js"></script>
+
+  <!-- DATATABLES -->
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
+
+  <!-- DataTables para seleccionar y eliminar 1 fila -->
+	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+
+  <script>
+    $(document).ready(function (){
+      console.log("JQuery ready");
+
+      var request= $.ajax({
+        type: "GET",
+        url:"/api/v1/telematic-monitorings?apikey=read"
+      });
+
+      request.done((data,status,jqXHR)=>{
+        //$(document).ready( function () { ////
+        $("#columns").DataTable( {
+          data: data,
+          "columns": [
+            { data: "autonomous_community" },
+            { data: "year"},
+            { data: "age_0_18"},
+            { data: "age_19_24"},
+            { data: "age_25_29"},
+            { data: "age_30_34"}
+          ]
+        });
+
+        var table = $("#columns").DataTable(); //Tabla "table"
+        //**** Seleccionar una fila ****
+        $('#columns tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+            /*if ( $(this).hasClass('selected') ) { //Si está en Clase "selected"
+                $(this).removeClass('selected'); //entonces lo quito de "selected"
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected'); //Añado a la clase "selected"
+            }*/
+        });
+
+
+        //Eliminar todo
+    		$('#DELETE_ALL').on( 'click', function () {
+					//table.row('.selected').remove().draw( false );
+					var row = table.row('.selected');
+					var request = $.ajax({
+						url : "/api/v1/divorces-spanish?apikey="+$("#apikey").val(),   //url : "/api/v1/divorces-spanish?apikey=juanluw",
+						type : "delete",
+						dataType : "json"
+					});
+          keyOK(request);
+					location.reload(); //Reload
+				});
+
+
+        ////UPDATE
+				$("#button_update").click( function () {
+			    var row = table.rows('.selected').data();
+          if(row.length == 0){
+            alert("You should select 1 row to UPDATE");
+          } else {
+            var datos = "";
+  			    datos += '{"autonomous_community":'; //1º campo lo cojo del objeto,pk es "key" y no puede modificarse
+  					datos += '"';
+  					datos += row[0].autonomous_community;
+  					datos += '"';
+  					datos += ',';
+  					datos += '"year":';
+  					datos += $("#yearU").val();
+  					datos += ',';
+  					datos += '"age_0_18":';
+  					datos += $("#age_0_18U").val();
+  					datos += ',';
+  					datos += '"age_19_24":';
+  					datos += $("#age_19_24U").val();
+  					datos += ',';
+  					datos += '"age_25_29":';
+  					datos += $("#age_25_29U").val();
+            datos += ',';
+  					datos += '"age_30_34":';
+  					datos += $("#age_30_34U").val();
+  					datos += '}';
+            console.log("TOMA UPDATE: "+datos);
+  					var request = $.ajax({
+              url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
+  						type : "PUT",
+              data : datos,
+  						dataType : "json",
+              contentType : "application/json"
+  					});
+            keyOK(request);
+          }
+			  } );
+ 				////finUPDATE
+
+        // ***** Eliminar 1 Fila *****
+    		$('#DELETE').click( function () {
+    			var row = table.rows('.selected').data();
+          //console.log("ELIMINO 1 FILA: "+row[0].autonomous_community);
+          console.log("ELIMINO 1 FILA: "+row.length);
+          if(row.length == 0){
+            alert("You should select 1 row to DELETE");
+          } else {
+            for(var i=0;i<row.length;i++){
+              var request = $.ajax({
+    						url : "/api/v1/divorces-spanish/"+ row[i].autonomous_community +"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/" + row[i].autonomous_community + "?apikey=juanluw",
+    						type : "delete",
+    						dataType : "json"
+    					});
+              keyOK(request);
+            }
+          }
+				});
+
+      //}); //fin ready ////
+      }); //fin done
+
+      request.always((jqXHR,status)=>{
+        if((jqXHR.status == 401) || (jqXHR.status == 403)){
+          alert("You can not modify data, because you don not have permission");
+        }
+      });
+
+    }); //FIN ready
+    </script>
+</head>
+<body>
+  <!-- ******************** HTML ******************** -->
+  <h1>Divorces Spanish</h1>
+  <p>Hello, My data is related to the number of divorces in Spain. I will get the info from this source: <a href="http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t18/p420/p01/&file=inebase">here.</a></p>
+
+  Apikey to operations: <input id="apikey" size="30" />
+
+  <!--Tabla -->
+  <!-- Columnas -->
+  <table id="columns">
+    <thead>
+      <tr>
+        <th>autonomous-community</th>
+        <th>year</th>
+        <th><18 age</th>
+        <th>19<24 age</th>
+        <th>25<29 age</th>
+        <th>30<34 age</th>
+      </tr>
+    </thead>
+  </table>
+
+  <!-- ******************* BOTONES *************************** -->
+	<input id="POST" type="button" value="Add" onclick="mostrar()" class="btn btn-primary" />
+	<input id="PUT" type="button" value="Update" onclick="mostrarUpdate()" class="btn btn-primary" />
+	<input id="DELETE_ALL" type="button" value="Delete ALL" class="btn btn-danger" />
+	<input id="DELETE" type="button" value="Delete selected row" onclick="reload()" class="btn btn-danger" />
+  <input id="LOAD" type="button" value="Load Initial Data" onclick="loadInitialData()" class="btn btn-success" />
+
+  <!-- ******************* FORMULARIO OCULTO ****************** -->
+	<div id="oculto" style="display:none;">
+	<hr>
+	<form id="fm">
+				<div class="fitem">
+					<label>Autonomous Community Name:</label> <input id="autonomous-community"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div class="fitem">
+					<label>Year:</label> <input id="year"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div class="fitem">
+					<label>Age < 18:</label> <input id="age_0_18"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div class="fitem">
+					<label>Age 19<24:</label> <input id="age_19_24"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div class="fitem">
+					<label>Age 25<29</label> <input id="age_25_29"
+						class="easyui-validatebox" required="true">
+				</div>
+        <div class="fitem">
+					<label>Age 30<34</label> <input id="age_30_34"
+						class="easyui-validatebox" required="true">
+				</div>
+				<div>
+					<button id="sendPost" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" onclick="post()" >Add</button>
+				</div>
+			</form>
+	</div>
+
+	<!-- ******************* FORMULARIO OCULTO UPDATE *********** -->
+	<div id="ocultoUpdate" style="display:none;">
+	   <hr>
+	    <form id="fp">
+      <!-- <div class="fitem">
+        <label>Autonomous Community Name:</label> <input id="autonomous-community" name="autonomous-community"
+        class="easyui-validatebox" required="true">
+      </div> -->
+      <div class="fitem">
+        <label>Year:</label> <input id="yearU"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div class="fitem">
+        <label>Age < 18:</label> <input id="age_0_18U"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div class="fitem">
+        <label>Age 19<24:</label> <input id="age_19_24U"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div class="fitem">
+        <label>Age 25<29</label> <input id="age_25_29U"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div class="fitem">
+        <label>Age 30<34</label> <input id="age_30_34U"
+          class="easyui-validatebox" required="true">
+      </div>
+      <div>
+        <button id="button_update" class="easyui-linkbutton btn btn-primary" iconCls="icon-ok" >Update</button>
+      </div>
+	   </form>
+	</div>
+</body>
+</html>
