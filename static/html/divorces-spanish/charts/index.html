@@ -1,0 +1,46 @@
+<!-- Pagina de /divorces-spanish/charts "https://sos-2016-10.herokuapp.com/divorces-spanish/charts" -->
+<html>
+<head>
+  <link href="/style.css" rel="stylesheet" type="text/css">
+  <title>CHARTS Divorces Spanish</title>
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+
+  <!-- ***************** GOOGLE ********************* -->
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
+  <script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var request = $.ajax({
+      url: "/api/v1/divorces-spanish?apikey=juanlur"
+    });
+    request.done(function(data,status,jqXHR){
+      var datos = [];
+      datos.push(['Task', 'Age_30_34']);
+
+      for(var i in data){ //Recorro todo los objetos
+        var obj = data[i];
+        datos.push([obj.autonomous_community,obj.age_30_34]);
+      }
+      console.warn(datos);
+      var data = google.visualization.arrayToDataTable(datos);
+      var options = {
+        title: 'Divorces in Spain'
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data, options);
+    });
+  }
+  </script>
+</head>
+<body>
+  <!-- ***************** GOOGLE CHART ********************* -->
+	<div id="piechart" style="width: 900px; height: 500px;"></div>
+</body>
+</html>
