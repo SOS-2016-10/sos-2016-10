@@ -1,3 +1,12 @@
+//Funcion auxiliar
+//Funcion numeroFilas
+function numRow(){
+  var row = table.rows('.selected').data();
+  if(row.length == 0){
+    alert("You should select 1 row to UPDATE");
+  }
+}
+
 //Funcion paginar
 function paginar(total){
   var limit = $("#limitt").val();
