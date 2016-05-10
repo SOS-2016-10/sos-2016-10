@@ -1,99 +1,92 @@
 <html>
   <head>
-    <!-- <link href="/style.css" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-    <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        console.log("JQuery Ready!");
-        $("#button").click(()=>{
-          //$("#log").html("<h1>HELLO WORLD!!!!</h1>");
-          console.log("Handling click");
-
-          var urlHTML = $("#url").val();
-          var method = $("input[type=radio]:checked").attr("id");
-          var dataJSON = $("#payload").val();
-          //console.log("DataJSON = "+dataJSON.text());
-
-          if(method == "GET"){
-            var request = $.ajax({
-              url: urlHTML,
-              type: method,
-              dataType: 'json', ///
-              contentType: "application/json",
-              //cache: false
-            });
-          } else {
-            var request = $.ajax({
-              url: urlHTML,
-              type: method,
-              data: dataJSON,
-              dataType: 'json', ///
-              contentType: "application/json",
-              //cache: false
-            });
-          }
-
-          console.log(request);
-
-          //Request done
-          request.done(function(data,status,jqXHR) {//Se ejecuta cuando la petición haya sido correcta
-            // Tratamiento en caso de exito
-            console.log("Handling request (OK)");
-            console.log(data);
-            var table = $('<table border="1">'); //Inicializo tabla
-            var head = "<tr>";
-            for (var i in data[0]){
-              head = head + ("<th>"+i+"</th>");
-            }
-            head = head + "<tr>";
-            $(head).appendTo(table);
-            $.each(data, function(index, value){
-              var row = "<tr>";
-              $.each(value, function(key,val){
-                row = row + ("<td>"+val+"</td>");
-              });
-              row = row + "</tr>";
-              $(table).append(row);
-            });
-            //return ($(table));
-
-            $(table).appendTo("#data");
-          });
-
-
-          //Request always
-          request.always(function(jqXHR, status){
-            if(jqXHR.status == undefined){
-              $("#status").text("OK");
-            } else {
-              $("#status").text(jqXHR.status + " " + jqXHR.statusText);
-            }
-          });
-        }); //END #button.click
-      }); //END document.ready
-    </script>
+    <!-- JQUERY -->
+    <!--script src="https://code.jquery.com/jquery-1.12.2.js"></script-->
+    <script src="/telematic-monitorings/jquery-1.12.2.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/telematic-monitorings/style.css"/>
+    <!-- MATERIALIZE -->
+    <link rel="stylesheet" type="text/css" href="/telematic-monitorings/materialize.min.css"/>
+    <!-- DATA TABLE -->
+    <script type="text/javascript" charset="utf8" src="/telematic-monitorings/jquery.dataTables.js"></script>
+    <!-- AUXILIAR -->
+    <script type="text/javascript" src="/telematic-monitorings/gui-TM.js"></script>
+    <script type="text/javascript" src="/telematic-monitorings/htmlFunctions.js"></script>
   </head>
+
   <body>
-    <h1>JQuery REST Client</h1>
-      URL: <input id="url" size="30" value="/api/v1/telematic-monitorings?apikey=read"/>
-      GET <input name="method" type="radio" id="GET" checked="checked"/> &nbsp;&nbsp;
-      POST <input name="method" type="radio" id="POST" /> &nbsp;&nbsp;
-      PUT <input name="method" type="radio" id="PUT" /> &nbsp;&nbsp;
-      DELETE <input name="method" type="radio" id="DELETE" /> &nbsp;&nbsp;
-    <br/>
-      Payload: <input id="payload" size="60" value='{ "province": "aa", "year": 2014, "installed": 0, "uninstalled": 6,}'/>
-    <br/><br/>
-      <span id="button">Send</span>
-    <br/><hr/>
-      HTTP Status: <span id="status"></span>
-    <br/><hr/>
-      <span id="data">
-        <table id="tableData"></table>
-      </span>
-    <br/><hr/>
-      <ul id="list"></ul>
-    <hr/>
-      Log: <span id="log"></span>
+    <h1>Telematic monitorings</h1>
+
+<!--  BOTONES ADD, UPDATE, DELETE...  -->
+    <div class="container">
+      <input id="show-data" type="button" value="Show data" onclick="showDataButton()" class="waves-effect waves-light btn" />
+      <input id="add-data" type="button" value="Add data" onclick="addButton()" class="waves-effect waves-light btn" />
+      <input id="update" type="button" value="Update" onclick="updateButton()" class="waves-effect waves-light btn" />
+      <input id="delete" type="button" value="Delete" onclick="deleteButton()" class="waves-effect waves-light btn" />
+      <input id="load-initial-data" type="button" value="Load initial data" onclick="loadInitialDataButton()"
+            class="waves-effect waves-light btn" />
+
+  <!-- FORMULARIOS OCULTOS  -->
+      <div id="show-data-hidden" style="display:none;">
+        <form id="show-data-form">
+          <label>APIKEY:  </label><input id="apikey-show" value="read" class="">
+          <label>Province:  </label><input id="show-province" class="">
+          <label>Year:      </label><input id="show-year" class="">
+          <span class="btn waves-effect waves-light material-icons right" onclick="showFunction()">Submit</span>
+          <!-- materialize no pone el estilo que deberia en este boton -->
+        </form>
+      </div>
+
+      <div id="update-hidden" style="display:none;">
+        <form id="update-form">
+          <label>APIKEY:  </label><input id="apikey-update" value="write" class="">
+          <label>Province:    </label><input id="update-province" class="">
+          <label>Year:        </label><input id="update-year" class="">
+          <label>Installed:   </label><input id="update-installed" class="">
+          <label>Uninstalled: </label><input id="update-uninstalled" class="">
+          <label>Actived:     </label><input id="update-actived" class="">
+          <button class="btn waves-effect waves-light material-icons right"  onclick="updateFunction()">Submit
+          </button><!-- materialize no pone el estilo que deberia en este boton -->
+        </form>
+      </div>
+
+      <div id="add-hidden" style="display:none;">
+        <form id="add-form">
+          <label>APIKEY:  </label><input id="apikey-add" value="write" class="">
+          <label>Province:    </label><input id="add-province" class="">
+          <label>Year:        </label><input id="add-year" class="">
+          <label>Installed:   </label><input id="add-installed" class="">
+          <label>Uninstalled: </label><input id="add-uninstalled" class="">
+          <label>Actived:     </label><input id="add-actived" class="">
+          <button class="btn waves-effect waves-light material-icons right" type="submit" onclick="addFunction()">Submit
+          </button><!-- materialize no pone el estilo que deberia en este boton -->
+        </form>
+      </div>
+
+      <div id="delete-hidden" style="display:none;">
+          <label>APIKEY:  </label><input id="apikey-delete" value="write" class="">
+          <button class="btn waves-effect waves-light material-icons" type="submit" onclick="deleteAllFunction()">Detele all
+          </button>
+          <button class="btn waves-effect waves-light material-icons" type="submit" onclick="deleteSelectedFunction()">Detele selected
+          </button><!-- materialize no pone el estilo que deberia en este boton -->
+      </div>
+
+
+<!-- TABLA VISUALIZACIÓN DE DATOS -->
+      <div id="data" style="display:none;">
+        <table id="columns" class="responsive-table highlight">
+          <thead>
+            <tr>
+              <th>Province</th>
+              <th>Year</th>
+              <th>Installed</th>
+              <th>Uninstalled</th>
+              <th>Actived</th>
+            </tr>
+          </thead>
+        </table>
+
+      </div>
+    </div>
   </body>
 </html>

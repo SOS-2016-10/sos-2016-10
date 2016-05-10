@@ -19,6 +19,7 @@ app.listen(port, ()=>{
 });
 
 //Me creo rutas estáticas
+app.use("/",express.static(__dirname + '/static/lib'));
 app.use("/",express.static(__dirname + '/static/css')); //Es como si folder "css" no existiera, y estuviera todo en RAIZ
 app.use("/",express.static(__dirname + '/static/html')); //Es como si folder "html" no existiera, y estuviera todo en RAIZ
 //app.use('/about/divorces-spanish', express.static(__dirname + '/html/about/divorces-spanish')); //lo que quiero que ponga en url, donde está realmente
