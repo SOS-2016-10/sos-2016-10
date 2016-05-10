@@ -17,9 +17,6 @@
   <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
 
-  <!-- ***************** GOOGLE ********************* -->
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
   <script>
     $(document).ready(function (){
       console.log("JQuery ready");
@@ -46,9 +43,6 @@
             { data: "age_30_34"}
           ]
         });
-
-        //var table = $("#columns").DataTable(); //Tabla "table"
-        //table.destroy();
 
         //**** Seleccionar una fila ****
         $('#columns tbody').on( 'click', 'tr', function () {
@@ -146,35 +140,6 @@
       });
 
     }); //FIN ready
-    </script>
-
-    <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
-    <script type="text/javascript">
-    google.load("visualization", "1", {packages:["corechart"]});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-      var request = $.ajax({
-        url: "/api/v1/divorces-spanish?apikey=juanlur"
-      });
-      request.done(function(data,status,jqXHR){
-        var datos = [];
-        datos.push(['Task', 'Age_30_34']);
-
-        for(var i in data){ //Recorro todo los objetos
-          var obj = data[i];
-          datos.push([obj.autonomous_community,obj.age_30_34]);
-        }
-        console.warn(datos);
-        var data = google.visualization.arrayToDataTable(datos);
-        var options = {
-          title: 'Divorces in Spain'
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      });
-    }
     </script>
 </head>
 <body>
@@ -291,8 +256,5 @@
       </div>
 	   </form>
 	</div>
-
-  <!-- ***************** GOOGLE CHART ********************* -->
-	<div id="piechart" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
