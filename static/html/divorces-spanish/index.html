@@ -19,16 +19,18 @@
 
   <script>
     $(document).ready(function (){
+      $("#lasty").hide(); ////
+      $("#nexty").hide(); ////
       console.log("JQuery ready");
 
       var request= $.ajax({
         type: "GET",
-        url: "/api/v1/divorces-spanish?apikey=juanlur", //"/api/v1/divorces-spanish?apikey=juanlur&limit=0&offset=0"
+        url: "/api/v1/divorces-spanish?apikey=juanlur&limit=5&offset=0", //"/api/v1/divorces-spanish?apikey=juanlur",
       });
 
       request.done((data,status,jqXHR)=>{
         //$(document).ready( function () { ////
-        paginar(data.length);
+        ////paginar(data.length);
         var table = $("#columns").DataTable( {
           ordering: false,
           paging: false,
@@ -178,8 +180,12 @@
       <option value="5" selected>5</option>
       <option value="10">10</option>
     </select>
-    <!-- <input id="last" type="button" value="Last" onclick="create_table('/api/v1/divorces-spanish/?apikey=juanlur')" />
-    <input id="next" type="button" value="Next" onclick="next()" /> -->
+    <!-- Button to LAST and NEXT -->
+    <input id="last" type="button" class="btn btn-warning" value="Last" onclick="last();" />
+    <input id="next" type="button" class="btn btn-warning" value="Next" onclick="next();" />
+    <!-- Button to LAST and NEXT when exist SEARCH -->
+    <input id="lasty" type="button" class="btn btn-warning" value="Last" onclick="lastYear();" />
+    <input id="nexty" type="button" class="btn btn-warning" value="Next" onclick="nextYear();" />
   </div>
 
   <!-- ******************* BOTONES *************************** -->
