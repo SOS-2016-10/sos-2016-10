@@ -11,7 +11,7 @@ var app = express();
 governify.control(app,{
   datastore: "http://datastore.governify.io/api/v6.1/",
   namespace: "sos-2016-10-jldl",
-  defaultPath: "/api" //todo lo que esté dentro de API lo coja sin problemas
+  defaultPath: "/api/v1/divorces-spanish" //todo lo que esté dentro de API lo coja sin problemas
 });
 
 ////PROXY
