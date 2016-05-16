@@ -6,7 +6,7 @@ var functions = require('./functions.js'); //Importo funciones
 var bodyParser = require('body-parser');
 var passport = require('passport'); //Para APIKEY
 
-var LocalAPIKeyStrategy = require('passport-localapikey-update').Strategy;
+/*var LocalAPIKeyStrategy = require('passport-localapikey-update').Strategy;
 
 passport.use(new LocalAPIKeyStrategy((apikey, done)=> { done(null,apikey); }));
 
@@ -30,7 +30,7 @@ ReadAccess = (req, res, next)=> {
         }
         return next();
     })(req, res, next);
-};
+};*/
 
 
 router.use(bodyParser.json());
@@ -79,7 +79,7 @@ router.get("/", (req,res)=>{
     res.send(aux);
   }
 });
-router.post("/", WriteAccess, (req,res)=>{
+router.post("/", (req,res)=>{
   var divorce = req.body;
   if(Object.keys(divorce).length != 6){
     res.sendStatus(400); //BAD REQUEST
@@ -98,11 +98,11 @@ router.post("/", WriteAccess, (req,res)=>{
   }
 });
 //NO PERMITIDO
-router.put("/", WriteAccess, (req,res)=>{
+router.put("/", (req,res)=>{
   console.log("PUT NOT ALLOWED");
   res.sendStatus(405);
 });
-router.delete("/", WriteAccess, (req,res)=>{
+router.delete("/", (req,res)=>{
   console.log("New DELETE of \"divorces-spanish\"");
   functions.deleteAll(divorces);
   res.sendStatus(200);
@@ -110,7 +110,7 @@ router.delete("/", WriteAccess, (req,res)=>{
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre 1 recurso (autonomous_community) ////////////////////
-router.get("/:autonomous_community(\\D+)", ReadAccess, (req,res)=>{ //"D+" patrón para NO dígitos(letras)
+router.get("/:autonomous_community(\\D+)", (req,res)=>{ //"D+" patrón para NO dígitos(letras)
   var n = req.params.autonomous_community;
   console.log("New GET of resource "+n);
 
@@ -122,12 +122,12 @@ router.get("/:autonomous_community(\\D+)", ReadAccess, (req,res)=>{ //"D+" patr�
   }
 });
 //NO PERMITIDO
-router.post("/:autonomous_community", WriteAccess, (req,res)=>{
+router.post("/:autonomous_community", (req,res)=>{
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
 });
 
-router.put("/:autonomous_community(\\D+)", WriteAccess, (req,res)=>{
+router.put("/:autonomous_community(\\D+)", (req,res)=>{
   var n = req.body.autonomous_community;
   var nn = req.params.autonomous_community;
 
@@ -151,7 +151,7 @@ router.put("/:autonomous_community(\\D+)", WriteAccess, (req,res)=>{
   }
 });
 
-router.delete("/:autonomous_community(\\D+)", WriteAccess, (req,res)=>{
+router.delete("/:autonomous_community(\\D+)", (req,res)=>{
   var n = req.params.autonomous_community;
   var prop = "autonomous_community";
 
@@ -169,7 +169,7 @@ router.delete("/:autonomous_community(\\D+)", WriteAccess, (req,res)=>{
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //OPERACIONES sobre 1 DIVORCE(recurso) ":year"////////////////////////////////////////////////////////////////
-router.get("/:year(\\d+)", ReadAccess, (req,res)=>{ //"d" patrón para digito
+router.get("/:year(\\d+)", (req,res)=>{ //"d" patrón para digito
   var y = req.params.year;
 
   var eiaux2 = functions.find_year(divorces,y);
@@ -179,7 +179,7 @@ router.get("/:year(\\d+)", ReadAccess, (req,res)=>{ //"d" patrón para digito
     res.sendStatus(404);
   }
 });
-router.put("/:year(\\d+)", WriteAccess, (req,res)=>{
+router.put("/:year(\\d+)", (req,res)=>{
   var y = req.body.year;
   var yy = req.params.year;
 
@@ -204,7 +204,7 @@ router.put("/:year(\\d+)", WriteAccess, (req,res)=>{
   }
 
 });
-router.delete("/:year(\\d+)", WriteAccess, (req,res)=>{
+router.delete("/:year(\\d+)", (req,res)=>{
   var y = req.params.year;
   var prop = "year";
 
@@ -221,7 +221,7 @@ router.delete("/:year(\\d+)", WriteAccess, (req,res)=>{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre 1 recurso (autonomous_community/year) ////////////////////////////////////////
-router.get("/:autonomous_community/:year", ReadAccess, (req,res)=>{
+router.get("/:autonomous_community/:year", (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
   console.log("New GET of resource "+n+" "+y);
@@ -236,11 +236,11 @@ router.get("/:autonomous_community/:year", ReadAccess, (req,res)=>{
   }
 });
 //NO PERMITIDO
-router.post("/:autonomous_community/:year", WriteAccess, (req,res)=>{
+router.post("/:autonomous_community/:year", (req,res)=>{
   console.log("POST NOT ALLOWED");
   res.sendStatus(405);
 });
-router.put("/:autonomous_community/:year", WriteAccess, (req,res)=>{
+router.put("/:autonomous_community/:year", (req,res)=>{
   var n = req.body.autonomous_community;
   var y = req.body.year;
   var nn = req.params.autonomous_community;
@@ -265,7 +265,7 @@ router.put("/:autonomous_community/:year", WriteAccess, (req,res)=>{
     }
   }
 });
-router.delete("/:autonomous_community/:year", WriteAccess, (req,res)=>{
+router.delete("/:autonomous_community/:year", (req,res)=>{
   var n = req.params.autonomous_community;
   var y = req.params.year;
 
