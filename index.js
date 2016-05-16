@@ -1,7 +1,8 @@
 //Inicializar módulos/
 var express = require("express");
 var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceversa
-
+var request = require("request"); ////
+var cors = require("cors"); ////
 //Importar Controladores hechos por nosotros
 
 var app = express();
@@ -11,9 +12,28 @@ var port = (process.env.PORT || 3000);
 
 //Cada vez que llegue JSON <=> Variable
 app.use(bodyParser.json());
+app.use(cors()); //Añado cabeceras CORS al maximo ////
 //app.listen(3000); //Para probar en local
 //app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
 //Hago callback porque es asincrono
+
+////PROXY
+var paths = '/api/v1/olympicsgames'; //indico la url(sin host)
+var apiServerHost = 'https://sos-2016-06.herokuapp.com'; //indico el HOST(sin barra del final)
+app.use(paths, function(req, res) {
+  var url = apiServerHost + req.baseUrl + req.url;
+  console.log('piped: '+req.baseUrl + req.url);
+  console.log('URL accesed: '+url);
+
+  req.pipe(request(url,(error,response,body)=>{
+    if(error){
+      console.error(error);
+      res.sendStatus(503); //Servicio NO disponible
+    }
+  })).pipe(res);
+});
+////FIN PROXY
+
 app.listen(port, ()=>{
   console.log("Ready to go! port "+port);
 });
