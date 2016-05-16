@@ -6,16 +6,6 @@ var cors = require("cors"); ////
 //Importar Controladores hechos por nosotros
 
 var app = express();
-//Puede tener 2 valores, o la variable entorno PORT o 3000
-//Evaluación perezosa
-var port = (process.env.PORT || 3000);
-
-//Cada vez que llegue JSON <=> Variable
-app.use(bodyParser.json());
-app.use(cors()); //Añado cabeceras CORS al maximo ////
-//app.listen(3000); //Para probar en local
-//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
-//Hago callback porque es asincrono
 
 ////PROXY
 var paths = '/api/v1/olympicsgames'; //indico la url(sin host)
@@ -33,6 +23,19 @@ app.use(paths, function(req, res) {
   })).pipe(res);
 });
 ////FIN PROXY
+
+//Puede tener 2 valores, o la variable entorno PORT o 3000
+//Evaluación perezosa
+var port = (process.env.PORT || 3000);
+
+//Cada vez que llegue JSON <=> Variable
+app.use(bodyParser.json());
+app.use(cors()); //Añado cabeceras CORS al maximo ////
+//app.listen(3000); //Para probar en local
+//app.listen(process.env.PORT); //variable entorno para puerto que me dice Heroku
+//Hago callback porque es asincrono
+
+
 
 app.listen(port, ()=>{
   console.log("Ready to go! port "+port);
