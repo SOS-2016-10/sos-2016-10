@@ -3,9 +3,16 @@ var express = require("express");
 var bodyParser = require("body-parser"); //Transformar JSON a VARIABLES o viceversa
 var request = require("request"); ////
 var cors = require("cors"); ////
+var governify = require("governify"); //SLA ////
 //Importar Controladores hechos por nosotros
 
 var app = express();
+////SLA
+governify.control(app,{
+  datastore: "http://datastore.governify.io/api/v6.1/",
+  namespace: "sos-2016-10-jldl",
+  defaultPath: "/api" //todo lo que esté dentro de API lo coja sin problemas
+});
 
 ////PROXY
 var paths = '/api/v1/olympicsgames'; //indico la url(sin host)

@@ -40,7 +40,7 @@ var divorces = [];
 
 //Para inicializar la API REST "divorces-spanish" ///////////////////////////////////////////////////////////////
 // /api/v1/divorces-spanish/loadInitialData“ ////////////////////////////////////////////////////////////////////
-router.get("/loadInitialData", (req,res)=>{
+router.get("/loadInitialData", WriteAccess, (req,res)=>{
   if(divorces.length == 0){ //Cargo los datos si está vacío
     console.log("/api/v1/divorces-spanish/loadInitialData");
     divorces.push({ autonomous_community: "canarias", year: 2014, age_0_18: 0, age_19_24: 10, age_25_29: 149, age_30_34: 429 });//No es JSON(es JavaScript)
@@ -60,7 +60,7 @@ router.get("/loadInitialData", (req,res)=>{
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Operaciones sobre lista de recursos ////////////////////
-router.get("/", (req,res)=>{
+router.get("/", ReadAccess, (req,res)=>{
   var q = req.query;
   var aux = [];
   if(Object.keys(q).length == 1){ //No hay busqueda(nº parámetros = 0)
