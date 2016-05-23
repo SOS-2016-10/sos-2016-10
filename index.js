@@ -96,7 +96,7 @@ app.use("/api/sandbox/teams", teamsCtl);
 //Llamar a API "DIVORCES-SPANISH"
 app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 //Llamar a Swagger
-app.use("/api/v1/divorces-spanish/docs", divorcesSpanishSwagger);
+app.use("/api/v1/docs", divorcesSpanishSwagger);
 
 
 ////////////////////////////////////////////////////////////////////////////////
