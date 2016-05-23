@@ -56,7 +56,7 @@ app.use("/",express.static(__dirname + '/static/html')); //Es como si folder "ht
 
 var teamsCtl = require("./static/juanlu/teamsFile.js");
 var divorcesSpanishCtl = require("./static/juanlu/divorcesSpanishFile.js");
-var divorcesSpanishSwagger = require("./static/juanlu/swagger/index.js");
+//var divorcesSpanishSwagger = require("./static/juanlu/swagger/index.js");
 var unionsCtl = require("./ulises/unions.js");
 var telematicMonitorings = require("./ulises/telematicMonitorings.js");
 var videogamesCtl = require("./videogames.js");
@@ -96,7 +96,7 @@ app.use("/api/sandbox/teams", teamsCtl);
 //Llamar a API "DIVORCES-SPANISH"
 app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 //Llamar a Swagger
-app.use("/api/v1/docs", divorcesSpanishSwagger);
+//app.get("/api/v1/docs", divorcesSpanishSwagger);
 
 
 ////////////////////////////////////////////////////////////////////////////////
