@@ -1,0 +1,182 @@
+---
+swagger: "2.0"
+info:
+  description: "Hello, My data is related to the number of divorces in Spain. I will\
+    \ get the info from this source [here](http://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176798&menu=ultiDatos&idp=1254735573206)"
+  version: "1.0.0"
+  title: "Docs of API Divorces in Spanish"
+  termsOfService: "http://helloreverb.com/terms/"
+  contact:
+    name: "Divorces Spanish API team"
+    url: "https://sos-2016-10.herokuapp.com"
+    email: "juadorluc@alum.us.es"
+  license:
+    name: "MIT"
+    url: "http://opensource.org/licenses/MIT"
+host: "sos-2016-10.herokuapp.com"
+basePath: "/api/v1"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /divorces-spanish:
+    get:
+      description: "Returns all divorces-spanish from the system that the user has\
+        \ access to"
+      operationId: "findDivorcesSpanish"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "autonomous_community"
+        in: "query"
+        description: "autonomous-community to filter by"
+        required: false
+        type: "string"
+      - name: "year"
+        in: "query"
+        description: "year to filter by"
+        required: false
+        type: "integer"
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of results to return"
+        required: false
+        type: "integer"
+        format: "int64"
+      - name: "offset"
+        in: "query"
+        description: "number to begin results to return"
+        required: false
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "divorce-spanish response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/divorce-spanish"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a new divorce-spanish in the API.  Duplicates are allowed"
+      operationId: "addDivorceSpanish"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "divorce-spanish"
+        description: "Divorce-spanish to add to the API"
+        required: true
+        schema:
+          $ref: "#/definitions/newDivorceSpanish"
+      responses:
+        200:
+          description: "divorce-spanish response"
+          schema:
+            $ref: "#/definitions/divorce-spanish"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+  /divorces-spanish/{year}:
+    get:
+      description: "Returns divorces-spanish based on a single YEAR"
+      operationId: "findDivorceSpanishByYear"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "year"
+        in: "path"
+        description: "YEAR of divorce-spanish to fetch"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "divorce-spanish response"
+          schema:
+            $ref: "#/definitions/divorce-spanish"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single divorce-spanish based on the YEAR supplied"
+      operationId: "deleteDivorceSpanishYear"
+      parameters:
+      - name: "year"
+        in: "path"
+        description: "YEAR of divorce-spanish to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "divorce-spanish deleted"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+definitions:
+  divorce-spanish:
+    type: "object"
+    properties:
+      autonomous_community:
+        type: "string"
+      year:
+        type: "integer"
+        format: "int64"
+      age_0_18:
+        type: "integer"
+        format: "int64"
+      age_19_24:
+        type: "integer"
+        format: "int64"
+      age_25_29:
+        type: "integer"
+        format: "int64"
+      age_30_34:
+        type: "integer"
+        format: "int64"
+  newDivorceSpanish:
+    type: "object"
+    properties:
+      autonomous_community:
+        type: "string"
+      year:
+        type: "integer"
+        format: "int64"
+      age_0_18:
+        type: "integer"
+        format: "int64"
+      age_19_24:
+        type: "integer"
+        format: "int64"
+      age_25_29:
+        type: "integer"
+        format: "int64"
+      age_30_34:
+        type: "integer"
+        format: "int64"
+  errorModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
