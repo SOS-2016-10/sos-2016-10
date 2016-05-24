@@ -1,23 +1,14 @@
-////'use strict';
-
-////var app = require('connect')();
-////var http = require('http');
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var fs = require('fs');
-//var serverPort = 8080;
-//var serverPort = (process.env.PORT || 3005);
+
 
 // swaggerRouter configuration
 var options = {
-  swaggerUi: './static/juanlu/swagger/api/swagger.yaml',
-  //controllers: './controllers',
-  ////controllers: './static/juanlu/swagger/controllers',
-  ////useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
+  swaggerUi: '/swagger.json',
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-//var spec = fs.readFileSync('./api/swagger.yaml', 'utf8');
 var spec = fs.readFileSync('./static/juanlu/swagger/api/swagger.yaml', 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 
@@ -34,10 +25,4 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
-
-  // Start the server
-  /*http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
-  });*/
 });

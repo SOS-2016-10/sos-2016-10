@@ -14,6 +14,38 @@ governify.control(app,{
   defaultPath: "/api/v1/divorces-spanish" //todo lo que esté dentro de API lo coja sin problemas
 });
 
+
+//// Para swagger ////
+var swaggerTools = require('swagger-tools');
+var jsyaml = require('js-yaml');
+var fs = require('fs');
+
+// swaggerRouter configuration
+var options = {
+  swaggerUi: '/swagger.json'
+};
+// The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
+var spec = fs.readFileSync('./static/juanlu/swagger/api/swagger.yaml', 'utf8');
+var swaggerDoc = jsyaml.safeLoad(spec);
+// Initialize the Swagger middleware
+swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+  // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+  app.use(middleware.swaggerMetadata());
+
+  // Validate Swagger requests
+  app.use(middleware.swaggerValidator());
+
+  // Route validated requests to appropriate controller
+  app.use(middleware.swaggerRouter(options));
+
+  // Serve the Swagger documents and Swagger UI
+  app.use(middleware.swaggerUi());
+});
+//// FIN swagger
+
+
+
+
 ////PROXY
 var paths = '/api/v1/olympicsgames'; //indico la url(sin host)
 var apiServerHost = 'https://sos-2016-06.herokuapp.com'; //indico el HOST(sin barra del final)
