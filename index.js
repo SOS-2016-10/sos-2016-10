@@ -96,7 +96,7 @@ app.use("/api/sandbox/teams", teamsCtl);
 //Llamar a API "DIVORCES-SPANISH"
 app.use("/api/v1/divorces-spanish", divorcesSpanishCtl);
 //Llamar a Swagger
-//app.get("/api/v1/docs", divorcesSpanishSwagger);
+//app.use("/api/v1/docs", divorcesSpanishSwagger);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -151,3 +151,12 @@ app.put("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.putVict
 app.put("/api/v1/mortal-victims/:autonomous_community/:dat", mortalVictimsCtl.putVictimDat);
 
 app.delete("/api/v1/mortal-victims/:autonomous_community", mortalVictimsCtl.deleteVictim);
+
+
+///////////////////////////////////////////////////////////////////////////////////////// SWAGGER
+/*var swaggerTools = require('swagger-tools');
+var jsyaml = require('js-yaml');
+var fs = require('fs');
+
+var spec = fs.readFileSync('./static/juanlu/swagger/api/swagger.yaml', 'utf8');
+var swaggerDoc = jsyaml.safeLoad(spec);*/
