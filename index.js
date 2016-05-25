@@ -13,7 +13,7 @@ governify.control(app,{
   namespace: "sos-2016-10-jldl",
   defaultPath: "/api/v1/divorces-spanish" //todo lo que esté dentro de API lo coja sin problemas
 });
-
+////FIN SLA
 
 //// Para swagger ////
 var swaggerTools = require('swagger-tools');

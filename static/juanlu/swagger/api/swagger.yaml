@@ -87,10 +87,59 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-swagger-router-controller: "Default"
+    delete:
+      description: "Delete ALL divorce-spanish in the API. The API was empty"
+      operationId: "deleteDivorceSpanish"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "divorce-spanish"
+        description: "Divorce-spanish to add to the API"
+        required: true
+        schema:
+          $ref: "#/definitions/newDivorceSpanish"
+      responses:
+        200:
+          description: "divorce-spanish response"
+          schema:
+            $ref: "#/definitions/divorce-spanish"
+        404: 
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/divorce-spanish"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+      
   /divorces-spanish/{year}:
     get:
       description: "Returns divorces-spanish based on a single YEAR"
       operationId: "findDivorceSpanishByYear"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "year"
+        in: "path"
+        description: "YEAR of divorce-spanish to fetch"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "divorce-spanish response"
+          schema:
+            $ref: "#/definitions/divorce-spanish"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-swagger-router-controller: "Default"
+    put:
+      description: "Update divorces-spanish based on a single YEAR"
+      operationId: "updateDivorceSpanishByYear"
       produces:
       - "application/json"
       parameters:
