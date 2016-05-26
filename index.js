@@ -47,10 +47,26 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
 
 ////PROXY
-var paths = '/api/v1/olympicsgames'; //indico la url(sin host)
-var apiServerHost = 'https://sos-2016-06.herokuapp.com'; //indico el HOST(sin barra del final)
-app.use(paths, function(req, res) {
-  var url = apiServerHost + req.baseUrl + req.url;
+var paths1 = '/beers'; //indico la url(sin host)
+var apiServerHost1 = 'http://ontariobeerapi.ca'; //indico el HOST(sin barra del final)
+app.use(paths1, function(req, res) {
+  var url = apiServerHost1 + req.baseUrl + req.url;
+  console.log('piped: '+req.baseUrl + req.url);
+  console.log('URL accesed: '+url);
+
+  req.pipe(request(url,(error,response,body)=>{
+    if(error){
+      console.error(error);
+      res.sendStatus(503); //Servicio NO disponible
+    }
+  })).pipe(res);
+});
+////FIN PROXY
+////PROXY
+var paths2 = '/v1/teams/86/players'; //indico la url(sin host)
+var apiServerHost2 = 'http://api.football-data.org'; //indico el HOST(sin barra del final)
+app.use(paths2, function(req, res) {
+  var url = apiServerHost2 + req.baseUrl + req.url;
   console.log('piped: '+req.baseUrl + req.url);
   console.log('URL accesed: '+url);
 

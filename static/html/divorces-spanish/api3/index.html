@@ -1,8 +1,8 @@
-<!-- Pagina de /divorces-spanish/api1 "https://sos-2016-10.herokuapp.com/divorces-spanish/api1" -->
+<!-- Pagina de /divorces-spanish/api3 "https://sos-2016-10.herokuapp.com/divorces-spanish/api3" -->
 <html>
 <head>
   <link href="/style.css" rel="stylesheet" type="text/css">
-  <title>API 1 - Divorces Spanish vs Olympics Games</title>
+  <title>API 3 - Divorces Spanish vs Beers</title>
 
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
@@ -17,23 +17,24 @@
   function drawChart() {
     var datos = [];
     var options;
-    //OlympicsGames
+    //Beers
     var request = $.ajax({
-      url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
+      url: "/beers"
     });
 
     request.done(function(data,status,jqXHR){
       //var datos = [];
       datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
 
-      for(var i in data){ //Recorro todo los objetos
+      for(var i=0;i<50;i++){//for(var i in data){ //Recorro todo los objetos
         var obj = data[i];
-        datos.push([obj.city,obj.year]);
+        datos.push([obj.name,obj.beer_id]); //.abv
       }
+
       console.warn(datos);
       //var data = google.visualization.arrayToDataTable(datos);
       options = {
-        title: 'Divorces Spanish vs Olympics Games'
+        title: 'Divorces Spanish vs Beers'
       };
 
       //var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -46,6 +47,9 @@
       url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
     });
     request.done(function(data,status,jqXHR){
+      if(datos.length == 0){
+        datos.push(['string', 'number']);
+      }
       for(var i in data){ //Recorro todo los objetos
         var obj = data[i];
         datos.push([obj.autonomous_community,obj.year]);

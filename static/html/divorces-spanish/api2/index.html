@@ -1,8 +1,8 @@
-<!-- Pagina de /divorces-spanish/api1 "https://sos-2016-10.herokuapp.com/divorces-spanish/api1" -->
+<!-- Pagina de /divorces-spanish/api2 "https://sos-2016-10.herokuapp.com/divorces-spanish/api2" -->
 <html>
 <head>
   <link href="/style.css" rel="stylesheet" type="text/css">
-  <title>API 1 - Divorces Spanish vs Olympics Games</title>
+  <title>API 2 - Divorces Spanish vs Average Rainfall</title>
 
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
@@ -17,23 +17,23 @@
   function drawChart() {
     var datos = [];
     var options;
-    //OlympicsGames
+    //AverageRainfall
     var request = $.ajax({
-      url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
+      url: "https://sos-2016-11.herokuapp.com/api/v1/average-rainfall"
     });
 
     request.done(function(data,status,jqXHR){
       //var datos = [];
-      datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
+      datos.push(['Task', 'year']); ////datos.push(['Task', 'athletes']);
 
       for(var i in data){ //Recorro todo los objetos
         var obj = data[i];
-        datos.push([obj.city,obj.year]);
+        datos.push([obj.river_basin,obj.year]);
       }
       console.warn(datos);
       //var data = google.visualization.arrayToDataTable(datos);
       options = {
-        title: 'Divorces Spanish vs Olympics Games'
+        title: '"Divorces Spanish" vs "Average Rainfall"'
       };
 
       //var chart = new google.visualization.PieChart(document.getElementById('piechart'));
