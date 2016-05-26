@@ -13,49 +13,47 @@
   <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
   <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var datos = [];
-    var options;
-    //OlympicsGames
-    var request = $.ajax({
-      url: "/v1/teams/86/players"
-    });
 
-    request.done(function(data,status,jqXHR){
-      //var datos = [];
-      datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
-      console.log(data.players[0].name);
-      for(var i in data.players){ //Recorro todo los objetos
-        var obj = data.players[i];
-        datos.push([obj.name,obj.jerseyNumber]);
-      }
+  $(document).ready(function (){
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      //Globals variables
+      var datos = [];
+      var options;
 
-      console.warn(datos);
-      //var data = google.visualization.arrayToDataTable(datos);
-      options = {
-        title: 'Divorces Spanish vs Players Real Madrid'
-      };
+      //Players of Real Madrid
+      var request = $.ajax({
+        url: "/v1/teams/86/players"
+      });
+      request.done(function(data,status,jqXHR){
+        datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
+        console.log(data.players[0].name);
+        for(var i in data.players){ //Recorro todo los objetos
+          var obj = data.players[i];
+          datos.push([obj.name,obj.jerseyNumber]);
+        }
 
-      //var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        console.warn(datos);
+      });
 
-      //chart.draw(data, options);
-    });
+      //DivorcesSpanish
+      var request = $.ajax({
+        url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
+      });
+      request.done(function(data,status,jqXHR){
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.autonomous_community,obj.age_19_24]);
+        }
 
-    //DivorcesSpanish
-    var request = $.ajax({
-      url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
-    });
-    request.done(function(data,status,jqXHR){
-      for(var i in data){ //Recorro todo los objetos
-        var obj = data[i];
-        datos.push([obj.autonomous_community,obj.year]);
-      }
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-      chart.draw(google.visualization.arrayToDataTable(datos), options);
-    });
-  }
+        options = {
+          title: 'Divorces Spanish(age_19_24) vs Players Real Madrid(jerseyNumber)'
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(google.visualization.arrayToDataTable(datos), options);
+      });
+    }
+  });//FIN DOCUMENT
   </script>
 </head>
 <body>

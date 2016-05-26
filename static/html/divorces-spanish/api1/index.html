@@ -8,57 +8,57 @@
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
 
   <!-- ***************** GOOGLE ********************* -->
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
   <script type="text/javascript">
-  google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var datos = [];
-    var options;
-    //OlympicsGames
-    var request = $.ajax({
-      url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
-    });
+  google.charts.load("current", {packages:["corechart"]});
 
-    request.done(function(data,status,jqXHR){
-      //var datos = [];
-      datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
+  $(document).ready(function (){
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      //Globals variables
+      var datos = [];
+      var options;
 
-      for(var i in data){ //Recorro todo los objetos
-        var obj = data[i];
-        datos.push([obj.city,obj.year]);
-      }
-      console.warn(datos);
-      //var data = google.visualization.arrayToDataTable(datos);
-      options = {
-        title: 'Divorces Spanish vs Olympics Games'
-      };
+      //OlympicsGames
+      var request = $.ajax({
+        url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
+      });
+      request.done(function(data,status,jqXHR){
+        datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
 
-      //var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.city,obj.athletes]);
+        }
+        console.warn(datos);
+      });
 
-      //chart.draw(data, options);
-    });
+      //DivorcesSpanish
+      var request = $.ajax({
+        url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
+      });
+      request.done(function(data,status,jqXHR){
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.autonomous_community,obj.age_25_29]);
+        }
 
-    //DivorcesSpanish
-    var request = $.ajax({
-      url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
-    });
-    request.done(function(data,status,jqXHR){
-      for(var i in data){ //Recorro todo los objetos
-        var obj = data[i];
-        datos.push([obj.autonomous_community,obj.year]);
-      }
+        var options = {
+          title: '"Divorces Spanish(age_25_29)" vs "Olympics Games(athletes)"',
+          legend: { position: 'none' },
+        };
 
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-      chart.draw(google.visualization.arrayToDataTable(datos), options);
-    });
-  }
+        var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+        chart.draw(google.visualization.arrayToDataTable(datos), options);
+      });
+    }
+  });
   </script>
 </head>
 <body>
   <!-- ***************** GOOGLE CHART ********************* -->
-	<div id="piechart" style="width: 900px; height: 500px;"></div>
+	<div id="chart_div" style="width: 900px; height: 500px;"></div>
 </body>
 </html>

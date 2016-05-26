@@ -8,61 +8,60 @@
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
 
   <!-- ***************** GOOGLE ********************* -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
   <!-- /////////////////////////////////////////////////////////////////////////// GOOGLE ///////////////////// -->
   <script type="text/javascript">
-  google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var datos = [];
-    var options;
-    //Beers
-    var request = $.ajax({
-      url: "/beers"
-    });
+  google.charts.load('current', {'packages':['geochart']});
 
-    request.done(function(data,status,jqXHR){
-      //var datos = [];
-      datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
+  $(document).ready(function (){
+    google.charts.setOnLoadCallback(drawRegionsMap);
+    function drawRegionsMap() {
+      //Globals variables
+      var datos = [];
+      var options;
 
-      for(var i=0;i<50;i++){//for(var i in data){ //Recorro todo los objetos
-        var obj = data[i];
-        datos.push([obj.name,obj.beer_id]); //.abv
-      }
 
-      console.warn(datos);
-      //var data = google.visualization.arrayToDataTable(datos);
-      options = {
-        title: 'Divorces Spanish vs Beers'
-      };
-
-      //var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-      //chart.draw(data, options);
-    });
-
-    //DivorcesSpanish
-    var request = $.ajax({
-      url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
-    });
-    request.done(function(data,status,jqXHR){
-      if(datos.length == 0){
+      //DivorcesSpanish
+      var request = $.ajax({
+        url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
+      });
+      request.done(function(data,status,jqXHR){
         datos.push(['string', 'number']);
-      }
-      for(var i in data){ //Recorro todo los objetos
-        var obj = data[i];
-        datos.push([obj.autonomous_community,obj.year]);
-      }
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.autonomous_community,obj.year]);
+        }
 
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-      chart.draw(google.visualization.arrayToDataTable(datos), options);
-    });
-  }
+      });
+      //Beers
+      var request = $.ajax({
+        url: "/beers"
+      });
+      request.done(function(data,status,jqXHR){
+        //console.log(data.length); //480
+        for(var i=200;i<225;i++){//for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.country,obj.beer_id]); //.abv
+        }
+
+        console.warn(datos);
+        options = {
+          //displayMode: 'text',
+          //region: '150'
+        };
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(google.visualization.arrayToDataTable(datos), options);
+      });
+
+    }
+  });
   </script>
 </head>
 <body>
+  <h3>Divorces Spanish(year) vs Beers(id)</h3>
   <!-- ***************** GOOGLE CHART ********************* -->
-	<div id="piechart" style="width: 900px; height: 500px;"></div>
+	<div id="geochart-colors" style="width: 700px; height: 433px;"></div>
 </body>
 </html>
