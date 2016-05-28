@@ -27,10 +27,10 @@
         async: false
       });
       request.done(function(data,status,jqXHR){
-        datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
+        datos.push(['Task', 'year']); ////datos.push(['Task', 'athletes']);
         for(var i in data){ //Recorro todo los objetos
           var obj = data[i];
-          datos.push([obj.autonomous_community,obj.age_25_29]);
+          datos.push([obj.autonomous_community,obj.age_19_24]);
         }
       });
 
