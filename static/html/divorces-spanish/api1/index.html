@@ -21,29 +21,28 @@
       var datos = [];
       var options;
 
-      //OlympicsGames
-      var request = $.ajax({
-        url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
-      });
-      request.done(function(data,status,jqXHR){
-        datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
-
-        for(var i in data){ //Recorro todo los objetos
-          var obj = data[i];
-          datos.push([obj.city,obj.athletes]);
-        }
-        console.warn(datos);
-      });
-
       //DivorcesSpanish
       var request = $.ajax({
         url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
       });
       request.done(function(data,status,jqXHR){
+        datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
         for(var i in data){ //Recorro todo los objetos
           var obj = data[i];
           datos.push([obj.autonomous_community,obj.age_25_29]);
         }
+      });
+
+      //OlympicsGames
+      var request = $.ajax({
+        url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
+      });
+      request.done(function(data,status,jqXHR){
+        for(var i in data){ //Recorro todo los objetos
+          var obj = data[i];
+          datos.push([obj.city,obj.athletes]);
+        }
+        console.warn(datos);
 
         var options = {
           title: '"Divorces Spanish(age_25_29)" vs "Olympics Games(athletes)"',
@@ -53,6 +52,8 @@
         var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
         chart.draw(google.visualization.arrayToDataTable(datos), options);
       });
+
+
     }
   });
   </script>
