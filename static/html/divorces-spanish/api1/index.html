@@ -23,7 +23,8 @@
 
       //DivorcesSpanish
       var request = $.ajax({
-        url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag"
+        url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag",
+        async: false
       });
       request.done(function(data,status,jqXHR){
         datos.push(['string', 'number']); ////datos.push(['Task', 'athletes']);
