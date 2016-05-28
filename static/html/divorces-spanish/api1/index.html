@@ -36,7 +36,8 @@
 
       //OlympicsGames
       var request = $.ajax({
-        url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag"
+        url: "https://sos-2016-06.herokuapp.com/api/v1/olympicsgames?apikey=multiPlan_C2_sos-2016-06-jern_ag",
+        async: false
       });
       request.done(function(data,status,jqXHR){
         for(var i in data){ //Recorro todo los objetos
