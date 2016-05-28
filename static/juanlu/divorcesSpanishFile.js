@@ -6,32 +6,6 @@ var functions = require('./functions.js'); //Importo funciones
 var bodyParser = require('body-parser');
 var passport = require('passport'); //Para APIKEY
 
-/*var LocalAPIKeyStrategy = require('passport-localapikey-update').Strategy;
-
-passport.use(new LocalAPIKeyStrategy((apikey, done)=> { done(null,apikey); }));
-
-WriteAccess = (req, res, next)=> {
-    passport.authenticate('localapikey', (err, apikey, info) =>{
-        if(!apikey){
-            return res.sendStatus(403);
-        }else if (apikey!="juanluw") {
-            return res.sendStatus(401);
-        }
-        return next();
-    })(req, res, next);
-};
-
-ReadAccess = (req, res, next)=> {
-    passport.authenticate('localapikey', (err, apikey, info) =>{
-        if(!apikey){
-          return res.sendStatus(403);
-        }else if (apikey!="juanlur") {
-          return res.sendStatus(401);
-        }
-        return next();
-    })(req, res, next);
-};*/
-
 
 router.use(bodyParser.json());
 
@@ -170,10 +144,14 @@ router.delete("/:autonomous_community(\\D+)", (req,res)=>{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //OPERACIONES sobre 1 DIVORCE(recurso) ":year"////////////////////////////////////////////////////////////////
 router.get("/:year(\\d+)", (req,res)=>{ //"d" patrón para digito
+  var q = req.query;
   var y = req.params.year;
 
   var eiaux2 = functions.find_year(divorces,y);
   if(eiaux2.length != 0){ //Error == 0 "NO hay error"
+    if((q.limit != undefined) && (q.offset != undefined)){//Pagination
+      eiaux2 = functions.pagination(q.limit,q.offset,eiaux2);
+    }
     res.send(eiaux2);
   } else {
     res.sendStatus(404);
