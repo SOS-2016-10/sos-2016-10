@@ -1,7 +1,7 @@
 $(document).ready(function (){
-
+  var limit = parseInt($('#limitt').val());
   var request= $.ajax({
-    url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag&limit=5&offset=0", //"/api/v1/divorces-spanish?apikey=juanlur",
+    url: "/api/v1/divorces-spanish?apikey=multiPlan_C4_sos-2016-10-jldl_ag&limit="+limit+"&offset=0", //"/api/v1/divorces-spanish?apikey=juanlur",
   });
   request.done((data,status,jqXHR)=>{
     var table = $("#columns").DataTable( {
@@ -98,7 +98,7 @@ $(document).ready(function (){
         datos += '"';
         datos += ',';
         datos += '"year":';
-        datos += $("#yearU").val();
+        datos += row[0].year;//$("#yearU").val();
         datos += ',';
         datos += '"age_0_18":';
         datos += $("#age_0_18U").val();
@@ -114,7 +114,7 @@ $(document).ready(function (){
         datos += '}';
         console.log("TOMA UPDATE: "+datos);
         var request = $.ajax({
-          url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
+          url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"/"+row[0].year+"?apikey="+$("#apikey").val(), //url : "/api/v1/divorces-spanish/"+row[0].autonomous_community+"?apikey=juanluw",
           type : "PUT",
           data : datos,
           dataType : "json",

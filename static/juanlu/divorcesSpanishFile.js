@@ -61,7 +61,7 @@ router.post("/", (req,res)=>{
     //comprobar antes que no existe esa "autonomous_community" ya y ese "year"
     var eiaux = functions.find_community(divorces,req.body.autonomous_community);//functions.find_resource(divorces,divorce.autonomous_community)[0];
     var eiaux2 = functions.find_year(eiaux,req.body.year);
-    if((eiaux.length != 0) && (eiaux2.length != 0)){ //(lo encuentra, ya existe)
+    if(eiaux2.length != 0){//if((eiaux.length != 0) && (eiaux2.length != 0)){ //(lo encuentra, ya existe)
       res.sendStatus(409); //Conflict
       console.log("NOT POST because \""+divorce.autonomous_community+"\" or \""+divorce.year+"\" exist");
     } else {
@@ -105,7 +105,7 @@ router.put("/:autonomous_community(\\D+)", (req,res)=>{
   var n = req.body.autonomous_community;
   var nn = req.params.autonomous_community;
 
-  if(n != nn){
+  if(n != nn){ //autonomous_community de BODY es distinta al PATH
     res.sendStatus(400);//BAD request
   } else if(Object.keys(req.body).length != 6){
     res.sendStatus(400);
@@ -161,7 +161,7 @@ router.put("/:year(\\d+)", (req,res)=>{
   var y = req.body.year;
   var yy = req.params.year;
 
-  if(y != yy){
+  if(y != yy){ //en body de put mando un YEAR distinto
     res.sendStatus(400);
   } else if(Object.keys(req.body).length != 6){
     res.sendStatus(400); //BAD REQUEST
