@@ -1,6 +1,6 @@
-// URI:/api/v1/telematic-monitorings
+// URI:/api/v1/university-indicators
 var fs = require('fs');
-var lib = require('./libTM.js');
+var lib = require('./libUniversityIndicators.js');
 var passport = require('passport');
 LocalAPIKeyStrategy = require('passport-localapikey-update').Strategy;
 
@@ -29,117 +29,140 @@ exports.ReadAccess = (req, res, next)=> {
 };
 
 
-var tms = [];//[{province:"Sevilla",year:2013,installed:22,uninstalled:23,actived:27}];
+var uis = [];
 //////////////////////////////      GET       //////////////////////////////////
 exports.loadInitialData = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  tms = JSON.parse(fs.readFileSync('./ulises/tm_initial_data.json','utf8'));
+  uis = JSON.parse(fs.readFileSync('./static/ulises/university_indicators_initial_data.json','utf8'));
   res.sendStatus(200);
 };
 
 //search & pagination implemented
-exports.getTMs = (req,res)=>{
-  console.log("New GET of TMs.");
+exports.getUIs = (req,res)=>{
+  console.log("getUIs");
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   switch (lib.whichCase(req)) {
     case 0://Bad request.
+      console.log("getUIs - bad request");
       return res.sendStatus(400);
     case 1://DO NOT SEARCH, DO NOT PAGINATION
-      var subArray = tms;
+      console.log("getUIs - dont search, dont paginate ");
+      var subArray = uis;
       break;
     case 2://SEARCH, DO NOT PAGINATION
     console.log('cASE 2: ')
-      var subArray = lib.filterFromTo(tms, req.query.from, req.query.to);
+      console.log("getUIs - search and dont paginate");
+      var subArray = lib.filterFromTo(uis, req.query.from, req.query.to);
       break;
     case 3://DO NOT SEARCH, PAGINATION
-      var subArray = tms;
+      console.log("getUIs - dont search and paginate");
+      var subArray = uis;
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
+      if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
       subArray = subArray.slice(offset, (offset+limit));
       break;
     case 4://SEARCH, PAGINATION
+      console.log("getUIs - search and paginate");
       var limit = parseInt(req.query.limit);
       var offset = parseInt(req.query.offset);
-      console.log('offset: '+req.query.limit);
-      console.log('limit: '+limit);
-      var subArray = lib.filterFromTo(tms, req.query.from, req.query.to);
-      console.log(subArray);
-      console.log('offset+limit: '+(offset+limit));
+      //console.log('offset: '+req.query.limit);
+      //console.log('limit: '+limit);
+      var subArray = lib.filterFromTo(uis, req.query.from, req.query.to);
+      //console.log(subArray);
+      //console.log('offset+limit: '+(offset+limit));
+      if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
       subArray = subArray.slice(offset, (offset+limit));//PAGINATION
-      console.log('SUB');
-      console.log(subArray);
+      //console.log('SUB');
+      //console.log(subArray);
       break;
   }
   (subArray.length == 0) ? res.sendStatus(404) : res.send(subArray);
 };
 
 //search & pagination implemented
-exports.getTMsByProvince = (req, res) => {// '/:province(\\D+)/ replaced for '/:province(\\w+)/
+exports.getUIsByCommunity = (req, res) => {// '/:province(\\D+)/ replaced for '/:province(\\w+)/
+  var value = req.params.community;
+  console.log("getUIsByCommunity: "+value);
     //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-    var value = req.params.province;
+
     switch (lib.whichCase(req)) {
       case 0://Bad request.
+        console.log("getUIsByCommunity - bad request");
         return res.sendStatus(400);
       case 1://DO NOT SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterBy(tms, 'province', value);
+        console.log("getUIsByCommunity - dont search and dont paginate");
+        var subArray = lib.filterBy(uis, 'community', value);
         break;
       case 2://DO SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterFromToByProvince(tms, value, req.query.from, req.query.to);
+        console.log("getUIsByCommunity - search and dont paginate");
+        var subArray = lib.filterFromToByCommunity(uis, value, req.query.from, req.query.to);
         break;
       case 3://DO NOT SEARCH, DO PAGINATION
-        var subArray = lib.filterBy(tms, 'province', value);
+        console.log("getUIsByCommunity - dont search and paginate");
+        var subArray = lib.filterBy(uis, 'community', value);
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        res.send(subArray.slice(offset, offset+limit));
+        if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
+        subArray = subArray.slice(offset, (offset+limit));
         break;
       case 4://DO SEARCH, DO PAGINATION
+        console.log("getUIsByCommunity - search and paginate");
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        var subArray = lib.filterFromToByProvince(tms, value, req.query.from, req.query.to);
-        subArray.slice(offset, offset+limit);//PAGINATION
+        if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
+        var subArray = lib.filterFromToByProvince(uis, value, req.query.from, req.query.to);
+        subArray = subArray.slice(offset, (offset+limit));//PAGINATION
         break;
     }
-    console.log("New GET by Province: "+value);
     (subArray.length == 0) ? res.sendStatus(404) : res.send(subArray);
 }
 
 //search & pagination implemented
-exports.getTMsByYear = (req, res) => {
+exports.getUIsByYear = (req, res) => {
+  var value = req.params.year;
+  console.log("getUIsByYear: "+value);
     //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-    var value = req.params.year;
     switch (lib.whichCase(req)) {
       case 0://Bad request.
+        console.log("getUIsByCommunity - bad request");
         return res.sendStatus(400);
       case 1://DO NOT SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterBy(tms, 'year', value);
+        console.log("getUIsByCommunity - dont search and dont paginate");
+        var subArray = lib.filterBy(uis, 'year', value);
         break;
       case 2://DO SEARCH, DO NOT PAGINATION
-        var subArray = lib.filterFromToByYear(tms, value, req.query.from, req.query.to);
+        console.log("getUIsByCommunity - search and dont paginate");
+        var subArray = lib.filterFromToByYear(uis, value, req.query.from, req.query.to);
         break;
       case 3://DO NOT SEARCH, DO PAGINATION
-        var subArray = lib.filterBy(tms, 'year', value);
+        console.log("getUIsByCommunity - dont search and paginate");
+        var subArray = lib.filterBy(uis, 'year', value);
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        res.send(subArray.slice(offset, offset+limit));
+        if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
+        subArray.slice(offset, offset+limit);
         break;
       case 4://DO SEARCH, DO PAGINATION
+        console.log("getUIsByCommunity - search and paginate");
         var limit = parseInt(req.query.limit);
         var offset = parseInt(req.query.offset);
-        var subArray = lib.filterFromToByYear(tms, value, req.query.from, req.query.to);
+        if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
+        var subArray = lib.filterFromToByYear(uis, value, req.query.from, req.query.to);
+        if(offset < 0) offset = 0;//evitamos error 500 si se recibe un offset negativo.
         subArray.slice(offset, offset+limit);//PAGINATION
         break;
     }
-    console.log("New GET by year: "+value);
     (subArray.length == 0) ? res.sendStatus(404) : res.send(subArray);
 };
 
 //only one element can exits, so it is NOT necessary PAGINATION or SEARCH.
-exports.getTM = (req,res)=>{
+exports.getUI = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  var value1 = req.params.province;
+  var value1 = req.params.community;
   var value2 = req.params.year;
-  console.log("New get of /"+value1+'/'+value2);
-  subArray1 = lib.filterBy(tms,'province', value1);
+  console.log("getUI: /"+value1+'/'+value2);
+  subArray1 = lib.filterBy(uis,'community', value1);
   if(subArray1.length == 0){
     res.sendStatus(404);
   }else{
@@ -167,25 +190,30 @@ router.post('/',(req,res)=>{
 });
 */
 
-exports.postTM = (req,res)=>{
+exports.postUI = (req,res)=>{
+  var ui = req.body;
+  console.log("postUI: "+ui[0]["province"]);
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  if(!lib.isDataCorrect(req,'post')){ return res.sendStatus(400);}
-  var tm = req.body;
-  var subArray1 = lib.filterBy(tms, 'province', tm[0]['province']);
-  var subArray2 = lib.filterBy(subArray1, 'year', tm[0]['year']);
+  if(!lib.isDataCorrect(req,"post")){
+    console.log("isDataCorrect - not correct");
+    return res.sendStatus(400);
+  }
+  var subArray1 = lib.filterBy(uis, 'community', ui[0]['community']);
+  var subArray2 = lib.filterBy(subArray1, 'year', ui[0]['year']);
     if(subArray2.length == 0){
-      tms.push(tm[0]);
+      console.log("isDataCorrect - correct - push to UIs");
+      uis.push(ui[0]);
       res.sendStatus(201);
     }else{
+      console.log("isDataCorrect - not correct, already exists");
       res.sendStatus(409);
     }
-  console.log("New POST of "+tm[0]["province"]);
 };
 
-exports.postTMByProvince = (req,res)=>{
+exports.postUIByCommunity = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
   res.sendStatus(405);
-  console.log("Post not allowed.")
+  console.log("Post by community or year is not allowed.");
 };
 /*
 exports.postTMByProvinceYear('/:province/:year', (req,res)=>{
@@ -195,9 +223,9 @@ exports.postTMByProvinceYear('/:province/:year', (req,res)=>{
 */
 
 //////////////////////////////     PUT     /////////////////////////////////////
-exports.putToTMs = (req,res)=>{
+exports.putToUIs = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  console.log("Put not allowed.");
+  console.log("Put to / or /:community is not allowed.");
   res.sendStatus(405);
 };
 
@@ -209,27 +237,33 @@ exports.putByProvince = (req,res)=>{
 };
 */
 
-exports.putTMByProvinceYear = (req,res)=>{
+exports.putUIByCommunityYear = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  if(!lib.isDataCorrect(req,'put')){ return res.sendStatus(400)};
-  var tm = req.body[0];
-  var value1 = req.params.province;
+  if(!lib.isDataCorrect(req,undefined)){
+    console.log("putUIByCommunityYear - data not correct.")
+    return res.sendStatus(400);
+  }
+  var ui = req.body[0];
+  console.log('putUIByCommunityYear - UI: '+ui);
+  var value1 = req.params.community;
   var value2 = req.params.year;
-  var index = lib.indexOf(tms, 'province', value1, 'year', value2);
-  console.log("New put of "+value1,value2);
+  var index = lib.indexOf(uis, 'community', value1, 'year', value2);
+  console.log("putUIByCommunityYear: "+value1,value2);
   if(index > -1){
-    tms[index] = tm;
+    console.log("putUIByCommunityYear - index: "+index);
+    uis[index] = ui;
     res.sendStatus(200);
   }else{
+    console.log("putUIByCommunityYear - index==-1");
     res.sendStatus(404);
   }
 };
 
 /////////////////////////////       DELETE     /////////////////////////////////
-exports.deleteTMs = (req,res)=>{
+exports.deleteUIs = (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  console.log("Deleting TMs.");
-  tms = [];
+  console.log("Deleting UIs.");
+  uis = [];
   res.sendStatus(200);
 };
 
@@ -239,15 +273,18 @@ router.delete('/:province', (req, res)=>{
 });
 */
 
-exports.deleteTM =  (req,res)=>{
+exports.deleteUI =  (req,res)=>{
   //if(!lib.verifyAccess(req.query.apikey)){ return res.sendStatus(401);}
-  var value1 = req.params.province;
+  var value1 = req.params.community;
   var value2 = req.params.year;
-  var index = lib.indexOf(tms, 'province', value1, 'year', value2);
+  console.log("deleteUI: "+value1,value2);
+  var index = lib.indexOf(uis, 'community', value1, 'year', value2);
   if(index > -1){
-    tms.splice(index, 1);
+    console.log("deleteUI - index: "+index);
+    uis.splice(index, 1);
     res.sendStatus(200);
   }else{
+    console.log("deleteUI - index==-1");
     res.sendStatus(400);
   }
 };

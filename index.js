@@ -110,6 +110,9 @@ var telematicMonitorings = require("./ulises/telematicMonitorings.js");
 var videogamesCtl = require("./static/old_versions/videogames.js");
 var mortalVictimsCtl = require("./static/old_versions/mortalVictimsFile.js");
 
+//ULISES JUNIO
+var university = require("./static/ulises/universityIndicators.js");
+
 //GET para página principal
 app.get("/",(req,res) => {
 });
@@ -130,6 +133,11 @@ app.get("/about/divorces-spanish",(req,res) => {
 //GET para Telematic-monitorings(Ulises)
 app.get('/about/telematic-monitorings', (req,res)=>{
   console.log("Telematic-monitorings");
+});
+
+//GET para Telematic-monitorings(Ulises)
+app.get('/about/university-indicators', (req,res)=>{
+  console.log("accessed to /about/university-indicators");
 });
 
 //GET para Mortal-victims(Requena)
@@ -163,6 +171,8 @@ app.get("/api-test/unions/loadInitialData", unionsCtl.loadInitialData); //Initia
 //Resource telematic-monitorings
 //Acceso a recursos API REST telematic-monitorings
 app.use('/api/v1/telematic-monitorings', telematicMonitorings);
+//JUNIO   Acceso a recursos API REST university-indicators
+app.use('/api/v1/university-indicators', university);
 
 //VIDEOGAMES - MORTAL-VICTIMS
 //Videogames

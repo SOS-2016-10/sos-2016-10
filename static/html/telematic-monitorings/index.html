@@ -6,75 +6,94 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="/telematic-monitorings/style.css"/>
     <!-- MATERIALIZE -->
-    <link rel="stylesheet" type="text/css" href="/telematic-monitorings/materialize.min.css"/>
+    <!--link rel="stylesheet" type="text/css" href="/telematic-monitorings/materialize.min.css"/-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <!-- DATA TABLE -->
-    <script type="text/javascript" charset="utf8" src="/telematic-monitorings/jquery.dataTables.js"></script>
+    <!--script type="text/javascript" charset="utf8" src="/telematic-monitorings/jquery.dataTables.js"></script-->
+    <!-- DYNATABLE -->
+    <script type="text/javascript" src="/telematic-monitorings/jquery.dynatable.js"></script>
+
+
     <!-- AUXILIAR -->
-    <script type="text/javascript" src="/telematic-monitorings/gui-TM.js"></script>
     <script type="text/javascript" src="/telematic-monitorings/htmlFunctions.js"></script>
   </head>
 
   <body>
-    <h1>Telematic monitorings</h1>
+    <h5 class="center">Telematic monitorings</h5>
 
 <!--  BOTONES ADD, UPDATE, DELETE...  -->
-    <div class="container">
-      <input id="show-data" type="button" value="Show data" onclick="showDataButton()" class="waves-effect waves-light btn" />
-      <input id="add-data" type="button" value="Add data" onclick="addButton()" class="waves-effect waves-light btn" />
-      <input id="update" type="button" value="Update" onclick="updateButton()" class="waves-effect waves-light btn" />
-      <input id="delete" type="button" value="Delete" onclick="deleteButton()" class="waves-effect waves-light btn" />
-      <input id="load-initial-data" type="button" value="Load initial data" onclick="loadInitialDataButton()"
-            class="waves-effect waves-light btn" />
+    <div class="left" float="left;">
+      <button id="show-data" type="button"  class="waves-effect waves-light btn">
+        Show data</button>
 
-  <!-- FORMULARIOS OCULTOS  -->
-      <div id="show-data-hidden" style="display:none;">
-        <form id="show-data-form">
-          <label>APIKEY:  </label><input id="apikey-show" value="read" class="">
-          <label>Province:  </label><input id="show-province" class="">
-          <label>Year:      </label><input id="show-year" class="">
-          <span class="btn waves-effect waves-light material-icons right" onclick="showFunction()">Submit</span>
+      <button id="add-data" type="button" class="waves-effect waves-light btn">
+        Add data</button>
+
+      <button id="update-data" type="button" class="waves-effect waves-light btn">
+        Update</button>
+
+      <button id="deleteall-data" type="button" class="waves-effect waves-light btn">
+        Delete all</button>
+      <button id="delete-data" class="btn waves-effect waves-light material-icons">
+        Detele selected</button>
+      <button id="load-initial-data" type="button" class="waves-effect waves-light btn">Load data</button>
+      </div>
+
+  <!-- FORMULARIOS -->
+  <br></br>
+
+        <form id="form" class="container">
+          <div>
+          <label for="apikey-input">Apikey:</label><input id="apikey-input" value="read" class="">
+          <label>Province:</label><input id="province-input" class="">
+          <label>Year:</label><input id="year-input" class="">
+          <label>Installed:</label><input id="installed-input" class="">
+          <label>Uninstalled:</label><input id="uninstalled-input" class="">
+          <label>Actived:</label><input id="actived-input" class="">
           <!-- materialize no pone el estilo que deberia en este boton -->
-        </form>
-      </div>
+          <span id="form-button" class="btn waves-effect waves-light material-icons right">Submit</span>
+        </div>
 
-      <div id="update-hidden" style="display:none;">
-        <form id="update-form">
-          <label>APIKEY:  </label><input id="apikey-update" value="write" class="">
-          <label>Province:    </label><input id="update-province" class="">
-          <label>Year:        </label><input id="update-year" class="">
-          <label>Installed:   </label><input id="update-installed" class="">
-          <label>Uninstalled: </label><input id="update-uninstalled" class="">
-          <label>Actived:     </label><input id="update-actived" class="">
-          <button class="btn waves-effect waves-light material-icons right"  onclick="updateFunction()">Submit
-          </button><!-- materialize no pone el estilo que deberia en este boton -->
-        </form>
-      </div>
+          <div id="pagination" class="left">
+            <label>Items per page</label>
+            <select id="limit">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+          <!--ul class="pagination">
+              <li class="disabled"><button onclick="previousPage()"><i class="material-icons">chevron_left</i></button></li>
+              <li class="waves-effect"><button onclick="nextPage()"><i class="material-icons">chevron_right</i></button></li>
+            </ul-->
+          <div class="center">
+            <span id="previous-page" class="btn waves-effect">Previous page</span>
+            <span id="next-page" type="button" class="waves-effect waves-light btn">Next page</span>
+          </div>
 
-      <div id="add-hidden" style="display:none;">
-        <form id="add-form">
-          <label>APIKEY:  </label><input id="apikey-add" value="write" class="">
-          <label>Province:    </label><input id="add-province" class="">
-          <label>Year:        </label><input id="add-year" class="">
-          <label>Installed:   </label><input id="add-installed" class="">
-          <label>Uninstalled: </label><input id="add-uninstalled" class="">
-          <label>Actived:     </label><input id="add-actived" class="">
-          <button class="btn waves-effect waves-light material-icons right" type="submit" onclick="addFunction()">Submit
-          </button><!-- materialize no pone el estilo que deberia en este boton -->
-        </form>
-      </div>
+            </form>
 
-      <div id="delete-hidden" style="display:none;">
-          <label>APIKEY:  </label><input id="apikey-delete" value="write" class="">
-          <button class="btn waves-effect waves-light material-icons" type="submit" onclick="deleteAllFunction()">Detele all
-          </button>
-          <button class="btn waves-effect waves-light material-icons" type="submit" onclick="deleteSelectedFunction()">Detele selected
-          </button><!-- materialize no pone el estilo que deberia en este boton -->
-      </div>
+        <br></br>
 
-
+<!-- LOG -->
+  <div  class="container center"style="display:none;" id="logDiv">
+    <br></br>
+    <br></br>
+    <br></br>
+    <p id="log"></p>
+    <button class="btn waves-effect waves-light material-icons center-btn" onclick="logButton()">OK</button>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+  </div>
 <!-- TABLA VISUALIZACIÓN DE DATOS -->
-      <div id="data" style="display:none;">
-        <table id="columns" class="responsive-table highlight">
+      <div id="data">
+        <table id="data-table" class="responsive-table highlight">
           <thead>
             <tr>
               <th>Province</th>
@@ -87,6 +106,6 @@
         </table>
 
       </div>
-    </div>
+
   </body>
 </html>
